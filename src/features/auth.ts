@@ -7,7 +7,10 @@ import { database } from "@/features/database";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(database),
-  providers: [GitHub, Google],
+  providers: [
+    GitHub({ allowDangerousEmailAccountLinking: true }),
+    Google({ allowDangerousEmailAccountLinking: true }),
+  ],
   session: {
     strategy: "jwt",
   },
