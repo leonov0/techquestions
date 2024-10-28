@@ -52,12 +52,12 @@ export async function updateUser(
 
   if (userData.username) {
     const result = await database
-      .select({ username: users.username })
+      .select({ id: users.id, username: users.username })
       .from(users)
       .where(eq(users.username, userData.username))
       .limit(1);
 
-    if (result) {
+    if (result.length > 0 && result[0].id !== userId) {
       throw new Error(`Username ${payload.username} is already taken`);
     }
   }
