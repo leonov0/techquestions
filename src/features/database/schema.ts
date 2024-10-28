@@ -3,7 +3,6 @@ import {
   integer,
   pgTable,
   primaryKey,
-  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -17,7 +16,14 @@ export const users = pgTable("user", {
   email: varchar("email", { length: 255 }).unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: varchar("image", { length: 2048 }),
+  username: varchar("username", { length: 32 }).unique(),
+  role: varchar("role", { length: 32, enum: ["user", "admin"] }).default(
+    "user",
+  ),
 });
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
 export const accounts = pgTable(
   "account",
@@ -25,7 +31,7 @@ export const accounts = pgTable(
     userId: char("userId", { length: 36 })
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    type: text("type").$type<AdapterAccountType>().notNull(),
+    type: varchar("type", { length: 8 }).$type<AdapterAccountType>().notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
     providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
