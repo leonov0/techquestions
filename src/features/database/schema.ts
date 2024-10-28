@@ -17,7 +17,9 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: varchar("image", { length: 2048 }),
   username: varchar("username", { length: 32 }).unique(),
-  role: varchar("role", { length: 32 }).default("user"),
+  role: varchar("role", { length: 32, enum: ["user", "admin"] }).default(
+    "user",
+  ),
 });
 
 export type User = typeof users.$inferSelect;
