@@ -1,17 +1,15 @@
 import {
-  char,
   integer,
   pgTable,
   primaryKey,
   timestamp,
+  uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
 export const users = pgTable("user", {
-  id: char("id", { length: 36 })
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
@@ -28,7 +26,7 @@ export type NewUser = typeof users.$inferInsert;
 export const accounts = pgTable(
   "account",
   {
-    userId: char("userId", { length: 36 })
+    userId: uuid("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: varchar("type", { length: 8 }).$type<AdapterAccountType>().notNull(),
