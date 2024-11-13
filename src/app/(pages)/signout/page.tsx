@@ -27,7 +27,7 @@ export default function SignOut() {
             action={async () => {
               "use server";
 
-              await signOut();
+              await signOut({ redirectTo: "/" });
             }}
           >
             <Button variant="destructive">

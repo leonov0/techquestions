@@ -18,7 +18,7 @@ export default async function SignIn({
 }: {
   searchParams: Promise<{ callbackUrl?: string }>;
 }) {
-  const redirectTo = (await searchParams).callbackUrl;
+  const redirectTo = (await searchParams).callbackUrl || "/";
 
   return (
     <main className="container max-w-screen-sm py-16">
