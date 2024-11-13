@@ -1,7 +1,9 @@
 import {
+  boolean,
   integer,
   pgTable,
   primaryKey,
+  text,
   timestamp,
   uuid,
   varchar,
@@ -46,3 +48,38 @@ export const accounts = pgTable(
     }),
   }),
 );
+
+export const questions = pgTable("question", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: varchar("title", { length: 255 }),
+  body: text("body"),
+  userId: uuid("userId").references(() => users.id),
+  isAnonymous: boolean("isAnonymous").default(false),
+  status: varchar("status", {
+    length: 32,
+    enum: ["pending", "approved", "rejected"],
+  }).default("pending"),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+});
+
+export type Question = typeof questions.$inferSelect;
+export type NewQuestion = typeof questions.$inferInsert;
+
+export const questionReviews = pgTable("question_review", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  questionId: uuid("questionId")
+    .notNull()
+    .references(() => questions.id, { onDelete: "cascade" }),
+  userId: uuid("userId").references(() => users.id),
+  status: varchar("status", {
+    length: 32,
+    enum: ["pending", "approved", "rejected"],
+  }).default("pending"),
+  message: text("message"),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+});
+
+export type QuestionReview = typeof questionReviews.$inferSelect;
+export type NewQuestionReview = typeof questionReviews.$inferInsert;
