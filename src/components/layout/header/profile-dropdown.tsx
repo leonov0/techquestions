@@ -39,7 +39,7 @@ export function ProfileDropdown({
           "group max-w-48 space-x-2 pl-2",
         )}
       >
-        <Avatar className="size-6 rounded-sm">
+        <Avatar className="size-5 rounded-sm">
           <AvatarImage src={image ?? undefined} />
 
           <AvatarFallback className="rounded-sm">
