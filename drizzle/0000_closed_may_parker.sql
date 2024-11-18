@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "account" (
-	"userId" char(36) NOT NULL,
-	"type" text NOT NULL,
+	"userId" uuid NOT NULL,
+	"type" varchar(8) NOT NULL,
 	"provider" varchar(255) NOT NULL,
 	"providerAccountId" varchar(255) NOT NULL,
 	"refresh_token" varchar(255),
@@ -14,12 +14,15 @@ CREATE TABLE IF NOT EXISTS "account" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
-	"id" char(36) PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(255),
 	"email" varchar(255),
 	"emailVerified" timestamp,
 	"image" varchar(2048),
-	CONSTRAINT "user_email_unique" UNIQUE("email")
+	"username" varchar(32),
+	"role" varchar(32) DEFAULT 'user',
+	CONSTRAINT "user_email_unique" UNIQUE("email"),
+	CONSTRAINT "user_username_unique" UNIQUE("username")
 );
 --> statement-breakpoint
 DO $$ BEGIN

@@ -1,5 +1,5 @@
 {
-  "id": "3a041c2d-23dc-4fdd-9cc5-4acbb71b7cbc",
+  "id": "d52bc1a6-792d-45f4-a57f-c6c7653b7b53",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,13 +10,13 @@
       "columns": {
         "userId": {
           "name": "userId",
-          "type": "char(36)",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
         "type": {
           "name": "type",
-          "type": "text",
+          "type": "varchar(8)",
           "primaryKey": false,
           "notNull": true
         },
@@ -102,9 +102,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "char(36)",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -129,6 +130,19 @@
           "type": "varchar(2048)",
           "primaryKey": false,
           "notNull": false
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'user'"
         }
       },
       "indexes": {},
@@ -139,6 +153,11 @@
           "name": "user_email_unique",
           "nullsNotDistinct": false,
           "columns": ["email"]
+        },
+        "user_username_unique": {
+          "name": "user_username_unique",
+          "nullsNotDistinct": false,
+          "columns": ["username"]
         }
       },
       "checkConstraints": {}

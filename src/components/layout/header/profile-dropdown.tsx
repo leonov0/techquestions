@@ -25,9 +25,11 @@ import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
 export function ProfileDropdown({
+  id,
   username,
   image,
 }: {
+  id: string;
   username?: string | null;
   image?: string | null;
 }) {
@@ -39,7 +41,7 @@ export function ProfileDropdown({
           "group max-w-48 space-x-2 pl-2",
         )}
       >
-        <Avatar className="size-6 rounded-sm">
+        <Avatar className="size-5 rounded-sm">
           <AvatarImage src={image ?? undefined} />
 
           <AvatarFallback className="rounded-sm">
@@ -57,7 +59,7 @@ export function ProfileDropdown({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href="/profile">
+          <Link href={`/users/${id}`}>
             <PersonIcon />
             <span className="ml-2">Profile</span>
           </Link>

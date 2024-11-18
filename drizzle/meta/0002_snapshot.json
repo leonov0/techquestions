@@ -1,6 +1,6 @@
 {
-  "id": "fe261c60-728a-49eb-a371-fe193ef02a4c",
-  "prevId": "d52bc1a6-792d-45f4-a57f-c6c7653b7b53",
+  "id": "159ef5e2-c46c-4b83-8778-03ac7a413f76",
+  "prevId": "fe261c60-728a-49eb-a371-fe193ef02a4c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -93,6 +93,82 @@
           "columns": ["provider", "providerAccountId"]
         }
       },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "public.company": {
+      "name": "company",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "public.level": {
+      "name": "level",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
@@ -242,6 +318,185 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "public.questions_to_companies": {
+      "name": "questions_to_companies",
+      "schema": "",
+      "columns": {
+        "questionId": {
+          "name": "questionId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "questions_to_companies_questionId_question_id_fk": {
+          "name": "questions_to_companies_questionId_question_id_fk",
+          "tableFrom": "questions_to_companies",
+          "tableTo": "question",
+          "columnsFrom": ["questionId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "questions_to_companies_companyId_company_id_fk": {
+          "name": "questions_to_companies_companyId_company_id_fk",
+          "tableFrom": "questions_to_companies",
+          "tableTo": "company",
+          "columnsFrom": ["companyId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "questions_to_companies_questionId_companyId_pk": {
+          "name": "questions_to_companies_questionId_companyId_pk",
+          "columns": ["questionId", "companyId"]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "public.questions_to_levels": {
+      "name": "questions_to_levels",
+      "schema": "",
+      "columns": {
+        "questionId": {
+          "name": "questionId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "levelId": {
+          "name": "levelId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "questions_to_levels_questionId_question_id_fk": {
+          "name": "questions_to_levels_questionId_question_id_fk",
+          "tableFrom": "questions_to_levels",
+          "tableTo": "question",
+          "columnsFrom": ["questionId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "questions_to_levels_levelId_level_id_fk": {
+          "name": "questions_to_levels_levelId_level_id_fk",
+          "tableFrom": "questions_to_levels",
+          "tableTo": "level",
+          "columnsFrom": ["levelId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "questions_to_levels_questionId_levelId_pk": {
+          "name": "questions_to_levels_questionId_levelId_pk",
+          "columns": ["questionId", "levelId"]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "public.questions_to_technologies": {
+      "name": "questions_to_technologies",
+      "schema": "",
+      "columns": {
+        "questionId": {
+          "name": "questionId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "technologyId": {
+          "name": "technologyId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "questions_to_technologies_questionId_question_id_fk": {
+          "name": "questions_to_technologies_questionId_question_id_fk",
+          "tableFrom": "questions_to_technologies",
+          "tableTo": "question",
+          "columnsFrom": ["questionId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "questions_to_technologies_technologyId_technology_id_fk": {
+          "name": "questions_to_technologies_technologyId_technology_id_fk",
+          "tableFrom": "questions_to_technologies",
+          "tableTo": "technology",
+          "columnsFrom": ["technologyId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "questions_to_technologies_questionId_technologyId_pk": {
+          "name": "questions_to_technologies_questionId_technologyId_pk",
+          "columns": ["questionId", "technologyId"]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "public.technology": {
+      "name": "technology",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
