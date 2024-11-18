@@ -23,10 +23,11 @@ export async function Header() {
         </Link>
 
         <div>
-          {session ? (
+          {session?.user.id ? (
             <ProfileDropdown
               username={session.user.username}
               image={session.user.image}
+              id={session.user.id}
             />
           ) : (
             <div className="space-x-4">
