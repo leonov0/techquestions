@@ -1,5 +1,7 @@
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   getCategories,
@@ -22,31 +24,37 @@ export default async function Questions(params: {
   const categories = await getCategories();
 
   return (
-    <main className="container py-16">
-      <QuestionFilterForm
-        technologies={categories.technologies}
-        companies={categories.companies}
-        levels={categories.levels}
-        searchParams={searchParams}
-      />
+    <div className="grid min-h-screen grid-rows-[auto,_1fr,_auto]">
+      <Header />
 
-      <section className="mx-auto mt-8 max-w-screen-md">
-        {getQuestionsResponse.error && (
-          <Alert variant="destructive">
-            <CrossCircledIcon />
+      <main className="container py-16">
+        <QuestionFilterForm
+          technologies={categories.technologies}
+          companies={categories.companies}
+          levels={categories.levels}
+          searchParams={searchParams}
+        />
 
-            <AlertTitle>
-              An error occurred while fetching the questions.
-            </AlertTitle>
+        <section className="mx-auto mt-8 max-w-screen-md">
+          {getQuestionsResponse.error && (
+            <Alert variant="destructive">
+              <CrossCircledIcon />
 
-            <AlertDescription>
-              {getQuestionsResponse.error.message}
-            </AlertDescription>
-          </Alert>
-        )}
+              <AlertTitle>
+                An error occurred while fetching the questions.
+              </AlertTitle>
 
-        <QuestionList questions={getQuestionsResponse.data} />
-      </section>
-    </main>
+              <AlertDescription>
+                {getQuestionsResponse.error.message}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <QuestionList questions={getQuestionsResponse.data} />
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

@@ -1,5 +1,7 @@
 import { ExitIcon } from "@radix-ui/react-icons";
 
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,31 +14,37 @@ import { signOut } from "@/features/auth";
 
 export default function SignOut() {
   return (
-    <main className="container max-w-screen-sm py-16">
-      <Card>
-        <CardHeader>
-          <CardTitle>Sign out of your account</CardTitle>
+    <div className="grid min-h-screen grid-rows-[auto,_1fr,_auto]">
+      <Header />
 
-          <CardDescription>
-            You will need to sign in again to get full access to our features.
-          </CardDescription>
-        </CardHeader>
+      <main className="container max-w-screen-sm py-16">
+        <Card>
+          <CardHeader>
+            <CardTitle>Sign out of your account</CardTitle>
 
-        <CardContent>
-          <form
-            action={async () => {
-              "use server";
+            <CardDescription>
+              You will need to sign in again to get full access to our features.
+            </CardDescription>
+          </CardHeader>
 
-              await signOut({ redirectTo: "/" });
-            }}
-          >
-            <Button variant="destructive">
-              <ExitIcon />
-              <span className="ml-2">Sign out</span>
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </main>
+          <CardContent>
+            <form
+              action={async () => {
+                "use server";
+
+                await signOut({ redirectTo: "/" });
+              }}
+            >
+              <Button variant="destructive">
+                <ExitIcon />
+                <span className="ml-2">Sign out</span>
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
