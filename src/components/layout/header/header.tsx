@@ -18,6 +18,7 @@ export async function Header() {
         <Link
           href="/"
           className="grid w-8 place-items-center transition-colors hover:text-foreground/90"
+          aria-label="Go to the home page"
         >
           <TechQuestionsLogoIcon className="size-7" />
         </Link>
