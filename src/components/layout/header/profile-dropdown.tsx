@@ -25,11 +25,9 @@ import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
 export function ProfileDropdown({
-  id,
   username,
   image,
 }: {
-  id: string;
   username?: string | null;
   image?: string | null;
 }) {
@@ -59,7 +57,7 @@ export function ProfileDropdown({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/users/${id}`}>
+          <Link href={`/users/${username}`}>
             <PersonIcon />
             <span className="ml-2">Profile</span>
           </Link>
