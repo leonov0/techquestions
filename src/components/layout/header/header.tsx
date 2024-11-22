@@ -28,7 +28,6 @@ export async function Header() {
             <ProfileDropdown
               username={session.user.username}
               image={session.user.image}
-              id={session.user.id}
             />
           ) : (
             <div className="space-x-4">
