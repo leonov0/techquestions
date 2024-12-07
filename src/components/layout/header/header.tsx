@@ -13,36 +13,43 @@ export async function Header() {
   const session = await auth();
 
   return (
-    <header className="sticky top-0 z-50 border border-border/40 bg-background/60 py-2 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border/40 bg-background/60 py-2 backdrop-blur">
       <div className="container flex justify-between gap-8">
-        <Link
-          href="/"
-          className="grid w-8 place-items-center transition-colors hover:text-foreground/90"
-          aria-label="Go to the home page"
-        >
-          <TechQuestionsLogoIcon className="size-7" />
-        </Link>
+        <nav className="flex gap-4">
+          <Link
+            href="/"
+            className="grid w-8 place-items-center transition-colors hover:text-foreground/90"
+            aria-label="Go to the home page"
+          >
+            <TechQuestionsLogoIcon className="size-7" />
+          </Link>
 
-        <div>
-          {session?.user.id ? (
-            <ProfileDropdown
-              username={session.user.username}
-              image={session.user.image}
-            />
-          ) : (
-            <div className="space-x-4">
-              <ThemeToggle />
+          <Link
+            href="/questions"
+            className={buttonVariants({ variant: "ghost" })}
+          >
+            Questions
+          </Link>
+        </nav>
 
-              <Link
-                href="/signin"
-                className={buttonVariants({ variant: "secondary" })}
-              >
-                <EnterIcon />
-                <span className="ml-2">Sign in</span>
-              </Link>
-            </div>
-          )}
-        </div>
+        {session?.user.id ? (
+          <ProfileDropdown
+            username={session.user.username}
+            image={session.user.image}
+          />
+        ) : (
+          <div className="flex gap-4">
+            <ThemeToggle />
+
+            <Link
+              href="/signin"
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              <EnterIcon />
+              <span className="ml-2">Sign in</span>
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   );
