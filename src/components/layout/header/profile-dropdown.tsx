@@ -36,7 +36,7 @@ export function ProfileDropdown({
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({ variant: "secondary" }),
-          "group max-w-48 space-x-2 pl-2",
+          "group max-w-40 space-x-2 pl-2",
         )}
       >
         <Avatar className="size-5 rounded-sm">
