@@ -38,7 +38,7 @@ export function QuestionFilterForm({
   }, [debouncedQuery, pathname, router, searchParams]);
 
   function handleSelect(key: string, id: string | null) {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams);
 
     Object.entries(searchParams).forEach(([key, value]) => {
       params.set(key, value);
