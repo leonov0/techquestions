@@ -1,5 +1,6 @@
 "use client";
 
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -76,7 +77,15 @@ export function QuestionFilterForm({
         label="level"
       />
 
-      <Input value={query} onChange={(e) => setQuery(e.target.value)} />
+      <div className="relative">
+        <Input
+          className="pl-10"
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <MagnifyingGlassIcon className="absolute left-3 top-2.5 z-10 size-4 text-input" />
+      </div>
     </div>
   );
 }
