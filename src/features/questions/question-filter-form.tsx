@@ -1,8 +1,11 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
+import { Input } from "@/components/ui/input";
 import type { Company, Level, Technology } from "@/features/database";
+import { useDebounce } from "@/lib/use-debounce";
 
 import { Combobox } from "./combobox";
 
@@ -10,15 +13,29 @@ export function QuestionFilterForm({
   technologies,
   companies,
   levels,
-  searchParams,
 }: {
   technologies: Technology[];
   companies: Company[];
   levels: Level[];
-  searchParams: { [key: string]: string };
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [query, setQuery] = useState(searchParams.get("query") ?? "");
+  const debouncedQuery = useDebounce(query, 500);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+
+    if (debouncedQuery) {
+      params.set("query", debouncedQuery);
+    } else {
+      params.delete("query");
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
+  }, [debouncedQuery, pathname, router, searchParams]);
 
   function handleSelect(key: string, id: string | null) {
     const params = new URLSearchParams();
@@ -37,27 +54,29 @@ export function QuestionFilterForm({
   }
 
   return (
-    <form className="flex flex-col gap-4 sm:flex-row">
+    <div className="grid gap-4 md:grid-cols-4">
       <Combobox
         items={technologies}
-        selectedItemId={searchParams.technologyId}
+        selectedItemId={searchParams.get("technologyId")}
         handleSelect={(id) => handleSelect("technologyId", id)}
         label="technology"
       />
 
       <Combobox
         items={companies}
-        selectedItemId={searchParams.companyId}
+        selectedItemId={searchParams.get("companyId")}
         handleSelect={(id) => handleSelect("companyId", id)}
         label="company"
       />
 
       <Combobox
         items={levels}
-        selectedItemId={searchParams.levelId}
+        selectedItemId={searchParams.get("levelId")}
         handleSelect={(id) => handleSelect("levelId", id)}
         label="level"
       />
-    </form>
+
+      <Input value={query} onChange={(e) => setQuery(e.target.value)} />
+    </div>
   );
 }
