@@ -1,8 +1,13 @@
 "use server";
 
-import { eq, SQL } from "drizzle-orm";
+import { eq, SQL, sql } from "drizzle-orm";
 
-import { companies, levels, technologies } from "@/features/database";
+import {
+  companies,
+  levels,
+  questions,
+  technologies,
+} from "@/features/database";
 
 import * as lib from "./lib";
 import { getQuestionSchema } from "./schemas";
@@ -27,6 +32,16 @@ export async function getQuestions(payload: GetQuestionPayload) {
 
   if (result.data.levelId) {
     filters.push(eq(levels.id, result.data.levelId));
+  }
+
+  if (result.data.query) {
+    filters.push(
+      sql`(
+      setweight(to_tsvector('english', ${questions.title}), 'A') ||
+      setweight(to_tsvector('english', ${questions.body}), 'B'))
+      @@ plainto_tsquery('english', ${result.data.query}
+      )`,
+    );
   }
 
   return { data: await lib.getQuestions(filters), error: null };
