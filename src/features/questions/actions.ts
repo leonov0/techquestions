@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, SQL, sql } from "drizzle-orm";
+import { desc, eq, SQL, sql } from "drizzle-orm";
 
 import {
   companies,
@@ -44,9 +44,17 @@ export async function getQuestions(payload: GetQuestionPayload) {
     );
   }
 
-  return { data: await lib.getQuestions(filters), error: null };
+  return { data: await lib.getQuestions({ filters }), error: null };
 }
 
 export async function getCategories() {
   return lib.getCategories();
+}
+
+export async function getRecommendations() {
+  // TODO: Implement recommendations
+
+  const orderBy = desc(questions.createdAt);
+
+  return { data: await lib.getQuestions({ orderBy }), error: null };
 }

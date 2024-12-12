@@ -16,13 +16,13 @@ export function QuestionList({ questions }: { questions: FullQuestion[] }) {
               href={`/questions/${question.id}`}
               className="text-lg font-medium text-primary underline-offset-4 hover:underline"
             >
-              {question?.title}
+              {question.title}
             </Link>
           </h3>
 
           <p className="line-clamp-2 text-sm">{question.body}</p>
 
-          <ul className="mt-2 flex flex-wrap gap-2">
+          <ul className="mt-2 flex flex-wrap gap-x-2 gap-y-1">
             {question.technologies.map((technology) => (
               <li key={`technology-${question.id}-${technology.id}`}>
                 <Badge>{technology.name}</Badge>
@@ -43,7 +43,7 @@ export function QuestionList({ questions }: { questions: FullQuestion[] }) {
           </ul>
 
           <div className="mt-2 flex">
-            {question.isAnonymous || !question.author ? (
+            {question.isAnonymous || !question.author?.username ? (
               <div className="inline-flex gap-2">
                 <Avatar>
                   <AvatarFallback>A</AvatarFallback>
