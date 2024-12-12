@@ -3,7 +3,6 @@ import {
   ExitIcon,
   GearIcon,
   MoonIcon,
-  PersonIcon,
   SunIcon,
 } from "@radix-ui/react-icons";
 import Link from "next/link";
@@ -16,6 +15,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
+  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
@@ -25,9 +25,11 @@ import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
 export function ProfileDropdown({
+  name,
   username,
   image,
 }: {
+  name?: string | null;
   username?: string | null;
   image?: string | null;
 }) {
@@ -36,7 +38,7 @@ export function ProfileDropdown({
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({ variant: "secondary" }),
-          "group max-w-48 space-x-2 pl-2",
+          "group max-w-40 space-x-2 pl-2",
         )}
       >
         <Avatar className="size-5 rounded-sm">
@@ -57,11 +59,25 @@ export function ProfileDropdown({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/users/${username}`}>
-            <PersonIcon />
-            <span className="ml-2">Profile</span>
+          <Link href={`/users/${username}`} className="flex items-center gap-4">
+            <Avatar className="size-8 rounded-sm">
+              <AvatarImage src={image ?? undefined} />
+
+              <AvatarFallback className="rounded-sm">
+                {username && getCapitalizedFirstLetter(username)}
+              </AvatarFallback>
+            </Avatar>
+
+            <div className="max-w-32 pr-4">
+              <p className="overflow-hidden text-clip text-sm font-medium">
+                {name}
+              </p>
+              <p className="overflow-hidden text-clip text-xs">@{username}</p>
+            </div>
           </Link>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
           <Link href="/settings">
@@ -81,6 +97,8 @@ export function ProfileDropdown({
             <DropdownMenuThemesSubContent />
           </DropdownMenuPortal>
         </DropdownMenuSub>
+
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
           <Link href="/signout">

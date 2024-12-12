@@ -1,6 +1,7 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
+  index,
   integer,
   pgTable,
   primaryKey,
@@ -50,19 +51,31 @@ export const accounts = pgTable(
   }),
 );
 
-export const questions = pgTable("question", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  title: varchar("title", { length: 255 }),
-  body: text("body"),
-  userId: uuid("userId").references(() => users.id),
-  isAnonymous: boolean("isAnonymous").default(false),
-  status: varchar("status", {
-    length: 32,
-    enum: ["pending", "approved", "rejected"],
-  }).default("pending"),
-  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
-});
+export const questions = pgTable(
+  "question",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: varchar("title", { length: 255 }),
+    body: text("body"),
+    userId: uuid("userId").references(() => users.id),
+    isAnonymous: boolean("isAnonymous").default(false),
+    status: varchar("status", {
+      length: 32,
+      enum: ["pending", "approved", "rejected"],
+    }).default("pending"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => ({
+    searchIndex: index("search_index").using(
+      "gin",
+      sql`(
+          setweight(to_tsvector('english', ${table.title}), 'A') ||
+          setweight(to_tsvector('english', ${table.body}), 'B')
+      )`,
+    ),
+  }),
+);
 
 export type Question = typeof questions.$inferSelect;
 export type NewQuestion = typeof questions.$inferInsert;

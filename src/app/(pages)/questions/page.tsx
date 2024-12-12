@@ -19,6 +19,7 @@ export default async function Questions(params: {
     technologyId: searchParams?.technologyId,
     companyId: searchParams?.companyId,
     levelId: searchParams?.levelId,
+    query: searchParams?.query,
   });
 
   const categories = await getCategories();
@@ -32,7 +33,6 @@ export default async function Questions(params: {
           technologies={categories.technologies}
           companies={categories.companies}
           levels={categories.levels}
-          searchParams={searchParams}
         />
 
         <section className="mx-auto mt-8 max-w-screen-md">

@@ -1,4 +1,5 @@
 "use client";
+
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 
@@ -16,7 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 
 export function Combobox({
   items,
@@ -33,6 +33,8 @@ export function Combobox({
     items.map((item) => [item.id, item.name?.toLowerCase()]),
   );
 
+  const selectedItem = items.find((item) => item.id === selectedItemId);
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -42,18 +44,17 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between sm:max-w-[200px]"
+          className="w-full justify-between"
         >
-          <span>
-            {items.find((item) => item.id === selectedItemId)?.name ||
-              `Select ${label}...`}
+          <span className="overflow-hidden text-clip">
+            {selectedItem ? selectedItem.name : `Select ${label}...`}
           </span>
 
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="p-0" align="end">
         <Command
           filter={(value, search) => {
             const technologyName = itemMap.get(value);
@@ -76,14 +77,11 @@ export function Combobox({
                     setOpen(false);
                   }}
                 >
-                  {item.name}
+                  <span className="overflow-hidden text-clip">
+                    {item.name ?? "\u00A0"}
+                  </span>
 
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      selectedItemId === item.id ? "opacity-100" : "opacity-0",
-                    )}
-                  />
+                  {selectedItemId === item.id && <Check className="ml-auto" />}
                 </CommandItem>
               ))}
             </CommandGroup>
