@@ -1,4 +1,4 @@
-import { and, eq, SQL } from "drizzle-orm";
+import { and, asc, eq, SQL } from "drizzle-orm";
 
 import {
   companies,
@@ -14,7 +14,15 @@ import {
 
 import type { FullQuestion } from "./types";
 
-export async function getQuestions(filters?: SQL[]): Promise<FullQuestion[]> {
+export async function getQuestions({
+  filters,
+  orderBy,
+  limit = 10,
+}: {
+  filters?: SQL[];
+  orderBy?: SQL;
+  limit?: number;
+}): Promise<FullQuestion[]> {
   const result = await database
     .select({
       question: questions,
@@ -40,7 +48,9 @@ export async function getQuestions(filters?: SQL[]): Promise<FullQuestion[]> {
       eq(questionsToTechnologies.technologyId, technologies.id),
     )
     .leftJoin(users, eq(questions.userId, users.id))
-    .where(filters ? and(...filters) : undefined);
+    .where(filters ? and(...filters) : undefined)
+    .orderBy(orderBy ? orderBy : asc(questions.title))
+    .limit(limit);
 
   const questionsMap: Map<string, FullQuestion> = new Map();
 
