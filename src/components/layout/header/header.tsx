@@ -13,7 +13,7 @@ export async function Header() {
   const session = await auth();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/40 bg-background/60 py-2 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-background/60 py-2 backdrop-blur">
       <div className="container flex justify-between gap-8">
         <nav className="flex gap-4">
           <Link
