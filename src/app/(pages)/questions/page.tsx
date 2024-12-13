@@ -25,7 +25,7 @@ export default async function Questions(params: {
   const categories = await getCategories();
 
   return (
-    <div className="grid min-h-screen grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
       <main className="container py-16">

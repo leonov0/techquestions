@@ -12,7 +12,7 @@ export default async function Home() {
   const recommendedQuestions = await getRecommendations();
 
   return (
-    <div className="grid min-h-screen grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
       <main className="container">

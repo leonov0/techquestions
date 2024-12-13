@@ -23,7 +23,7 @@ export default async function SignIn({
   const redirectTo = (await searchParams).callbackUrl || "/";
 
   return (
-    <div className="grid min-h-screen grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
       <main className="container max-w-screen-sm py-16">
