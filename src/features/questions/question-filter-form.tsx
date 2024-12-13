@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import type { Company, Level, Technology } from "@/features/database";
 import { useDebounce } from "@/lib/use-debounce";
+import { cn } from "@/lib/utils";
 
 import { Combobox } from "./combobox";
 
@@ -14,10 +15,12 @@ export function QuestionFilterForm({
   technologies,
   companies,
   levels,
+  className,
 }: {
   technologies: Technology[];
   companies: Company[];
   levels: Level[];
+  className?: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -55,7 +58,7 @@ export function QuestionFilterForm({
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-4">
+    <div className={cn("grid gap-4", className)}>
       <Combobox
         items={technologies}
         selectedItemId={searchParams.get("technologyId")}

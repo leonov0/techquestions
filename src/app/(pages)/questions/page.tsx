@@ -1,8 +1,10 @@
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { buttonVariants } from "@/components/ui/button";
 import {
   getCategories,
   getQuestions,
@@ -29,7 +31,12 @@ export default async function Questions(params: {
       <Header />
 
       <main className="container py-16">
+        <Link href="/questions/new" className={buttonVariants()}>
+          Add a question
+        </Link>
+
         <QuestionFilterForm
+          className="mt-8 md:grid-cols-4"
           technologies={categories.technologies}
           companies={categories.companies}
           levels={categories.levels}
