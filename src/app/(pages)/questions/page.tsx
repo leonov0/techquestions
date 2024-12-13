@@ -24,7 +24,9 @@ export default async function Questions(params: {
     query: searchParams?.query,
   });
 
-  const categories = await getCategories();
+  const {
+    data: { technologies, companies, levels },
+  } = await getCategories();
 
   return (
     <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
@@ -37,9 +39,9 @@ export default async function Questions(params: {
 
         <QuestionFilterForm
           className="mt-8 md:grid-cols-4"
-          technologies={categories.technologies}
-          companies={categories.companies}
-          levels={categories.levels}
+          technologies={technologies}
+          companies={companies}
+          levels={levels}
         />
 
         <section className="mx-auto mt-8 max-w-screen-md">
@@ -51,9 +53,7 @@ export default async function Questions(params: {
                 An error occurred while fetching the questions.
               </AlertTitle>
 
-              <AlertDescription>
-                {getQuestionsResponse.error.message}
-              </AlertDescription>
+              <AlertDescription>{getQuestionsResponse.error}</AlertDescription>
             </Alert>
           )}
 
