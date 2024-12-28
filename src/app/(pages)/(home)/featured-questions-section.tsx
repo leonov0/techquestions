@@ -1,14 +1,9 @@
-"use client";
-
-import { motion } from "motion/react";
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import type { FullQuestion } from "@/features/questions";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
-
-import { getAppearingMotionVariants } from "./utils";
 
 export default function FeaturedQuestionsSection({
   questions,
@@ -17,23 +12,15 @@ export default function FeaturedQuestionsSection({
 }) {
   return (
     <section className="mt-32">
-      <motion.h2
-        className="mb-8 text-2xl font-semibold tracking-tight"
-        variants={getAppearingMotionVariants(0.3)}
-        initial="hidden"
-        animate="visible"
-      >
+      <h2 className="mb-8 text-2xl font-semibold tracking-tight">
         Featured Questions
-      </motion.h2>
+      </h2>
 
       <ul className="grid gap-4 lg:grid-cols-3">
-        {questions.map((question, index) => (
-          <motion.li
+        {questions.map((question) => (
+          <li
             key={question.id}
-            className="flex flex-col rounded-xl border bg-card p-6 text-card-foreground shadow"
-            variants={getAppearingMotionVariants(0.4 + index * 0.1)}
-            initial="hidden"
-            animate="visible"
+            className="motion-preset-focus flex flex-col rounded-xl border bg-card p-6 text-card-foreground shadow"
           >
             <h3>
               <Link
@@ -107,7 +94,7 @@ export default function FeaturedQuestionsSection({
                 </Link>
               )}
             </div>
-          </motion.li>
+          </li>
         ))}
       </ul>
     </section>
