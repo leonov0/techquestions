@@ -71,7 +71,7 @@ export async function getRecommendations() {
   const orderBy = desc(questions.createdAt);
 
   try {
-    const data = await lib.getQuestions({ orderBy });
+    const data = await lib.getQuestions({ orderBy, limit: 3 });
 
     return { data, error: null };
   } catch {
