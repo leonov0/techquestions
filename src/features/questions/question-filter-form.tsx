@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import type { Company, Level, Technology } from "@/features/database";
+import type { Company, Level, Technology } from "@/database";
 import { useDebounce } from "@/lib/use-debounce";
 import { cn } from "@/lib/utils";
 

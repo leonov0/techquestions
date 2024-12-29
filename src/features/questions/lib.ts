@@ -10,7 +10,7 @@ import {
   questionsToTechnologies,
   technologies,
   users,
-} from "@/features/database";
+} from "@/database";
 
 import type { FullQuestion } from "./types";
 

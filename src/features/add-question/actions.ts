@@ -1,6 +1,6 @@
 "use server";
 
-import { database, schema } from "@/features/database";
+import { database, schema } from "@/database";
 
 import { auth } from "../auth";
 import { submitQuestionSchema } from "./schemas";

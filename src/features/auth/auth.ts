@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-import { database } from "@/features/database";
+import { database } from "@/database";
 import {
   createUsernameFromEmail,
   getUser,

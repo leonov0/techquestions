@@ -2,12 +2,7 @@
 
 import { desc, eq, SQL, sql } from "drizzle-orm";
 
-import {
-  companies,
-  levels,
-  questions,
-  technologies,
-} from "@/features/database";
+import { companies, levels, questions, technologies } from "@/database";
 
 import * as lib from "./lib";
 import { getQuestionSchema } from "./schemas";
