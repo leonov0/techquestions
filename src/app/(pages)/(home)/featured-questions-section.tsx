@@ -13,7 +13,7 @@ export default function FeaturedQuestionsSection({
   return (
     <section className="mt-32">
       <h2 className="mb-8 text-2xl font-semibold tracking-tight">
-        Featured Questions
+        Featured questions
       </h2>
 
       <ul className="grid gap-4 lg:grid-cols-3">

@@ -34,7 +34,7 @@ export default async function Questions(params: {
 
       <main className="container py-16">
         <Link href="/questions/new" className={buttonVariants()}>
-          Add a question
+          Submit a new question
         </Link>
 
         <QuestionFilterForm

@@ -21,7 +21,7 @@ export function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
           href="/questions"
           className={cn(buttonVariants(), "sm:h-10 sm:px-8")}
         >
-          Explore Questions
+          Explore questions
         </Link>
 
         {!isAuthenticated && (
@@ -32,7 +32,7 @@ export function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
               "sm:h-10 sm:px-8",
             )}
           >
-            Join the Community
+            Join the community
           </Link>
         )}
       </div>

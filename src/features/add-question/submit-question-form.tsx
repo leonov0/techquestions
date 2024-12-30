@@ -120,7 +120,7 @@ export function SubmitQuestionForm() {
           <CardFooter>
             <Button type="submit" disabled={isPending}>
               {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
-              <span>Submit</span>
+              <span>Submit for moderation</span>
             </Button>
           </CardFooter>
         </Card>
