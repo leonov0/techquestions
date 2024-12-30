@@ -77,8 +77,8 @@ export function Combobox({
                     setOpen(false);
                   }}
                 >
-                  <span className="overflow-hidden text-clip">
-                    {item.name ?? "\u00A0"}
+                  <span className="h-5 overflow-hidden text-clip">
+                    {item.name}
                   </span>
 
                   {selectedItemId === item.id && <Check className="ml-auto" />}
