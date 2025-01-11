@@ -7,14 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -25,18 +18,33 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import type { Company, Level, Technology } from "@/database";
 
 import { submitQuestion } from "./actions";
+import { MultipleSelect } from "./multiple-select";
 import { submitQuestionSchema } from "./schemas";
 import type { SubmitQuestionPayload } from "./types";
 
-export function SubmitQuestionForm() {
+export function SubmitQuestionForm({
+  technologies,
+  companies,
+  levels,
+}: {
+  technologies: Technology[];
+  companies: Company[];
+  levels: Level[];
+}) {
   const form = useForm<SubmitQuestionPayload>({
     resolver: zodResolver(submitQuestionSchema),
     defaultValues: {
       title: "",
       body: "",
+      isAnonymous: false,
+      technologies: [],
+      companies: [],
+      levels: [],
     },
   });
 
@@ -59,71 +67,158 @@ export function SubmitQuestionForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Submit a new question</CardTitle>
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Submit a new question
+          </h1>
 
-            <CardDescription>
-              Contribute to the community by submitting question you&apos;ve
-              been asked in interviews. Provide details and context to; help
-              others prepare effectively.
-            </CardDescription>
-          </CardHeader>
+          <p className="mt-2 text-lg text-muted-foreground sm:text-xl">
+            Contribute to the community by submitting question you&apos;ve been
+            asked in interviews.
+          </p>
+        </div>
 
-          <CardContent>
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
+        <Separator className="my-8" />
 
-                  <FormControl>
-                    <Input
-                      placeholder="Find the sum of elements in an array"
-                      {...field}
-                    />
-                  </FormControl>
+        <div className="space-y-6">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormControl>
+                  <Input
+                    placeholder="Find the sum of elements in an array"
+                    {...field}
+                  />
+                </FormControl>
 
-            <FormField
-              control={form.control}
-              name="body"
-              render={({ field }) => (
-                <FormItem className="mt-4">
-                  <FormLabel>
-                    Details <span>(optional)</span>
-                  </FormLabel>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Given an array of integers, find the sum of all the elements."
-                    />
-                  </FormControl>
+          <FormField
+            control={form.control}
+            name="body"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Details <span>(optional)</span>
+                </FormLabel>
+
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder="Given an array of integers, find the sum of all the elements."
+                  />
+                </FormControl>
+
+                <FormDescription>
+                  Describe the question in detail. Include any relevant
+                  condition, constraints, or context. Markdown is supported.
+                </FormDescription>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isAnonymous"
+            render={({ field }) => (
+              <FormItem className="flex items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Submit anonymously</FormLabel>
 
                   <FormDescription>
-                    Describe the question in detail. Include any relevant
-                    condition, constraints, or context. Markdown is supported.
+                    Your username will not be displayed with the question.
                   </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
+          <FormField
+            control={form.control}
+            name="technologies"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Technologies</FormLabel>
 
-          <CardFooter>
-            <Button type="submit" disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
-              <span>Submit for moderation</span>
-            </Button>
-          </CardFooter>
-        </Card>
+                <FormControl>
+                  <MultipleSelect items={technologies} {...field} />
+                </FormControl>
+
+                <FormDescription>
+                  Select the technologies relevant to the question.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="companies"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Companies</FormLabel>
+
+                <FormControl>
+                  <MultipleSelect
+                    items={companies}
+                    badgeProps={{ variant: "secondary" }}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormDescription>
+                  Select the companies where you were asked this question.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="levels"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Levels</FormLabel>
+
+                <FormControl>
+                  <MultipleSelect
+                    items={levels}
+                    badgeProps={{ variant: "outline" }}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormDescription>
+                  Select the expected developer levels for this question.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" disabled={isPending}>
+            {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+            <span>Submit for moderation</span>
+          </Button>
+        </div>
       </form>
     </Form>
   );

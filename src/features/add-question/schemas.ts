@@ -8,4 +8,8 @@ export const submitQuestionSchema = z.object({
     .string()
     .max(1024, "Details must be at most 1024 characters.")
     .optional(),
+  isAnonymous: z.boolean().optional(),
+  technologies: z.array(z.string().uuid()).optional(),
+  companies: z.array(z.string().uuid()).optional(),
+  levels: z.array(z.string().uuid()).optional(),
 });
