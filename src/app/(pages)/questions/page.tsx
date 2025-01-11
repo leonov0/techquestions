@@ -1,8 +1,10 @@
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { buttonVariants } from "@/components/ui/button";
 import {
   getCategories,
   getQuestions,
@@ -22,17 +24,24 @@ export default async function Questions(params: {
     query: searchParams?.query,
   });
 
-  const categories = await getCategories();
+  const {
+    data: { technologies, companies, levels },
+  } = await getCategories();
 
   return (
-    <div className="grid min-h-screen grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
       <main className="container py-16">
+        <Link href="/questions/new" className={buttonVariants()}>
+          Submit a new question
+        </Link>
+
         <QuestionFilterForm
-          technologies={categories.technologies}
-          companies={categories.companies}
-          levels={categories.levels}
+          className="mt-8 md:grid-cols-4"
+          technologies={technologies}
+          companies={companies}
+          levels={levels}
         />
 
         <section className="mx-auto mt-8 max-w-screen-md">
@@ -44,9 +53,7 @@ export default async function Questions(params: {
                 An error occurred while fetching the questions.
               </AlertTitle>
 
-              <AlertDescription>
-                {getQuestionsResponse.error.message}
-              </AlertDescription>
+              <AlertDescription>{getQuestionsResponse.error}</AlertDescription>
             </Alert>
           )}
 

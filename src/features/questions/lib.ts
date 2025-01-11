@@ -1,16 +1,6 @@
 import { and, asc, eq, SQL } from "drizzle-orm";
 
-import {
-  companies,
-  database,
-  levels,
-  questions,
-  questionsToCompanies,
-  questionsToLevels,
-  questionsToTechnologies,
-  technologies,
-  users,
-} from "@/features/database";
+import { database, schema } from "@/database";
 
 import type { FullQuestion } from "./types";
 
@@ -23,38 +13,57 @@ export async function getQuestions({
   orderBy?: SQL;
   limit?: number;
 }): Promise<FullQuestion[]> {
+  const questionsQuery = database
+    .select()
+    .from(schema.questions)
+    .limit(limit)
+    .as("questionsQuery");
+
   const result = await database
     .select({
-      question: questions,
-      company: companies,
-      level: levels,
-      technology: technologies,
-      author: users,
+      question: schema.questions,
+      company: schema.companies,
+      level: schema.levels,
+      technology: schema.technologies,
+      author: schema.users,
     })
-    .from(questions)
+    .from(questionsQuery)
+    .leftJoin(schema.questions, eq(questionsQuery.id, schema.questions.id))
     .leftJoin(
-      questionsToCompanies,
-      eq(questionsToCompanies.questionId, questions.id),
-    )
-    .leftJoin(companies, eq(questionsToCompanies.companyId, companies.id))
-    .leftJoin(questionsToLevels, eq(questionsToLevels.questionId, questions.id))
-    .leftJoin(levels, eq(questionsToLevels.levelId, levels.id))
-    .leftJoin(
-      questionsToTechnologies,
-      eq(questionsToTechnologies.questionId, questions.id),
+      schema.questionsToCompanies,
+      eq(schema.questionsToCompanies.questionId, schema.questions.id),
     )
     .leftJoin(
-      technologies,
-      eq(questionsToTechnologies.technologyId, technologies.id),
+      schema.companies,
+      eq(schema.questionsToCompanies.companyId, schema.companies.id),
     )
-    .leftJoin(users, eq(questions.userId, users.id))
-    .where(filters ? and(...filters) : undefined)
-    .orderBy(orderBy ? orderBy : asc(questions.title))
-    .limit(limit);
+    .leftJoin(
+      schema.questionsToLevels,
+      eq(schema.questionsToLevels.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.levels,
+      eq(schema.questionsToLevels.levelId, schema.levels.id),
+    )
+    .leftJoin(
+      schema.questionsToTechnologies,
+      eq(schema.questionsToTechnologies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.technologies,
+      eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
+    )
+    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id))
+    .orderBy(orderBy ? orderBy : asc(schema.questions.createdAt))
+    .where(filters ? and(...filters) : undefined);
 
   const questionsMap: Map<string, FullQuestion> = new Map();
 
   result.forEach((row) => {
+    if (row.question === null) {
+      throw new Error("Question not found");
+    }
+
     const questionId = row.question.id;
 
     if (!questionsMap.has(questionId)) {
@@ -106,9 +115,9 @@ export async function getQuestions({
 
 export async function getCategories() {
   const [companyList, levelList, technologyList] = await Promise.all([
-    database.select().from(companies),
-    database.select().from(levels),
-    database.select().from(technologies),
+    database.select().from(schema.companies),
+    database.select().from(schema.levels),
+    database.select().from(schema.technologies),
   ]);
 
   return {

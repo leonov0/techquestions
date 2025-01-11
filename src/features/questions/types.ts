@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Company, Level, Question, Technology } from "@/features/database";
+import type { Company, Level, Question, Technology } from "@/database";
 
 import { getQuestionSchema } from "./schemas";
 

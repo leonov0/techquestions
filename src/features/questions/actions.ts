@@ -2,12 +2,7 @@
 
 import { desc, eq, SQL, sql } from "drizzle-orm";
 
-import {
-  companies,
-  levels,
-  questions,
-  technologies,
-} from "@/features/database";
+import { companies, levels, questions, technologies } from "@/database";
 
 import * as lib from "./lib";
 import { getQuestionSchema } from "./schemas";
@@ -17,7 +12,7 @@ export async function getQuestions(payload: GetQuestionPayload) {
   const result = await getQuestionSchema.safeParseAsync(payload);
 
   if (!result.success) {
-    return { data: [], error: result.error };
+    return { data: [], error: result.error.message };
   }
 
   const filters: SQL[] = [];
@@ -44,17 +39,37 @@ export async function getQuestions(payload: GetQuestionPayload) {
     );
   }
 
-  return { data: await lib.getQuestions({ filters }), error: null };
+  try {
+    const data = await lib.getQuestions({ filters });
+
+    return { data, error: null };
+  } catch {
+    return { data: [], error: "Failed to get questions" };
+  }
 }
 
 export async function getCategories() {
-  return lib.getCategories();
+  try {
+    const data = await lib.getCategories();
+
+    return { data, error: null };
+  } catch {
+    const data = { technologies: [], companies: [], levels: [] };
+
+    return { data, error: "Failed to get categories" };
+  }
 }
 
 export async function getRecommendations() {
-  // TODO: Implement recommendations
+  // TODO: Implement featured questions
 
   const orderBy = desc(questions.createdAt);
 
-  return { data: await lib.getQuestions({ orderBy }), error: null };
+  try {
+    const data = await lib.getQuestions({ orderBy, limit: 3 });
+
+    return { data, error: null };
+  } catch {
+    return { data: [], error: "Failed to get featured questions" };
+  }
 }

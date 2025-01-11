@@ -2,7 +2,7 @@
 
 import NextAuth, { type DefaultSession } from "next-auth";
 
-import type { User } from "@/features/database/schema";
+import type { User } from "@/database/schema";
 
 declare module "next-auth" {
   interface Session {

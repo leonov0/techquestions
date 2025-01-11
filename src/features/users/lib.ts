@@ -1,6 +1,6 @@
 import { eq, ilike } from "drizzle-orm";
 
-import { database, type User, users } from "@/features/database";
+import { database, type User, users } from "@/database";
 
 import { updateUserSchema } from "./schemas";
 import type { UpdateUserPayload } from "./types";
