@@ -12,6 +12,8 @@ import {
   QuestionList,
 } from "@/features/questions";
 
+import { QuestionPagination } from "./pagination";
+
 export default async function Questions(params: {
   searchParams: Promise<{ [key: string]: string }>;
 }) {
@@ -22,6 +24,8 @@ export default async function Questions(params: {
     companyId: searchParams?.companyId,
     levelId: searchParams?.levelId,
     query: searchParams?.query,
+    page: +searchParams?.page,
+    limit: +searchParams?.limit,
   });
 
   const {
@@ -59,6 +63,8 @@ export default async function Questions(params: {
 
           <QuestionList questions={getQuestionsResponse.data} />
         </section>
+
+        <QuestionPagination pageCount={20} />
       </main>
 
       <Footer />

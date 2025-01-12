@@ -1,6 +1,6 @@
 "use server";
 
-import { desc, eq, SQL, sql } from "drizzle-orm";
+import { asc, desc, eq, SQL, sql } from "drizzle-orm";
 
 import { companies, levels, questions, technologies } from "@/database";
 
@@ -39,8 +39,14 @@ export async function getQuestions(payload: GetQuestionPayload) {
     );
   }
 
+  const limit = payload.limit || 10;
+
   try {
-    const data = await lib.getQuestions({ filters });
+    const data = await lib.getQuestions({
+      filters,
+      limit,
+      offset: payload.page ? (payload.page - 1) * limit : undefined,
+    });
 
     return { data, error: null };
   } catch {
@@ -63,7 +69,7 @@ export async function getCategories() {
 export async function getRecommendations() {
   // TODO: Implement featured questions
 
-  const orderBy = desc(questions.createdAt);
+  const orderBy = asc(questions.createdAt);
 
   try {
     const data = await lib.getQuestions({ orderBy, limit: 3 });

@@ -11,4 +11,7 @@ export type FullQuestion = Question & {
   author: { id: string; username: string | null; image: string | null } | null;
 };
 
-export type GetQuestionPayload = z.infer<typeof getQuestionSchema>;
+export type GetQuestionPayload = z.infer<typeof getQuestionSchema> & {
+  page?: number;
+  limit?: number;
+};

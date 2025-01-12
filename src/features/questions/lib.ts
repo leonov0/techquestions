@@ -8,16 +8,21 @@ export async function getQuestions({
   filters,
   orderBy,
   limit = 10,
+  offset = 0,
 }: {
   filters?: SQL[];
   orderBy?: SQL;
   limit?: number;
+  offset?: number;
 }): Promise<FullQuestion[]> {
-  const questionsQuery = database
-    .select()
+  const subQuery = database
+    .select({ id: schema.questions.id })
     .from(schema.questions)
+    .where(filters ? and(...filters) : undefined)
+    .orderBy(orderBy ? orderBy : asc(schema.questions.createdAt))
     .limit(limit)
-    .as("questionsQuery");
+    .offset(offset)
+    .as("subQuery");
 
   const result = await database
     .select({
@@ -27,8 +32,8 @@ export async function getQuestions({
       technology: schema.technologies,
       author: schema.users,
     })
-    .from(questionsQuery)
-    .leftJoin(schema.questions, eq(questionsQuery.id, schema.questions.id))
+    .from(schema.questions)
+    .innerJoin(subQuery, eq(subQuery.id, schema.questions.id))
     .leftJoin(
       schema.questionsToCompanies,
       eq(schema.questionsToCompanies.questionId, schema.questions.id),
@@ -53,9 +58,7 @@ export async function getQuestions({
       schema.technologies,
       eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
     )
-    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id))
-    .orderBy(orderBy ? orderBy : asc(schema.questions.createdAt))
-    .where(filters ? and(...filters) : undefined);
+    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id));
 
   const questionsMap: Map<string, FullQuestion> = new Map();
 
