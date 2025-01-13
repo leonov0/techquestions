@@ -12,7 +12,13 @@ export async function getQuestions(payload: GetQuestionPayload) {
   const result = await getQuestionSchema.safeParseAsync(payload);
 
   if (!result.success) {
-    return { data: [], error: result.error.message };
+    return {
+      data: {
+        questions: [],
+        count: 0,
+      },
+      error: result.error.message,
+    };
   }
 
   const filters: SQL[] = [];
@@ -42,15 +48,27 @@ export async function getQuestions(payload: GetQuestionPayload) {
   const limit = payload.limit || 10;
 
   try {
-    const data = await lib.getQuestions({
-      filters,
-      limit,
-      offset: payload.page ? (payload.page - 1) * limit : undefined,
-    });
+    const [questions, count] = await Promise.all([
+      lib.getQuestions({
+        filters,
+        limit,
+        offset: payload.page ? (payload.page - 1) * limit : undefined,
+      }),
+      lib.getQuestionCount(filters),
+    ]);
 
-    return { data, error: null };
+    return {
+      data: { questions, count: Math.ceil(count / limit) },
+      error: null,
+    };
   } catch {
-    return { data: [], error: "Failed to get questions" };
+    return {
+      data: {
+        questions: [],
+        count: 0,
+      },
+      error: "Failed to get questions",
+    };
   }
 }
 

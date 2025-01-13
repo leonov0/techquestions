@@ -152,6 +152,40 @@ export async function getQuestions({
   return Array.from(questionsMap.values());
 }
 
+export async function getQuestionCount(filters?: SQL[]) {
+  const questions = await database
+    .select({ id: schema.questions.id })
+    .from(schema.questions)
+    .leftJoin(
+      schema.questionsToCompanies,
+      eq(schema.questionsToCompanies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.companies,
+      eq(schema.questionsToCompanies.companyId, schema.companies.id),
+    )
+    .leftJoin(
+      schema.questionsToLevels,
+      eq(schema.questionsToLevels.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.levels,
+      eq(schema.questionsToLevels.levelId, schema.levels.id),
+    )
+    .leftJoin(
+      schema.questionsToTechnologies,
+      eq(schema.questionsToTechnologies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.technologies,
+      eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
+    )
+    .where(filters ? and(...filters) : undefined)
+    .groupBy(schema.questions.id);
+
+  return questions.length;
+}
+
 export async function getCategories() {
   const [companyList, levelList, technologyList] = await Promise.all([
     database.select().from(schema.companies),

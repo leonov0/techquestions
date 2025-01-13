@@ -61,10 +61,10 @@ export default async function Questions(params: {
             </Alert>
           )}
 
-          <QuestionList questions={getQuestionsResponse.data} />
+          <QuestionList questions={getQuestionsResponse.data.questions} />
         </section>
 
-        <QuestionPagination pageCount={20} />
+        <QuestionPagination pageCount={getQuestionsResponse.data.count} />
       </main>
 
       <Footer />
