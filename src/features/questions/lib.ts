@@ -6,7 +6,7 @@ import type { FullQuestion } from "./types";
 
 export async function getQuestions({
   filters,
-  orderBy,
+  orderBy = asc(schema.questions.createdAt),
   limit = 10,
   offset = 0,
 }: {
@@ -15,25 +15,42 @@ export async function getQuestions({
   limit?: number;
   offset?: number;
 }): Promise<FullQuestion[]> {
-  const subQuery = database
-    .select({ id: schema.questions.id })
-    .from(schema.questions)
-    .where(filters ? and(...filters) : undefined)
-    .orderBy(orderBy ? orderBy : asc(schema.questions.createdAt))
-    .limit(limit)
-    .offset(offset)
-    .as("subQuery");
+  console.log(
+    await database
+      .selectDistinctOn([schema.questions.id], { id: schema.questions.id })
+      .from(schema.questions)
+      .leftJoin(
+        schema.questionsToCompanies,
+        eq(schema.questionsToCompanies.questionId, schema.questions.id),
+      )
+      .leftJoin(
+        schema.companies,
+        eq(schema.questionsToCompanies.companyId, schema.companies.id),
+      )
+      .leftJoin(
+        schema.questionsToLevels,
+        eq(schema.questionsToLevels.questionId, schema.questions.id),
+      )
+      .leftJoin(
+        schema.levels,
+        eq(schema.questionsToLevels.levelId, schema.levels.id),
+      )
+      .leftJoin(
+        schema.questionsToTechnologies,
+        eq(schema.questionsToTechnologies.questionId, schema.questions.id),
+      )
+      .leftJoin(
+        schema.technologies,
+        eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
+      )
+      .where(filters ? and(...filters) : undefined)
+      .limit(limit)
+      .offset(offset),
+  );
 
-  const result = await database
-    .select({
-      question: schema.questions,
-      company: schema.companies,
-      level: schema.levels,
-      technology: schema.technologies,
-      author: schema.users,
-    })
+  const filteredQuestionsQuery = database
+    .selectDistinctOn([schema.questions.id], { id: schema.questions.id })
     .from(schema.questions)
-    .innerJoin(subQuery, eq(subQuery.id, schema.questions.id))
     .leftJoin(
       schema.questionsToCompanies,
       eq(schema.questionsToCompanies.questionId, schema.questions.id),
@@ -58,7 +75,50 @@ export async function getQuestions({
       schema.technologies,
       eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
     )
-    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id));
+    .where(filters ? and(...filters) : undefined)
+    .limit(limit)
+    .offset(offset)
+    .as("filteredQuestionsQuery");
+
+  const result = await database
+    .select({
+      question: schema.questions,
+      company: schema.companies,
+      level: schema.levels,
+      technology: schema.technologies,
+      author: schema.users,
+    })
+    .from(schema.questions)
+    .innerJoin(
+      filteredQuestionsQuery,
+      eq(schema.questions.id, filteredQuestionsQuery.id),
+    )
+    .leftJoin(
+      schema.questionsToCompanies,
+      eq(schema.questionsToCompanies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.companies,
+      eq(schema.questionsToCompanies.companyId, schema.companies.id),
+    )
+    .leftJoin(
+      schema.questionsToLevels,
+      eq(schema.questionsToLevels.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.levels,
+      eq(schema.questionsToLevels.levelId, schema.levels.id),
+    )
+    .leftJoin(
+      schema.questionsToTechnologies,
+      eq(schema.questionsToTechnologies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.technologies,
+      eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
+    )
+    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id))
+    .orderBy(orderBy);
 
   const questionsMap: Map<string, FullQuestion> = new Map();
 
