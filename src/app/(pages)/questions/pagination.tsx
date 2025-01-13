@@ -26,7 +26,7 @@ export function QuestionPagination({ pageCount }: { pageCount: number }) {
   };
 
   return (
-    <Pagination>
+    <Pagination className="mt-8">
       <PaginationContent>
         {currentPage > 1 ? (
           <>
