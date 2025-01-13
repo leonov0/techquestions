@@ -1,6 +1,6 @@
 "use server";
 
-import { asc, desc, eq, SQL, sql } from "drizzle-orm";
+import { asc, eq, SQL, sql } from "drizzle-orm";
 
 import { companies, levels, questions, technologies } from "@/database";
 
