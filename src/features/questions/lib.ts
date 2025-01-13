@@ -15,39 +15,6 @@ export async function getQuestions({
   limit?: number;
   offset?: number;
 }): Promise<FullQuestion[]> {
-  console.log(
-    await database
-      .selectDistinctOn([schema.questions.id], { id: schema.questions.id })
-      .from(schema.questions)
-      .leftJoin(
-        schema.questionsToCompanies,
-        eq(schema.questionsToCompanies.questionId, schema.questions.id),
-      )
-      .leftJoin(
-        schema.companies,
-        eq(schema.questionsToCompanies.companyId, schema.companies.id),
-      )
-      .leftJoin(
-        schema.questionsToLevels,
-        eq(schema.questionsToLevels.questionId, schema.questions.id),
-      )
-      .leftJoin(
-        schema.levels,
-        eq(schema.questionsToLevels.levelId, schema.levels.id),
-      )
-      .leftJoin(
-        schema.questionsToTechnologies,
-        eq(schema.questionsToTechnologies.questionId, schema.questions.id),
-      )
-      .leftJoin(
-        schema.technologies,
-        eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
-      )
-      .where(filters ? and(...filters) : undefined)
-      .limit(limit)
-      .offset(offset),
-  );
-
   const filteredQuestionsQuery = database
     .selectDistinctOn([schema.questions.id], { id: schema.questions.id })
     .from(schema.questions)
@@ -76,11 +43,21 @@ export async function getQuestions({
       eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
     )
     .where(filters ? and(...filters) : undefined)
-    .limit(limit)
-    .offset(offset)
     .as("filteredQuestionsQuery");
 
-  const result = await database
+  const orderedQuestionsQuery = database
+    .select({ id: schema.questions.id })
+    .from(filteredQuestionsQuery)
+    .leftJoin(
+      schema.questions,
+      eq(schema.questions.id, filteredQuestionsQuery.id),
+    )
+    .limit(limit)
+    .offset(offset)
+    .orderBy(orderBy)
+    .as("orderedQuestionsQuery");
+
+  const questions = await database
     .select({
       question: schema.questions,
       company: schema.companies,
@@ -90,8 +67,8 @@ export async function getQuestions({
     })
     .from(schema.questions)
     .innerJoin(
-      filteredQuestionsQuery,
-      eq(schema.questions.id, filteredQuestionsQuery.id),
+      orderedQuestionsQuery,
+      eq(schema.questions.id, orderedQuestionsQuery.id),
     )
     .leftJoin(
       schema.questionsToCompanies,
@@ -117,12 +94,11 @@ export async function getQuestions({
       schema.technologies,
       eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
     )
-    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id))
-    .orderBy(orderBy);
+    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id));
 
   const questionsMap: Map<string, FullQuestion> = new Map();
 
-  result.forEach((row) => {
+  questions.forEach((row) => {
     if (row.question === null) {
       throw new Error("Question not found");
     }
