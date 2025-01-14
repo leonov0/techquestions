@@ -6,29 +6,18 @@ import type { FullQuestion } from "./types";
 
 export async function getQuestions({
   filters,
-  orderBy,
+  orderBy = asc(schema.questions.createdAt),
   limit = 10,
+  offset = 0,
 }: {
   filters?: SQL[];
   orderBy?: SQL;
   limit?: number;
+  offset?: number;
 }): Promise<FullQuestion[]> {
-  const questionsQuery = database
-    .select()
+  const filteredQuestionsQuery = database
+    .selectDistinctOn([schema.questions.id], { id: schema.questions.id })
     .from(schema.questions)
-    .limit(limit)
-    .as("questionsQuery");
-
-  const result = await database
-    .select({
-      question: schema.questions,
-      company: schema.companies,
-      level: schema.levels,
-      technology: schema.technologies,
-      author: schema.users,
-    })
-    .from(questionsQuery)
-    .leftJoin(schema.questions, eq(questionsQuery.id, schema.questions.id))
     .leftJoin(
       schema.questionsToCompanies,
       eq(schema.questionsToCompanies.questionId, schema.questions.id),
@@ -53,13 +42,63 @@ export async function getQuestions({
       schema.technologies,
       eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
     )
-    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id))
-    .orderBy(orderBy ? orderBy : asc(schema.questions.createdAt))
-    .where(filters ? and(...filters) : undefined);
+    .where(filters ? and(...filters) : undefined)
+    .as("filteredQuestionsQuery");
+
+  const orderedQuestionsQuery = database
+    .select({ id: schema.questions.id })
+    .from(filteredQuestionsQuery)
+    .leftJoin(
+      schema.questions,
+      eq(schema.questions.id, filteredQuestionsQuery.id),
+    )
+    .limit(limit)
+    .offset(offset)
+    .orderBy(orderBy)
+    .as("orderedQuestionsQuery");
+
+  const questions = await database
+    .select({
+      question: schema.questions,
+      company: schema.companies,
+      level: schema.levels,
+      technology: schema.technologies,
+      author: schema.users,
+    })
+    .from(schema.questions)
+    .innerJoin(
+      orderedQuestionsQuery,
+      eq(schema.questions.id, orderedQuestionsQuery.id),
+    )
+    .leftJoin(
+      schema.questionsToCompanies,
+      eq(schema.questionsToCompanies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.companies,
+      eq(schema.questionsToCompanies.companyId, schema.companies.id),
+    )
+    .leftJoin(
+      schema.questionsToLevels,
+      eq(schema.questionsToLevels.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.levels,
+      eq(schema.questionsToLevels.levelId, schema.levels.id),
+    )
+    .leftJoin(
+      schema.questionsToTechnologies,
+      eq(schema.questionsToTechnologies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.technologies,
+      eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
+    )
+    .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id));
 
   const questionsMap: Map<string, FullQuestion> = new Map();
 
-  result.forEach((row) => {
+  questions.forEach((row) => {
     if (row.question === null) {
       throw new Error("Question not found");
     }
@@ -111,6 +150,40 @@ export async function getQuestions({
   });
 
   return Array.from(questionsMap.values());
+}
+
+export async function getQuestionCount(filters?: SQL[]) {
+  const questions = await database
+    .select({ id: schema.questions.id })
+    .from(schema.questions)
+    .leftJoin(
+      schema.questionsToCompanies,
+      eq(schema.questionsToCompanies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.companies,
+      eq(schema.questionsToCompanies.companyId, schema.companies.id),
+    )
+    .leftJoin(
+      schema.questionsToLevels,
+      eq(schema.questionsToLevels.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.levels,
+      eq(schema.questionsToLevels.levelId, schema.levels.id),
+    )
+    .leftJoin(
+      schema.questionsToTechnologies,
+      eq(schema.questionsToTechnologies.questionId, schema.questions.id),
+    )
+    .leftJoin(
+      schema.technologies,
+      eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
+    )
+    .where(filters ? and(...filters) : undefined)
+    .groupBy(schema.questions.id);
+
+  return questions.length;
 }
 
 export async function getCategories() {

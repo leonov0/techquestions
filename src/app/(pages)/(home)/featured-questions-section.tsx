@@ -25,7 +25,7 @@ export default function FeaturedQuestionsSection({
             <h3>
               <Link
                 href={`/questions/${question.id}`}
-                className="text-lg font-medium text-primary underline-offset-4 hover:underline"
+                className="line-clamp-1 text-lg font-medium text-primary underline-offset-4 hover:underline"
               >
                 {question.title}
               </Link>

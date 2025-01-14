@@ -27,11 +27,29 @@ export async function submitQuestion(payload: SubmitQuestionPayload) {
     })
     .returning({ questionId: schema.questions.id });
 
-  if (parsedPayload.data.technologies) {
+  if (parsedPayload.data.technologies?.length) {
     await database.insert(schema.questionsToTechnologies).values(
       parsedPayload.data.technologies.map((technologyId) => ({
         questionId,
         technologyId,
+      })),
+    );
+  }
+
+  if (parsedPayload.data.companies?.length) {
+    await database.insert(schema.questionsToCompanies).values(
+      parsedPayload.data.companies.map((companyId) => ({
+        questionId,
+        companyId,
+      })),
+    );
+  }
+
+  if (parsedPayload.data.levels?.length) {
+    await database.insert(schema.questionsToLevels).values(
+      parsedPayload.data.levels.map((levelId) => ({
+        questionId,
+        levelId,
       })),
     );
   }

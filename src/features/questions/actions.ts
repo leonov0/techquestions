@@ -1,6 +1,6 @@
 "use server";
 
-import { desc, eq, SQL, sql } from "drizzle-orm";
+import { asc, eq, SQL, sql } from "drizzle-orm";
 
 import { companies, levels, questions, technologies } from "@/database";
 
@@ -12,7 +12,13 @@ export async function getQuestions(payload: GetQuestionPayload) {
   const result = await getQuestionSchema.safeParseAsync(payload);
 
   if (!result.success) {
-    return { data: [], error: result.error.message };
+    return {
+      data: {
+        questions: [],
+        count: 0,
+      },
+      error: result.error.message,
+    };
   }
 
   const filters: SQL[] = [];
@@ -39,12 +45,30 @@ export async function getQuestions(payload: GetQuestionPayload) {
     );
   }
 
-  try {
-    const data = await lib.getQuestions({ filters });
+  const limit = payload.limit || 10;
 
-    return { data, error: null };
+  try {
+    const [questions, count] = await Promise.all([
+      lib.getQuestions({
+        filters,
+        limit,
+        offset: payload.page ? (payload.page - 1) * limit : undefined,
+      }),
+      lib.getQuestionCount(filters),
+    ]);
+
+    return {
+      data: { questions, count: Math.ceil(count / limit) },
+      error: null,
+    };
   } catch {
-    return { data: [], error: "Failed to get questions" };
+    return {
+      data: {
+        questions: [],
+        count: 0,
+      },
+      error: "Failed to get questions",
+    };
   }
 }
 
@@ -63,7 +87,7 @@ export async function getCategories() {
 export async function getRecommendations() {
   // TODO: Implement featured questions
 
-  const orderBy = desc(questions.createdAt);
+  const orderBy = asc(questions.createdAt);
 
   try {
     const data = await lib.getQuestions({ orderBy, limit: 3 });
