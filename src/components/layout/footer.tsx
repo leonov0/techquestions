@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="py-8 text-muted-foreground">
+    <footer className="py-8 pt-0 text-muted-foreground">
       <div className="container flex flex-col-reverse items-center justify-between gap-2 sm:flex-row">
         <p className="text-sm">
           Copyright &copy; {new Date().getFullYear()} TechQuestions
