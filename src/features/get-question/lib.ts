@@ -59,7 +59,38 @@ export async function getQuestion(id: string): Promise<FullQuestion> {
   }
 
   const question = rows[0].question;
+  const { technologies, companies, levels } = getTags(rows);
+  const author = getAuthor(rows[0].author, question.isAnonymous);
 
+  return { ...question, technologies, companies, levels, author };
+}
+
+function getAuthor(
+  author: User | null,
+  isAnonymous: boolean | null,
+): {
+  id: string;
+  username: string | null;
+  image: string | null;
+} | null {
+  if (isAnonymous || !author) {
+    return null;
+  }
+
+  return {
+    id: author.id,
+    username: author.username,
+    image: author.image,
+  };
+}
+
+function getTags(
+  rows: {
+    technology: Technology | null;
+    company: Company | null;
+    level: Level | null;
+  }[],
+) {
   const tags = rows.reduce(
     (acc, row) => {
       if (row.technology) {
@@ -84,29 +115,8 @@ export async function getQuestion(id: string): Promise<FullQuestion> {
   );
 
   return {
-    ...question,
-    author: getAuthor(rows[0].author, question.isAnonymous),
     technologies: Array.from(tags.technologies.values()),
     companies: Array.from(tags.companies.values()),
     levels: Array.from(tags.levels.values()),
-  };
-}
-
-function getAuthor(
-  author: User | null,
-  isAnonymous: boolean | null,
-): {
-  id: string;
-  username: string | null;
-  image: string | null;
-} | null {
-  if (isAnonymous || !author) {
-    return null;
-  }
-
-  return {
-    id: author.id,
-    username: author.username,
-    image: author.image,
   };
 }
