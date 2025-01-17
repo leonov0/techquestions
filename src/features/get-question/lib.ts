@@ -6,6 +6,7 @@ import {
   type Level,
   schema,
   type Technology,
+  type User,
 } from "@/database";
 import type { FullQuestion } from "@/features/questions";
 
@@ -82,20 +83,30 @@ export async function getQuestion(id: string): Promise<FullQuestion> {
     },
   );
 
-  const author =
-    question.isAnonymous || !rows[0].author
-      ? null
-      : {
-          id: rows[0].author.id,
-          username: rows[0].author.username,
-          image: rows[0].author.image,
-        };
-
   return {
     ...question,
-    author,
+    author: getAuthor(rows[0].author, question.isAnonymous),
     technologies: Array.from(tags.technologies.values()),
     companies: Array.from(tags.companies.values()),
     levels: Array.from(tags.levels.values()),
+  };
+}
+
+function getAuthor(
+  author: User | null,
+  isAnonymous: boolean | null,
+): {
+  id: string;
+  username: string | null;
+  image: string | null;
+} | null {
+  if (isAnonymous || !author) {
+    return null;
+  }
+
+  return {
+    id: author.id,
+    username: author.username,
+    image: author.image,
   };
 }
