@@ -12,7 +12,7 @@ export default async function SubmitQuestion() {
     <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
-      <main className="container py-16">
+      <main className="container max-w-screen-sm py-16">
         <SubmitQuestionForm
           technologies={technologies}
           companies={companies}
