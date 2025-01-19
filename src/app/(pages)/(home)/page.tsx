@@ -1,24 +1,30 @@
+import { Suspense } from "react";
+
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { auth } from "@/features/auth";
-import { getRecommendations } from "@/features/questions";
+import {
+  FeaturedQuestions,
+  FeaturedQuestionsSkeleton,
+} from "@/features/get-featured-questions";
 
-import FeaturedQuestionsSection from "./featured-questions-section";
 import { HeroSection } from "./hero-section";
 
 export default async function Home() {
   const session = await auth();
 
-  const recommendedQuestions = await getRecommendations();
-
   return (
     <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
-      <main className="container">
+      <main className="container py-16">
         <HeroSection isAuthenticated={!!session} />
 
-        <FeaturedQuestionsSection questions={recommendedQuestions.data} />
+        <section className="mt-16">
+          <Suspense fallback={<FeaturedQuestionsSkeleton />}>
+            <FeaturedQuestions />
+          </Suspense>
+        </section>
       </main>
 
       <Footer />

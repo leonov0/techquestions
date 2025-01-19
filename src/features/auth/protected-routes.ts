@@ -1,1 +1,5 @@
-export const protectedRoutes = ["/complete-profile", "/signout"];
+export const protectedRoutes = [
+  "/complete-profile",
+  "/signout",
+  "/questions/new",
+];

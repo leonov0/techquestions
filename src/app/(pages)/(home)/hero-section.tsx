@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
   return (
-    <section className="mx-auto mt-32 max-w-xl">
+    <section className="mx-auto max-w-xl">
       <h1 className="text-3xl font-semibold tracking-tight motion-translate-y-in-50 motion-opacity-in-[0%]">
         Master Every Tech Interview
       </h1>

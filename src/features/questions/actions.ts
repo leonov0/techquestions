@@ -1,6 +1,6 @@
 "use server";
 
-import { asc, eq, SQL, sql } from "drizzle-orm";
+import { eq, SQL, sql } from "drizzle-orm";
 
 import { companies, levels, questions, technologies } from "@/database";
 
@@ -81,19 +81,5 @@ export async function getCategories() {
     const data = { technologies: [], companies: [], levels: [] };
 
     return { data, error: "Failed to get categories" };
-  }
-}
-
-export async function getRecommendations() {
-  // TODO: Implement featured questions
-
-  const orderBy = asc(questions.createdAt);
-
-  try {
-    const data = await lib.getQuestions({ orderBy, limit: 3 });
-
-    return { data, error: null };
-  } catch {
-    return { data: [], error: "Failed to get featured questions" };
   }
 }
