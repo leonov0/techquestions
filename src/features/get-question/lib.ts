@@ -73,7 +73,7 @@ function getAuthor(
   username: string | null;
   image: string | null;
 } | null {
-  if (isAnonymous || !author) {
+  if (isAnonymous || !author || !author.username) {
     return null;
   }
 
