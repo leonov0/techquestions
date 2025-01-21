@@ -22,6 +22,13 @@
       "when": 1731526434119,
       "tag": "0002_clear_saracen",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737438960253,
+      "tag": "0003_strange_gravity",
+      "breakpoints": true
     }
   ]
 }

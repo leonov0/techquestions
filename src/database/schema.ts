@@ -27,6 +27,10 @@ export const users = pgTable("user", {
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
+export const usersRelations = relations(users, ({ many }) => ({
+  questionVotes: many(questionVotes),
+}));
+
 export const accounts = pgTable(
   "account",
   {
@@ -84,6 +88,7 @@ export const questionsRelations = relations(users, ({ many }) => ({
   questionsToCompanies: many(questionsToCompanies),
   questionsToTechnologies: many(questionsToTechnologies),
   questionsToLevels: many(questionsToLevels),
+  questionVotes: many(questionVotes),
 }));
 
 export const questionReviews = pgTable("question_review", {
@@ -190,3 +195,24 @@ export const questionsToLevels = pgTable(
     pk: primaryKey({ columns: [t.questionId, t.levelId] }),
   }),
 );
+
+export const questionVotes = pgTable("question_vote", {
+  questionId: uuid("questionId")
+    .notNull()
+    .references(() => questions.id, { onDelete: "cascade" }),
+  userId: uuid("userId").references(() => users.id),
+  vote: integer("vote"),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const questionVotesRelations = relations(questionVotes, ({ one }) => ({
+  user: one(users, {
+    fields: [questionVotes.userId],
+    references: [users.id],
+  }),
+  question: one(questions, {
+    fields: [questionVotes.questionId],
+    references: [questions.id],
+  }),
+}));
