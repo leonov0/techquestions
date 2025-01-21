@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -27,10 +27,6 @@ export const users = pgTable("user", {
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
-export const usersRelations = relations(users, ({ many }) => ({
-  questionVotes: many(questionVotes),
-}));
-
 export const accounts = pgTable(
   "account",
   {
@@ -48,11 +44,9 @@ export const accounts = pgTable(
     id_token: varchar("id_token", { length: 255 }),
     session_state: varchar("session_state", { length: 255 }),
   },
-  (account) => ({
-    compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
-    }),
-  }),
+  (table) => [
+    primaryKey({ columns: [table.provider, table.providerAccountId] }),
+  ],
 );
 
 export const questions = pgTable(
@@ -70,26 +64,19 @@ export const questions = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
   },
-  (table) => ({
-    searchIndex: index("search_index").using(
+  (table) => [
+    index("search_index").using(
       "gin",
       sql`(
           setweight(to_tsvector('english', ${table.title}), 'A') ||
           setweight(to_tsvector('english', ${table.body}), 'B')
       )`,
     ),
-  }),
+  ],
 );
 
 export type Question = typeof questions.$inferSelect;
 export type NewQuestion = typeof questions.$inferInsert;
-
-export const questionsRelations = relations(users, ({ many }) => ({
-  questionsToCompanies: many(questionsToCompanies),
-  questionsToTechnologies: many(questionsToTechnologies),
-  questionsToLevels: many(questionsToLevels),
-  questionVotes: many(questionVotes),
-}));
 
 export const questionReviews = pgTable("question_review", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -119,10 +106,6 @@ export const companies = pgTable("company", {
 export type Company = typeof companies.$inferSelect;
 export type NewCompany = typeof companies.$inferInsert;
 
-export const companiesRelations = relations(companies, ({ many }) => ({
-  questionsToCompanies: many(questionsToCompanies),
-}));
-
 export const questionsToCompanies = pgTable(
   "questions_to_companies",
   {
@@ -133,9 +116,7 @@ export const questionsToCompanies = pgTable(
       .notNull()
       .references(() => companies.id),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.questionId, t.companyId] }),
-  }),
+  (table) => [primaryKey({ columns: [table.questionId, table.companyId] })],
 );
 
 export const technologies = pgTable("technology", {
@@ -148,10 +129,6 @@ export const technologies = pgTable("technology", {
 export type Technology = typeof technologies.$inferSelect;
 export type NewTechnology = typeof technologies.$inferInsert;
 
-export const technologiesRelations = relations(technologies, ({ many }) => ({
-  questionsToTechnologies: many(questionsToTechnologies),
-}));
-
 export const questionsToTechnologies = pgTable(
   "questions_to_technologies",
   {
@@ -162,9 +139,7 @@ export const questionsToTechnologies = pgTable(
       .notNull()
       .references(() => technologies.id),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.questionId, t.technologyId] }),
-  }),
+  (table) => [primaryKey({ columns: [table.questionId, table.technologyId] })],
 );
 
 export const levels = pgTable("level", {
@@ -177,10 +152,6 @@ export const levels = pgTable("level", {
 export type Level = typeof levels.$inferSelect;
 export type NewLevel = typeof levels.$inferInsert;
 
-export const levelsRelations = relations(levels, ({ many }) => ({
-  questionsToLevels: many(questionsToLevels),
-}));
-
 export const questionsToLevels = pgTable(
   "questions_to_levels",
   {
@@ -191,28 +162,19 @@ export const questionsToLevels = pgTable(
       .notNull()
       .references(() => levels.id),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.questionId, t.levelId] }),
-  }),
+  (table) => [primaryKey({ columns: [table.questionId, table.levelId] })],
 );
 
-export const questionVotes = pgTable("question_vote", {
-  questionId: uuid("questionId")
-    .notNull()
-    .references(() => questions.id, { onDelete: "cascade" }),
-  userId: uuid("userId").references(() => users.id),
-  vote: integer("vote"),
-  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
-});
-
-export const questionVotesRelations = relations(questionVotes, ({ one }) => ({
-  user: one(users, {
-    fields: [questionVotes.userId],
-    references: [users.id],
-  }),
-  question: one(questions, {
-    fields: [questionVotes.questionId],
-    references: [questions.id],
-  }),
-}));
+export const questionVotes = pgTable(
+  "question_vote",
+  {
+    questionId: uuid("questionId")
+      .notNull()
+      .references(() => questions.id, { onDelete: "cascade" }),
+    userId: uuid("userId").references(() => users.id),
+    vote: integer("vote"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.questionId, table.userId] })],
+);
