@@ -1,8 +1,10 @@
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getQuestion } from "@/features/get-question";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
@@ -80,7 +82,21 @@ export async function QuestionSection({ id }: { id: string }) {
 
       <Separator className="my-8" />
 
-      <p className="mt-4 text-lg">{question.body}</p>
+      <div className="grid grid-cols-[auto,_1fr] gap-4">
+        <div className="flex flex-col items-center gap-2">
+          <Button variant="outline" size="icon">
+            <ChevronUpIcon />
+          </Button>
+
+          <span>0</span>
+
+          <Button variant="outline" size="icon">
+            <ChevronDownIcon />
+          </Button>
+        </div>
+
+        <p className="text-lg">{question.body}</p>
+      </div>
     </section>
   );
 }
