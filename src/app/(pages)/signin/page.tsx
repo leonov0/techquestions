@@ -65,7 +65,7 @@ export default async function SignIn({
           </CardContent>
 
           <CardFooter>
-            <p className="w-full text-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground w-full text-center text-sm">
               By signing in, you agree to our{" "}
               <Link
                 href="/terms"

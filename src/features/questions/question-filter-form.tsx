@@ -87,7 +87,7 @@ export function QuestionFilterForm({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <MagnifyingGlassIcon className="absolute left-3 top-2.5 z-10 size-4 text-input" />
+        <MagnifyingGlassIcon className="text-input absolute top-2.5 left-3 z-10 size-4" />
       </div>
     </div>
   );

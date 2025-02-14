@@ -14,7 +14,7 @@ export function QuestionList({ questions }: { questions: FullQuestion[] }) {
           <h3>
             <Link
               href={`/questions/${question.id}`}
-              className="line-clamp-1 text-lg font-medium text-primary underline-offset-4 hover:underline"
+              className="text-primary line-clamp-1 text-lg font-medium underline-offset-4 hover:underline"
             >
               {question.title}
             </Link>
@@ -71,7 +71,7 @@ export function QuestionList({ questions }: { questions: FullQuestion[] }) {
                 </Avatar>
 
                 <div className="text-sm">
-                  <p className="transition-colors group-hover:text-primary">
+                  <p className="group-hover:text-primary transition-colors">
                     @{question.author.username}
                   </p>
                   <p className="text-muted-foreground">
