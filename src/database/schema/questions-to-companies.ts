@@ -30,3 +30,6 @@ export const questionsToCompaniesRelations = relations(
     }),
   }),
 );
+
+export type QuestionsToCompany = typeof questionsToCompanies.$inferSelect;
+export type NewQuestionsToCompany = typeof questionsToCompanies.$inferInsert;

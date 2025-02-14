@@ -13,3 +13,6 @@ export const levels = pgTable("level", {
 export const levelsRelations = relations(levels, ({ many }) => ({
   questionsToLevels: many(questionsToLevels),
 }));
+
+export type Level = typeof levels.$inferSelect;
+export type NewLevel = typeof levels.$inferInsert;

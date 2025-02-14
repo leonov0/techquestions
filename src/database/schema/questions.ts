@@ -53,3 +53,6 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
   questionsToLevels: many(questionsToLevels),
   questionsToTechnologies: many(questionsToTechnologies),
 }));
+
+export type Question = typeof questions.$inferSelect;
+export type NewQuestion = typeof questions.$inferInsert;

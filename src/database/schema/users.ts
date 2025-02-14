@@ -24,3 +24,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   questions: many(questions),
   questionVotes: many(questionVotes),
 }));
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;

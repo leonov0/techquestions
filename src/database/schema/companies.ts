@@ -13,3 +13,6 @@ export const companies = pgTable("company", {
 export const companiesRelations = relations(companies, ({ many }) => ({
   questionsToCompanies: many(questionsToCompanies),
 }));
+
+export type Company = typeof companies.$inferSelect;
+export type NewCompany = typeof companies.$inferInsert;

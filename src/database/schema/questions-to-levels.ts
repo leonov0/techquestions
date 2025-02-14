@@ -30,3 +30,6 @@ export const questionsToLevelsRelations = relations(
     }),
   }),
 );
+
+export type QuestionsToLevel = typeof questionsToLevels.$inferSelect;
+export type NewQuestionsToLevel = typeof questionsToLevels.$inferInsert;

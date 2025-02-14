@@ -34,3 +34,6 @@ export const questionVotesRelations = relations(questionVotes, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export type QuestionVote = typeof questionVotes.$inferSelect;
+export type NewQuestionVote = typeof questionVotes.$inferInsert;

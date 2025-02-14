@@ -30,3 +30,7 @@ export const questionsToTechnologiesRelations = relations(
     }),
   }),
 );
+
+export type QuestionsToTechnology = typeof questionsToTechnologies.$inferSelect;
+export type NewQuestionsToTechnology =
+  typeof questionsToTechnologies.$inferInsert;

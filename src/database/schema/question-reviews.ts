@@ -32,3 +32,6 @@ export const questionReviewsRelations = relations(
     }),
   }),
 );
+
+export type QuestionReview = typeof questionReviews.$inferSelect;
+export type NewQuestionReview = typeof questionReviews.$inferInsert;
