@@ -40,7 +40,7 @@ export async function QuestionSection({ id }: { id: string }) {
         {question.author ? (
           <Link
             href={`users/${question.author.username}`}
-            className="border-primary/50 bg-primary/10 hover:bg-primary/20 row-span-2 mt-2 flex h-fit gap-2 rounded-md border px-3 py-1.5 transition-colors md:mt-0"
+            className="row-span-2 mt-2 flex h-fit gap-2 rounded-md border border-primary/50 bg-primary/10 px-3 py-1.5 transition-colors hover:bg-primary/20 md:mt-0"
           >
             <Avatar>
               <AvatarImage src={question.author.image ?? undefined} />

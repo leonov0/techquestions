@@ -1,4 +1,4 @@
-import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -14,7 +14,7 @@ export async function FeaturedQuestions() {
   if (error) {
     return (
       <Alert variant="destructive">
-        <CrossCircledIcon />
+        <AlertCircle className="size-4" />
 
         <AlertTitle>An error occurred while fetching the questions.</AlertTitle>
 
@@ -28,12 +28,12 @@ export async function FeaturedQuestions() {
       {questions.map((question) => (
         <li
           key={question.id}
-          className="motion-preset-focus bg-card text-card-foreground flex flex-col rounded-xl border p-6 shadow"
+          className="motion-preset-focus flex flex-col rounded-xl border bg-card p-6 text-card-foreground shadow"
         >
           <h3>
             <Link
               href={`/questions/${question.id}`}
-              className="text-primary line-clamp-1 text-lg font-medium underline-offset-4 hover:underline"
+              className="line-clamp-1 text-lg font-medium text-primary underline-offset-4 hover:underline"
             >
               {question.title}
             </Link>
@@ -92,7 +92,7 @@ export async function FeaturedQuestions() {
                 </Avatar>
 
                 <div className="text-sm">
-                  <p className="group-hover:text-primary transition-colors">
+                  <p className="transition-colors group-hover:text-primary">
                     @{question.author.username}
                   </p>
                   <p className="text-muted-foreground">

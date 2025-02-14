@@ -1,10 +1,4 @@
-import {
-  ChevronDownIcon,
-  ExitIcon,
-  GearIcon,
-  MoonIcon,
-  SunIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDown, LogOut, Moon, Settings, Sun } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -51,7 +45,7 @@ export function ProfileDropdown({
 
         <span className="line-clamp-1">{username}</span>
 
-        <ChevronDownIcon
+        <ChevronDown
           className="relative top-[1px] size-3 transition duration-300 group-data-[state=open]:rotate-180"
           aria-hidden="true"
         />
@@ -69,10 +63,10 @@ export function ProfileDropdown({
             </Avatar>
 
             <div className="max-w-32 pr-4">
-              <p className="overflow-hidden text-sm font-medium text-clip">
+              <p className="overflow-hidden text-clip text-sm font-medium">
                 {name}
               </p>
-              <p className="overflow-hidden text-xs text-clip">@{username}</p>
+              <p className="overflow-hidden text-clip text-xs">@{username}</p>
             </div>
           </Link>
         </DropdownMenuItem>
@@ -81,15 +75,15 @@ export function ProfileDropdown({
 
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <GearIcon />
+            <Settings />
             <span className="ml-2">Settings</span>
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <SunIcon className="dark:hidden" />
-            <MoonIcon className="hidden dark:block" />
+            <Sun className="dark:hidden" />
+            <Moon className="hidden dark:block" />
             <span className="ml-2">Themes</span>
           </DropdownMenuSubTrigger>
 
@@ -102,7 +96,7 @@ export function ProfileDropdown({
 
         <DropdownMenuItem asChild>
           <Link href="/signout">
-            <ExitIcon />
+            <LogOut />
             <span className="ml-2">Sign out</span>
           </Link>
         </DropdownMenuItem>

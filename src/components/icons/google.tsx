@@ -1,8 +1,6 @@
-export function GoogleLogoIcon({ className }: { className?: string }) {
+export function Google({ className }: { className?: string }) {
   return (
     <svg
-      width="15"
-      height="15"
       viewBox="0 0 28 28"
       xmlns="http://www.w3.org/2000/svg"
       className={className}

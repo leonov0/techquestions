@@ -72,7 +72,7 @@ export function SubmitQuestionForm({
             Submit a new question
           </h1>
 
-          <p className="text-muted-foreground mt-2 text-lg sm:text-xl">
+          <p className="mt-2 text-lg text-muted-foreground sm:text-xl">
             Contribute to the community by submitting question you&apos;ve been
             asked in interviews.
           </p>
@@ -130,7 +130,7 @@ export function SubmitQuestionForm({
             control={form.control}
             name="isAnonymous"
             render={({ field }) => (
-              <FormItem className="flex items-start space-y-0 space-x-3 rounded-md border p-4 shadow">
+              <FormItem className="flex items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
                 <FormControl>
                   <Checkbox
                     checked={field.value}

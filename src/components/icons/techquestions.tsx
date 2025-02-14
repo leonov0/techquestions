@@ -1,8 +1,6 @@
-export function TechQuestionsLogoIcon({ className }: { className?: string }) {
+export function TechQuestions({ className }: { className?: string }) {
   return (
     <svg
-      width="15"
-      height="15"
       viewBox="0 0 15 15"
       xmlns="http://www.w3.org/2000/svg"
       className={className}

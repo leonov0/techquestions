@@ -1,5 +1,4 @@
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { Badge, type BadgeProps } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -47,7 +46,7 @@ export function MultipleSelect({
       <PopoverTrigger
         className={cn(
           buttonVariants({ variant: "outline" }),
-          "group hover:bg-background hover:text-foreground h-full justify-between gap-2",
+          "group h-full justify-between gap-2 hover:bg-background hover:text-foreground",
         )}
         role="combobox"
       >
@@ -66,7 +65,7 @@ export function MultipleSelect({
                     {...badgeProps}
                   >
                     {itemName}
-                    <Cross2Icon className="ml-1" />
+                    <X className="ml-1" />
                   </Badge>
                 </li>
               );

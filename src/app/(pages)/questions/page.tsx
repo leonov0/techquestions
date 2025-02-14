@@ -1,4 +1,4 @@
-import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 import { Footer } from "@/components/layout/footer";
@@ -51,7 +51,7 @@ export default async function Questions(params: {
         <section className="mx-auto mt-8 max-w-screen-md">
           {getQuestionsResponse.error && (
             <Alert variant="destructive">
-              <CrossCircledIcon />
+              <AlertCircle className="size-4" />
 
               <AlertTitle>
                 An error occurred while fetching the questions.

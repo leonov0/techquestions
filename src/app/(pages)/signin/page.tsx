@@ -1,7 +1,7 @@
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
-import { GoogleLogoIcon } from "@/components/icons/google-logo-icon";
+import { GitHub } from "@/components/icons/github";
+import { Google } from "@/components/icons/google";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default async function SignIn({
               }}
             >
               <Button className="w-full">
-                <GitHubLogoIcon />
+                <GitHub />
                 <span className="ml-2">GitHub</span>
               </Button>
             </form>
@@ -58,14 +58,14 @@ export default async function SignIn({
               }}
             >
               <Button className="w-full">
-                <GoogleLogoIcon />
+                <Google />
                 <span className="ml-2">Google</span>
               </Button>
             </form>
           </CardContent>
 
           <CardFooter>
-            <p className="text-muted-foreground w-full text-center text-sm">
+            <p className="w-full text-center text-sm text-muted-foreground">
               By signing in, you agree to our{" "}
               <Link
                 href="/terms"

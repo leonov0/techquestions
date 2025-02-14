@@ -1,6 +1,6 @@
 "use client";
 
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -87,7 +87,7 @@ export function QuestionFilterForm({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <MagnifyingGlassIcon className="text-input absolute top-2.5 left-3 z-10 size-4" />
+        <Search className="absolute left-3 top-2.5 z-10 size-4 text-input" />
       </div>
     </div>
   );
