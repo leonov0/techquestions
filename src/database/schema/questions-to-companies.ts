@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, primaryKey, uuid } from "drizzle-orm/pg-core";
 
 import { companies } from "./companies";
@@ -14,4 +15,18 @@ export const questionsToCompanies = pgTable(
       .references(() => companies.id),
   },
   (table) => [primaryKey({ columns: [table.questionId, table.companyId] })],
+);
+
+export const questionsToCompaniesRelations = relations(
+  questionsToCompanies,
+  ({ one }) => ({
+    question: one(questions, {
+      fields: [questionsToCompanies.questionId],
+      references: [questions.id],
+    }),
+    company: one(companies, {
+      fields: [questionsToCompanies.companyId],
+      references: [companies.id],
+    }),
+  }),
 );

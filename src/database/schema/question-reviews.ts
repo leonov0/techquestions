@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { questions } from "./questions";
@@ -17,3 +18,17 @@ export const questionReviews = pgTable("question_review", {
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
 });
+
+export const questionReviewsRelations = relations(
+  questionReviews,
+  ({ one }) => ({
+    question: one(questions, {
+      fields: [questionReviews.questionId],
+      references: [questions.id],
+    }),
+    user: one(users, {
+      fields: [questionReviews.userId],
+      references: [users.id],
+    }),
+  }),
+);

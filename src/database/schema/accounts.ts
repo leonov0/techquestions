@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -30,3 +31,10 @@ export const accounts = pgTable(
     primaryKey({ columns: [table.provider, table.providerAccountId] }),
   ],
 );
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  users: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
+}));

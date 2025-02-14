@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -22,3 +23,14 @@ export const questionVotes = pgTable(
   },
   (table) => [primaryKey({ columns: [table.questionId, table.userId] })],
 );
+
+export const questionVotesRelations = relations(questionVotes, ({ one }) => ({
+  question: one(questions, {
+    fields: [questionVotes.questionId],
+    references: [questions.id],
+  }),
+  user: one(users, {
+    fields: [questionVotes.userId],
+    references: [users.id],
+  }),
+}));

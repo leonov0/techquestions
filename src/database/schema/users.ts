@@ -1,4 +1,10 @@
+import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+
+import { accounts } from "./accounts";
+import { questionReviews } from "./question-reviews";
+import { questionVotes } from "./question-votes";
+import { questions } from "./questions";
 
 export const users = pgTable("user", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -11,3 +17,10 @@ export const users = pgTable("user", {
     "user",
   ),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  questionReviews: many(questionReviews),
+  questions: many(questions),
+  questionVotes: many(questionVotes),
+}));

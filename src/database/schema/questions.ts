@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -9,6 +9,11 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { questionReviews } from "./question-reviews";
+import { questionVotes } from "./question-votes";
+import { questionsToCompanies } from "./questions-to-companies";
+import { questionsToLevels } from "./questions-to-levels";
+import { questionsToTechnologies } from "./questions-to-technologies";
 import { users } from "./users";
 
 export const questions = pgTable(
@@ -36,3 +41,15 @@ export const questions = pgTable(
     ),
   ],
 );
+
+export const questionsRelations = relations(questions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [questions.userId],
+    references: [users.id],
+  }),
+  questionReviews: many(questionReviews),
+  questionVotes: many(questionVotes),
+  questionsToCompanies: many(questionsToCompanies),
+  questionsToLevels: many(questionsToLevels),
+  questionsToTechnologies: many(questionsToTechnologies),
+}));
