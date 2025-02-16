@@ -1,33 +1,47 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
-import {
-  type Company,
-  database,
-  type Level,
-  schema,
-  type Technology,
-  type User,
-} from "@/database";
-import type { FullQuestion } from "@/features/questions";
+import { database, schema } from "@/database";
 
-export async function getQuestion(id: string): Promise<FullQuestion> {
-  const getQuestionQuery = database
-    .select({ id: schema.questions.id })
-    .from(schema.questions)
-    .where(eq(schema.questions.id, id))
-    .limit(1)
-    .as("getQuestionQuery");
+import { Question } from "./types";
 
-  const rows = await database
+export async function getQuestion(id: string): Promise<Question | null> {
+  const [question] = await database
     .select({
-      question: schema.questions,
-      author: schema.users,
-      technology: schema.technologies,
-      company: schema.companies,
-      level: schema.levels,
+      id: schema.questions.id,
+      title: schema.questions.title,
+      body: schema.questions.body,
+      isAnonymous: schema.questions.isAnonymous,
+      status: schema.questions.status,
+      createdAt: schema.questions.createdAt,
+      updatedAt: schema.questions.updatedAt,
+      rating: sql<number>`COALESCE(SUM(${schema.questionVotes.vote}), 0)`,
+      technologies: sql<
+        [{ id: string; name: string }]
+      >`json_agg(DISTINCT jsonb_build_object('id', ${schema.technologies.id}, 'name', ${schema.technologies.name}))`,
+      companies: sql<
+        [{ id: string; name: string }]
+      >`json_agg(DISTINCT jsonb_build_object('id', ${schema.companies.id}, 'name', ${schema.companies.name}))`,
+      levels: sql<
+        [{ id: string; name: string }]
+      >`json_agg(DISTINCT jsonb_build_object('id', ${schema.levels.id}, 'name', ${schema.levels.name}))`,
+      author: sql<{
+        id: string;
+        username: string;
+        image: string | null;
+      } | null>`CASE 
+        WHEN ${schema.questions.isAnonymous} OR ${schema.users.username} IS NULL THEN NULL
+        ELSE jsonb_build_object(
+          'id', ${schema.users.id}, 
+          'username', ${schema.users.username}, 
+          'image', ${schema.users.image}
+        )
+      END`,
     })
-    .from(getQuestionQuery)
-    .leftJoin(schema.questions, eq(getQuestionQuery.id, schema.questions.id))
+    .from(schema.questions)
+    .leftJoin(
+      schema.questionVotes,
+      eq(schema.questions.id, schema.questionVotes.questionId),
+    )
     .leftJoin(schema.users, eq(schema.questions.userId, schema.users.id))
     .leftJoin(
       schema.questionsToTechnologies,
@@ -37,6 +51,7 @@ export async function getQuestion(id: string): Promise<FullQuestion> {
       schema.technologies,
       eq(schema.questionsToTechnologies.technologyId, schema.technologies.id),
     )
+
     .leftJoin(
       schema.questionsToCompanies,
       eq(schema.questions.id, schema.questionsToCompanies.questionId),
@@ -49,74 +64,13 @@ export async function getQuestion(id: string): Promise<FullQuestion> {
       schema.questionsToLevels,
       eq(schema.questions.id, schema.questionsToLevels.questionId),
     )
+
     .leftJoin(
       schema.levels,
       eq(schema.questionsToLevels.levelId, schema.levels.id),
-    );
+    )
+    .where(eq(schema.questions.id, id))
+    .groupBy(schema.questions.id, schema.users.id);
 
-  if (rows.length === 0 || !rows[0].question) {
-    throw new Error("Question not found");
-  }
-
-  const question = rows[0].question;
-  const { technologies, companies, levels } = getTags(rows);
-  const author = getAuthor(rows[0].author, question.isAnonymous);
-
-  return { ...question, technologies, companies, levels, author };
-}
-
-function getAuthor(
-  author: User | null,
-  isAnonymous: boolean | null,
-): {
-  id: string;
-  username: string | null;
-  image: string | null;
-} | null {
-  if (isAnonymous || !author || !author.username) {
-    return null;
-  }
-
-  return {
-    id: author.id,
-    username: author.username,
-    image: author.image,
-  };
-}
-
-function getTags(
-  rows: {
-    technology: Technology | null;
-    company: Company | null;
-    level: Level | null;
-  }[],
-) {
-  const tags = rows.reduce(
-    (acc, row) => {
-      if (row.technology) {
-        acc.technologies.set(row.technology.id, row.technology);
-      }
-
-      if (row.company) {
-        acc.companies.set(row.company.id, row.company);
-      }
-
-      if (row.level) {
-        acc.levels.set(row.level.id, row.level);
-      }
-
-      return acc;
-    },
-    {
-      technologies: new Map<string, Technology>(),
-      companies: new Map<string, Company>(),
-      levels: new Map<string, Level>(),
-    },
-  );
-
-  return {
-    technologies: Array.from(tags.technologies.values()),
-    companies: Array.from(tags.companies.values()),
-    levels: Array.from(tags.levels.values()),
-  };
+  return question as Question | null;
 }
