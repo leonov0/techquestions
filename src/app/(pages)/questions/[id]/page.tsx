@@ -11,15 +11,13 @@ export default async function Question({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-
   return (
     <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
       <main className="container py-16">
         <Suspense fallback={<Loading />}>
-          <QuestionSection id={id} />
+          <QuestionSection params={params} />
         </Suspense>
       </main>
 

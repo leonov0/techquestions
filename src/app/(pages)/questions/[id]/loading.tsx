@@ -6,24 +6,23 @@ export default function Loading() {
     <section>
       <Skeleton className="h-9 w-full" />
 
-      <div className="mt-4 grid flex-1 gap-x-4 gap-y-1 md:grid-cols-[auto,_1fr,_auto]">
+      <div className="mt-2 flex flex-col gap-4 sm:flex-row">
         <Skeleton className="h-6 w-56" />
-
         <Skeleton className="h-6 w-56" />
-
-        <Skeleton className="row-span-2 mt-2 flex h-[3.375rem] w-48 gap-2 rounded-md px-3 py-1.5 md:mt-0" />
-
-        {
-          <ul className="row-start-3 mt-2 flex flex-wrap gap-x-2 gap-y-1 md:col-span-2 md:row-start-2">
-            {[...new Array(5)].map((_, index) => (
-              <Skeleton
-                key={`badge-skeleton-${index}`}
-                className="h-[1.375rem] w-16"
-              />
-            ))}
-          </ul>
-        }
       </div>
+
+      {
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {[...new Array(5)].map((_, index) => (
+            <Skeleton
+              key={`badge-skeleton-${index}`}
+              className="h-[1.375rem] w-16"
+            />
+          ))}
+        </ul>
+      }
+
+      <Skeleton className="mt-4 h-10 w-56" />
 
       <Separator className="my-8" />
 
