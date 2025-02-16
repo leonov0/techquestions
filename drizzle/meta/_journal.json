@@ -43,6 +43,13 @@
       "when": 1739699617213,
       "tag": "0005_white_groot",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1739700452447,
+      "tag": "0006_chubby_squadron_supreme",
+      "breakpoints": true
     }
   ]
 }
