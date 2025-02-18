@@ -2,7 +2,7 @@ import { and, asc, countDistinct, eq, inArray, SQL, sql } from "drizzle-orm";
 
 import { database, schema } from "@/database";
 
-import { Question } from "../types";
+import type { Question } from "../types";
 
 export async function getQuestions({
   filters,

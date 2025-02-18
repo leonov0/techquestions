@@ -4,7 +4,7 @@ import { schema } from "@/database";
 
 import * as lib from "../lib";
 import { getQuestionSchema } from "../schemas";
-import { GetQuestionPayload } from "../types";
+import type { GetQuestionPayload } from "../types";
 
 export async function getQuestions(payload: GetQuestionPayload) {
   const result = await getQuestionSchema.safeParseAsync(payload);
