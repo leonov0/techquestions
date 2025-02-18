@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import type { Company, Level, Technology } from "@/database";
 import { useDebounce } from "@/lib/use-debounce";
-import { cn } from "@/lib/utils";
 
 import { Combobox } from "./combobox";
 
@@ -15,22 +14,24 @@ export function QuestionFilterForm({
   technologies,
   companies,
   levels,
-  className,
 }: {
   technologies: Technology[];
   companies: Company[];
   levels: Level[];
-  className?: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [query, setQuery] = useState(searchParams.get("query") ?? "");
+  const [query, setQuery] = useState(searchParams.get("query"));
   const debouncedQuery = useDebounce(query, 500);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
+
+    if (debouncedQuery !== params.get("query")) {
+      params.delete("page");
+    }
 
     if (debouncedQuery) {
       params.set("query", debouncedQuery);
@@ -41,14 +42,10 @@ export function QuestionFilterForm({
     router.push(`${pathname}?${params.toString()}`);
   }, [debouncedQuery, pathname, router, searchParams]);
 
-  function handleSelect(key: string, id: string | null) {
+  function handleSelect(key: string, id: string) {
     const params = new URLSearchParams(searchParams);
 
-    Object.entries(searchParams).forEach(([key, value]) => {
-      params.set(key, value);
-    });
-
-    if (!id || id === params.get(key)) {
+    if (id === params.get(key)) {
       params.delete(key);
     } else {
       params.set(key, id);
@@ -58,7 +55,7 @@ export function QuestionFilterForm({
   }
 
   return (
-    <div className={cn("grid gap-4", className)}>
+    <div className="grid gap-4 md:grid-cols-4">
       <Combobox
         items={technologies}
         selectedItemId={searchParams.get("technologyId")}
@@ -84,9 +81,10 @@ export function QuestionFilterForm({
         <Input
           className="pl-10"
           placeholder="Search..."
-          value={query}
+          value={query || ""}
           onChange={(e) => setQuery(e.target.value)}
         />
+
         <Search className="absolute left-3 top-2.5 z-10 size-4 text-input" />
       </div>
     </div>

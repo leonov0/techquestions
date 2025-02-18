@@ -2,9 +2,9 @@ import { eq, sql } from "drizzle-orm";
 
 import { database, schema } from "@/database";
 
-import { Question } from "./types";
+import { Question } from "../types";
 
-export async function getQuestion(id: string): Promise<Question | null> {
+export async function getQuestion(id: string) {
   const [question] = await database
     .select({
       id: schema.questions.id,

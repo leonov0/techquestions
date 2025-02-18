@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { getQuestion } from "@/features/get-question";
 import { getVote, VoteButtons } from "@/features/voting";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
+
+import { getQuestion } from "../actions";
+import { CategoryList } from "./category-list";
 
 export async function QuestionSection({
   params,
@@ -17,19 +19,18 @@ export async function QuestionSection({
 
   const { data: question } = await getQuestion(id);
 
-  const currentVote = await getVote(id);
-
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
-  await sleep(1000);
-
   if (!question) {
     return notFound();
   }
 
+  const { data: currentVote, error } = await getVote(question.id);
+
+  if (error) {
+    toast.error(error);
+  }
+
   return (
-    <section>
+    <section className="motion-preset-focus">
       <h1 className="text-3xl font-bold">{question.title}</h1>
 
       <div className="mt-2 flex flex-col gap-4 sm:flex-row">
@@ -50,32 +51,16 @@ export async function QuestionSection({
         </p>
       </div>
 
-      <ul className="mt-4 flex flex-wrap gap-2">
-        {question.technologies.map(({ id, name }) => (
-          <Badge key={`technology-${id}`}>{name}</Badge>
-        ))}
+      <CategoryList {...question} className="mt-4" />
 
-        {question.companies.map(({ id, name }) => (
-          <Badge key={`company-${id}`} variant="secondary">
-            {name}
-          </Badge>
-        ))}
-
-        {question.levels.map(({ id, name }) => (
-          <Badge key={`level-${id}`} variant="outline">
-            {name}
-          </Badge>
-        ))}
-      </ul>
-
-      <div className="mt-4 flex items-start gap-4">
+      <div className="mt-4 flex flex-grow gap-4">
         <VoteButtons
-          questionId={id}
+          questionId={question.id}
           rating={question.rating}
           currentVote={currentVote}
         />
 
-        {question.author && (
+        {question.author ? (
           <Link
             href={`users/${question.author.username}`}
             className="group flex gap-2"
@@ -86,23 +71,28 @@ export async function QuestionSection({
               )}
 
               <AvatarFallback>
-                {question.author.username &&
-                  getCapitalizedFirstLetter(question.author.username)}
+                {getCapitalizedFirstLetter(question.author.username)}
               </AvatarFallback>
             </Avatar>
 
-            <p className="transition-colors group-hover:text-primary">
+            <p className="text-sm transition-colors group-hover:text-primary">
               @{question.author.username}
             </p>
           </Link>
+        ) : (
+          <div className="flex gap-2">
+            <Avatar>
+              <AvatarFallback>A</AvatarFallback>
+            </Avatar>
+
+            <p className="text-sm">Anonymous</p>
+          </div>
         )}
       </div>
 
       <Separator className="my-8" />
 
-      <div className="grid grid-cols-[auto,_1fr] gap-4">
-        <p className="text-lg">{question.body}</p>
-      </div>
+      <p className="text-lg">{question.body}</p>
     </section>
   );
 }

@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Loading() {
+export function QuestionSectionLoader() {
   return (
     <section>
       <Skeleton className="h-9 w-full" />
@@ -14,10 +14,7 @@ export default function Loading() {
       {
         <ul className="mt-4 flex flex-wrap gap-2">
           {[...new Array(5)].map((_, index) => (
-            <Skeleton
-              key={`badge-skeleton-${index}`}
-              className="h-[1.375rem] w-16"
-            />
+            <Skeleton key={`badge-skeleton-${index}`} className="h-6 w-16" />
           ))}
         </ul>
       }

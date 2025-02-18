@@ -1,6 +1,4 @@
-"use server";
-
-import * as lib from "./lib";
+import * as lib from "../lib";
 
 export async function getQuestion(id: string) {
   try {

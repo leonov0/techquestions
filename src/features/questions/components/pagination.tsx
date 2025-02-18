@@ -12,21 +12,27 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export function QuestionPagination({ pageCount }: { pageCount: number }) {
+export function QuestionPagination({
+  pageCount,
+  className,
+}: {
+  pageCount: number;
+  className?: string;
+}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  const createPageURL = (pageNumber: number | string) => {
+  const createPageURL = (page: number) => {
     const params = new URLSearchParams(searchParams);
 
-    params.set("page", pageNumber.toString());
+    params.set("page", page.toString());
 
     return `${pathname}?${params.toString()}`;
   };
 
   return (
-    <Pagination className="mt-8">
+    <Pagination className={className}>
       <PaginationContent>
         {currentPage > 1 ? (
           <>

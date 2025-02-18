@@ -4,9 +4,9 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { auth } from "@/features/auth";
 import {
-  FeaturedQuestions,
-  FeaturedQuestionsSkeleton,
-} from "@/features/get-featured-questions";
+  FeaturedQuestionList,
+  FeaturedQuestionListLoader,
+} from "@/features/questions";
 
 import { HeroSection } from "./hero-section";
 
@@ -21,8 +21,8 @@ export default async function Home() {
         <HeroSection isAuthenticated={!!session} />
 
         <section className="mt-16">
-          <Suspense fallback={<FeaturedQuestionsSkeleton />}>
-            <FeaturedQuestions />
+          <Suspense fallback={<FeaturedQuestionListLoader />}>
+            <FeaturedQuestionList />
           </Suspense>
         </section>
       </main>
