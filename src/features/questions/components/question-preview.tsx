@@ -64,7 +64,7 @@ export async function QuestionPreview({
               </p>
 
               <p className="text-muted-foreground">
-                {question.createdAt.toLocaleDateString("en-GB")}
+                {question.updatedAt.toLocaleDateString("en-GB")}
               </p>
             </div>
           </Link>
