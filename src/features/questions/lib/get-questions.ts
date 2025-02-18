@@ -54,36 +54,23 @@ export async function getQuestions({
       createdAt: schema.questions.createdAt,
       updatedAt: schema.questions.updatedAt,
       rating: sql<number>`COALESCE(SUM(${schema.questionVotes.vote}), 0)`,
-      technologies: sql<
-        [{ id: string; name: string }]
-      >`json_agg(DISTINCT jsonb_build_object(
-        'id', ${schema.technologies.id}, 
-        'name', ${schema.technologies.name}
-      ))`,
-      companies: sql<
-        [{ id: string; name: string }]
-      >`json_agg(DISTINCT jsonb_build_object(
-        'id', ${schema.companies.id}, 
-        'name', ${schema.companies.name}
-      ))`,
-      levels: sql<
-        [{ id: string; name: string }]
-      >`json_agg(DISTINCT jsonb_build_object(
-        'id', ${schema.levels.id}, 
-        'name', ${schema.levels.name}
-      ))`,
+      technologies: sql<[{ id: string; name: string }]>`COALESCE(
+        json_agg(
+          DISTINCT jsonb_build_object('id', ${schema.technologies.id}, 'name', ${schema.technologies.name})
+        ) FILTER (WHERE ${schema.technologies.id} IS NOT NULL), '[]'::json)`,
+      companies: sql<[{ id: string; name: string }]>`COALESCE(
+        json_agg(
+          DISTINCT jsonb_build_object('id', ${schema.companies.id},'name', ${schema.companies.name})
+        ) FILTER (WHERE ${schema.companies.id} IS NOT NULL), '[]'::json)`,
+      levels: sql<[{ id: string; name: string }]>`COALESCE(
+        json_agg(DISTINCT jsonb_build_object('id', ${schema.levels.id},'name', ${schema.levels.name})
+        ) FILTER (WHERE ${schema.levels.id} IS NOT NULL), '[]'::json)`,
       author: sql<{
         id: string;
         username: string;
         image: string | null;
-      } | null>`CASE 
-        WHEN ${schema.questions.isAnonymous} OR ${schema.users.username} IS NULL THEN NULL
-        ELSE jsonb_build_object(
-          'id', ${schema.users.id}, 
-          'username', ${schema.users.username}, 
-          'image', ${schema.users.image}
-        )
-      END`,
+      } | null>`CASE WHEN ${schema.questions.isAnonymous} OR ${schema.users.username} IS NULL THEN NULL ELSE
+        jsonb_build_object('id', ${schema.users.id}, 'username', ${schema.users.username}, 'image', ${schema.users.image}) END`,
     })
     .from(schema.questions)
     .leftJoin(

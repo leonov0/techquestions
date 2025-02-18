@@ -16,6 +16,10 @@ export function CategoryList({
   levels: Level[];
   className?: string;
 }) {
+  if (technologies.length + companies.length + levels.length === 0) {
+    return null;
+  }
+
   return (
     <ul className={cn("flex flex-wrap gap-2", className)}>
       {technologies.map((technology) => (
