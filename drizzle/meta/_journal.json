@@ -22,6 +22,41 @@
       "when": 1731526434119,
       "tag": "0002_clear_saracen",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737438960253,
+      "tag": "0003_strange_gravity",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1737439947301,
+      "tag": "0004_modern_korg",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1739699617213,
+      "tag": "0005_white_groot",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1739700452447,
+      "tag": "0006_chubby_squadron_supreme",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1739879542642,
+      "tag": "0007_classy_the_liberteens",
+      "breakpoints": true
     }
   ]
 }

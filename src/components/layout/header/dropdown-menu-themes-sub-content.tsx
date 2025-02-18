@@ -1,6 +1,6 @@
 "use client";
 
-import { LaptopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import {
@@ -14,17 +14,17 @@ export function DropdownMenuThemesSubContent() {
   return (
     <DropdownMenuSubContent>
       <DropdownMenuItem onClick={() => setTheme("light")}>
-        <SunIcon />
+        <Sun />
         <span className="ml-2">Light</span>
       </DropdownMenuItem>
 
       <DropdownMenuItem onClick={() => setTheme("dark")}>
-        <MoonIcon />
+        <Moon />
         <span className="ml-2">Dark</span>
       </DropdownMenuItem>
 
       <DropdownMenuItem onClick={() => setTheme("system")}>
-        <LaptopIcon />
+        <Monitor />
         <span className="ml-2">System</span>
       </DropdownMenuItem>
     </DropdownMenuSubContent>

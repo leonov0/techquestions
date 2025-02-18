@@ -1,4 +1,4 @@
-import { ExitIcon } from "@radix-ui/react-icons";
+import { LogOut } from "lucide-react";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
@@ -36,7 +36,7 @@ export default function SignOut() {
               }}
             >
               <Button variant="destructive">
-                <ExitIcon />
+                <LogOut />
                 <span className="ml-2">Sign out</span>
               </Button>
             </form>

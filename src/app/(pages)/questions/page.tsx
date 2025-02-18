@@ -1,70 +1,43 @@
-import { CrossCircledIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { buttonVariants } from "@/components/ui/button";
 import {
-  getCategories,
-  getQuestions,
-  QuestionFilterForm,
+  QuestionFilters,
+  QuestionFiltersLoader,
   QuestionList,
+  QuestionListLoader,
 } from "@/features/questions";
+import { cn } from "@/lib/utils";
 
-import { QuestionPagination } from "./pagination";
-
-export default async function Questions(params: {
+export default async function Questions({
+  searchParams,
+}: {
   searchParams: Promise<{ [key: string]: string }>;
 }) {
-  const searchParams = await params.searchParams;
-
-  const getQuestionsResponse = await getQuestions({
-    technologyId: searchParams?.technologyId,
-    companyId: searchParams?.companyId,
-    levelId: searchParams?.levelId,
-    query: searchParams?.query,
-    page: +searchParams?.page,
-    limit: +searchParams?.limit,
-  });
-
-  const {
-    data: { technologies, companies, levels },
-  } = await getCategories();
-
   return (
     <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
       <Header />
 
-      <main className="container py-16">
-        <Link href="/questions/new" className={buttonVariants()}>
-          Submit a new question
-        </Link>
+      <main className="container grid gap-8 py-16 lg:grid-cols-[18rem,_1fr] xl:grid-cols-[18rem,_1fr,_18rem]">
+        <aside className="space-y-4">
+          <Link
+            href="/questions/new"
+            className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
+          >
+            Submit new question
+          </Link>
 
-        <QuestionFilterForm
-          className="mt-8 md:grid-cols-4"
-          technologies={technologies}
-          companies={companies}
-          levels={levels}
-        />
+          <Suspense fallback={<QuestionFiltersLoader />}>
+            <QuestionFilters />
+          </Suspense>
+        </aside>
 
-        <section className="mx-auto mt-8 max-w-screen-md">
-          {getQuestionsResponse.error && (
-            <Alert variant="destructive">
-              <CrossCircledIcon />
-
-              <AlertTitle>
-                An error occurred while fetching the questions.
-              </AlertTitle>
-
-              <AlertDescription>{getQuestionsResponse.error}</AlertDescription>
-            </Alert>
-          )}
-
-          <QuestionList questions={getQuestionsResponse.data.questions} />
-        </section>
-
-        <QuestionPagination pageCount={getQuestionsResponse.data.count} />
+        <Suspense fallback={<QuestionListLoader />}>
+          <QuestionList searchParams={searchParams} />
+        </Suspense>
       </main>
 
       <Footer />
