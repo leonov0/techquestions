@@ -77,8 +77,7 @@ export async function getQuestions(payload: GetQuestionPayload) {
       data: { questions, pageCount },
       error: null,
     };
-  } catch (e) {
-    console.log(e);
+  } catch {
     return {
       data: {
         questions: [],
