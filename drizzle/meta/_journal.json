@@ -50,6 +50,13 @@
       "when": 1739700452447,
       "tag": "0006_chubby_squadron_supreme",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1739879542642,
+      "tag": "0007_classy_the_liberteens",
+      "breakpoints": true
     }
   ]
 }
