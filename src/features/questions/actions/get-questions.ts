@@ -1,10 +1,19 @@
-import { eq, SQL, sql } from "drizzle-orm";
+import { asc, desc, eq, SQL, sql } from "drizzle-orm";
 
 import { schema } from "@/database";
 
 import * as lib from "../lib";
 import { getQuestionSchema } from "../schemas";
 import type { GetQuestionPayload } from "../types";
+
+const orderMappings = new Map<string, SQL>([
+  ["date:asc", asc(schema.questions.updatedAt)],
+  ["date:desc", desc(schema.questions.updatedAt)],
+  ["rating:asc", asc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)],
+  ["rating:desc", desc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)],
+  ["title:asc", asc(schema.questions.title)],
+  ["title:desc", desc(schema.questions.title)],
+]);
 
 export async function getQuestions(payload: GetQuestionPayload) {
   const result = await getQuestionSchema.safeParseAsync(payload);
@@ -50,11 +59,16 @@ export async function getQuestions(payload: GetQuestionPayload) {
   const limit = result.data.limit || 10;
   const offset = result.data.page ? (result.data.page - 1) * limit : 0;
 
+  const orderBy = orderMappings.get(
+    `${result.data.orderBy || "date"}:${result.data.order || "desc"}`,
+  );
+
   try {
     const { questions, count } = await lib.getQuestions({
       filters,
       limit,
       offset,
+      orderBy,
     });
 
     const pageCount = Math.ceil(count / limit);

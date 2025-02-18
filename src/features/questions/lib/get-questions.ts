@@ -1,4 +1,4 @@
-import { and, asc, countDistinct, eq, inArray, SQL, sql } from "drizzle-orm";
+import { and, countDistinct, desc, eq, inArray, SQL, sql } from "drizzle-orm";
 
 import { database, schema } from "@/database";
 
@@ -6,7 +6,7 @@ import type { Question } from "../types";
 
 export async function getQuestions({
   filters,
-  orderBy = asc(schema.questions.createdAt),
+  orderBy = desc(schema.questions.updatedAt),
   limit = 10,
   offset = 0,
 }: {
