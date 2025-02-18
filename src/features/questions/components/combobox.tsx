@@ -54,7 +54,7 @@ export function Combobox({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="p-0" align="end">
+      <PopoverContent className="p-0">
         <Command
           filter={(value, search) => {
             const technologyName = itemMap.get(value);
