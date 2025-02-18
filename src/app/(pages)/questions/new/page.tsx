@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { SubmitQuestionForm } from "@/features/add-question";
-import { getCategories } from "@/features/questions";
+import { getCategories } from "@/features/questions/actions";
 
 export default async function SubmitQuestion() {
   const { data, error } = await getCategories();
