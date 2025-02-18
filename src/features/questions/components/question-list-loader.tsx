@@ -8,11 +8,11 @@ export function QuestionListLoader() {
           key={`question-loader-${index}`}
           className="border-t pt-4 first:border-none first:pt-0"
         >
-          <Skeleton className="h-[7.75rem]" />
+          <Skeleton className="h-40" />
         </li>
       ))}
 
-      <Skeleton className="mx-auto mt-8 h-9 max-w-[19rem]"></Skeleton>
+      <Skeleton className="mx-auto h-9 max-w-[19rem] lg:col-span-2 xl:col-span-3"></Skeleton>
     </ul>
   );
 }

@@ -14,7 +14,7 @@ export async function QuestionList({
   const { data, error } = await getQuestions(await searchParams);
 
   return (
-    <section>
+    <>
       <div className="space-y-8">
         {error && (
           <Alert variant="destructive">
@@ -43,7 +43,10 @@ export async function QuestionList({
         </ul>
       </div>
 
-      <QuestionPagination pageCount={data.pageCount} className="mt-8" />
-    </section>
+      <QuestionPagination
+        pageCount={data.pageCount}
+        className="lg:col-span-2 xl:col-span-3"
+      />
+    </>
   );
 }

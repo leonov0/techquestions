@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -77,77 +78,81 @@ export function QuestionFilterForm({
   }
 
   return (
-    <div className="mx-auto grid gap-4 lg:grid-cols-4">
-      <Combobox
-        items={technologies}
-        selectedItemId={searchParams.get("technologyId")}
-        handleSelect={(id) => handleSelect("technologyId", id)}
-        label="technology"
-      />
+    <Card>
+      <CardHeader>
+        <div className="relative">
+          <Input
+            className="pl-10"
+            placeholder="Search..."
+            value={query || ""}
+            onChange={(e) => setQuery(e.target.value)}
+          />
 
-      <Combobox
-        items={companies}
-        selectedItemId={searchParams.get("companyId")}
-        handleSelect={(id) => handleSelect("companyId", id)}
-        label="company"
-      />
+          <Search className="absolute left-3 top-2.5 z-10 size-4 text-input" />
+        </div>
+      </CardHeader>
 
-      <Combobox
-        items={levels}
-        selectedItemId={searchParams.get("levelId")}
-        handleSelect={(id) => handleSelect("levelId", id)}
-        label="level"
-      />
-
-      <div className="relative">
-        <Input
-          className="pl-10"
-          placeholder="Search..."
-          value={query || ""}
-          onChange={(e) => setQuery(e.target.value)}
+      <CardContent className="space-y-4">
+        <Combobox
+          items={technologies}
+          selectedItemId={searchParams.get("technologyId")}
+          handleSelect={(id) => handleSelect("technologyId", id)}
+          label="technology"
         />
 
-        <Search className="absolute left-3 top-2.5 z-10 size-4 text-input" />
-      </div>
+        <Combobox
+          items={companies}
+          selectedItemId={searchParams.get("companyId")}
+          handleSelect={(id) => handleSelect("companyId", id)}
+          label="company"
+        />
 
-      <div className="grid grid-cols-[1fr,_auto] gap-2 lg:col-start-4">
-        <Select
-          onValueChange={(value) => handleSelect("orderBy", value)}
-          value={searchParams.get("orderBy") || "date"}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Date" />
-          </SelectTrigger>
+        <Combobox
+          items={levels}
+          selectedItemId={searchParams.get("levelId")}
+          handleSelect={(id) => handleSelect("levelId", id)}
+          label="level"
+        />
 
-          <SelectContent>
-            <SelectItem value="date">Date</SelectItem>
-            <SelectItem value="rating">Rating</SelectItem>
-            <SelectItem value="title">Title</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            className={buttonVariants({ size: "icon", variant: "secondary" })}
+        <div className="grid grid-cols-[1fr,_auto] gap-2">
+          <Select
+            onValueChange={(value) => handleSelect("orderBy", value)}
+            value={searchParams.get("orderBy") || "date"}
           >
-            {searchParams.get("order") === "asc" ? (
-              <ArrowDownNarrowWide />
-            ) : (
-              <ArrowDownWideNarrow />
-            )}
-          </DropdownMenuTrigger>
+            <SelectTrigger>
+              <SelectValue placeholder="Date" />
+            </SelectTrigger>
 
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => selectOrder("asc")}>
-              Ascending
-            </DropdownMenuItem>
+            <SelectContent>
+              <SelectItem value="date">Date</SelectItem>
+              <SelectItem value="rating">Rating</SelectItem>
+              <SelectItem value="title">Title</SelectItem>
+            </SelectContent>
+          </Select>
 
-            <DropdownMenuItem onClick={() => selectOrder("desc")}>
-              Descending
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={buttonVariants({ size: "icon", variant: "secondary" })}
+            >
+              {searchParams.get("order") === "asc" ? (
+                <ArrowDownNarrowWide />
+              ) : (
+                <ArrowDownWideNarrow />
+              )}
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => selectOrder("asc")}>
+                Ascending
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => selectOrder("desc")}>
+                Descending
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
