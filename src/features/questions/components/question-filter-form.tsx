@@ -1,10 +1,24 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { ArrowDownNarrowWide, ArrowDownWideNarrow, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Company, Level, Technology } from "@/database";
 import { useDebounce } from "@/lib/use-debounce";
 
@@ -54,8 +68,16 @@ export function QuestionFilterForm({
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  function selectOrder(order: "asc" | "desc") {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("order", order);
+
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
   return (
-    <div className="grid gap-4 md:grid-cols-4">
+    <div className="mx-auto grid gap-4 lg:grid-cols-4">
       <Combobox
         items={technologies}
         selectedItemId={searchParams.get("technologyId")}
@@ -86,6 +108,45 @@ export function QuestionFilterForm({
         />
 
         <Search className="absolute left-3 top-2.5 z-10 size-4 text-input" />
+      </div>
+
+      <div className="grid grid-cols-[1fr,_auto] gap-2 lg:col-start-4">
+        <Select
+          onValueChange={(value) => handleSelect("orderBy", value)}
+          value={searchParams.get("orderBy") || "date"}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Date" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="date">Date</SelectItem>
+            <SelectItem value="rating">Rating</SelectItem>
+            <SelectItem value="title">Title</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={buttonVariants({ size: "icon", variant: "secondary" })}
+          >
+            {searchParams.get("order") === "asc" ? (
+              <ArrowDownNarrowWide />
+            ) : (
+              <ArrowDownWideNarrow />
+            )}
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => selectOrder("asc")}>
+              Ascending
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => selectOrder("desc")}>
+              Descending
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
