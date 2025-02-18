@@ -5,8 +5,6 @@ import { schema } from "@/database";
 import { getQuestions } from "../lib";
 
 export async function getFeaturedQuestions({ limit }: { limit: number }) {
-  // TODO: Implement featured questions
-
   const orderBy = sql<number>`COALESCE(SUM(${schema.questionVotes.vote}), 0) DESC`;
 
   try {
