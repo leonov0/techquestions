@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { toast } from "sonner";
+import { Suspense } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { getVote, VoteButtons } from "@/features/voting";
+import { Rating, RatingLoader } from "@/features/rating";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { getQuestion } from "../actions";
@@ -21,12 +21,6 @@ export async function QuestionSection({
 
   if (!question) {
     return notFound();
-  }
-
-  const { data: currentVote, error } = await getVote(question.id);
-
-  if (error) {
-    toast.error(error);
   }
 
   return (
@@ -54,11 +48,9 @@ export async function QuestionSection({
       <CategoryList {...question} className="mt-4" />
 
       <div className="mt-4 flex flex-grow gap-4">
-        <VoteButtons
-          questionId={question.id}
-          rating={question.rating}
-          currentVote={currentVote}
-        />
+        <Suspense fallback={<RatingLoader rating={question.rating} />}>
+          <Rating questionId={question.id} />
+        </Suspense>
 
         {question.author ? (
           <Link

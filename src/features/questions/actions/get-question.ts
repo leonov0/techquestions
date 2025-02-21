@@ -1,3 +1,5 @@
+"use cache";
+
 import * as lib from "../lib";
 
 export async function getQuestion(id: string) {

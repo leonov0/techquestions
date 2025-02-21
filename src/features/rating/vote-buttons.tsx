@@ -1,20 +1,31 @@
 "use client";
 
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { useOptimistic, useTransition } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useOptimistic, useTransition } from "react";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 
 import { vote } from "./actions";
 
-export function VoteButtons(props: {
+export function VoteButtons({
+  questionId,
+  rating,
+  currentVote,
+  isAuthorized,
+}: {
   questionId: string;
   rating: number;
   currentVote: number;
+  isAuthorized: boolean;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [optimisticRating, updateOptimisticRating] = useOptimistic(
-    { rating: props.rating, currentVote: props.currentVote },
+    { rating, currentVote },
     (state, newCurrentVote: number) => ({
       rating: state.rating - state.currentVote + newCurrentVote,
       currentVote: newCurrentVote,
@@ -27,7 +38,7 @@ export function VoteButtons(props: {
     startTransition(async () => {
       updateOptimisticRating(value);
 
-      const response = await vote(props.questionId, value);
+      const response = await vote(questionId, value);
 
       if (response.error) {
         toast.error(response.error);
@@ -35,20 +46,32 @@ export function VoteButtons(props: {
     });
   }
 
+  const redirectToSignIn = useCallback(() => {
+    router.push(
+      `/signin?callbackUrl=${encodeURIComponent(pathname + `?${searchParams}`)}`,
+    );
+  }, [router, pathname, searchParams]);
+
   function handleUpvote() {
+    if (!isAuthorized) {
+      redirectToSignIn();
+      return;
+    }
+
     setVote(optimisticRating.currentVote > 0 ? 0 : 1);
   }
 
   function handleDownvote() {
+    if (!isAuthorized) {
+      redirectToSignIn();
+      return;
+    }
+
     setVote(optimisticRating.currentVote < 0 ? 0 : -1);
   }
 
   return (
-    <div
-      className={
-        "flex items-center gap-2 rounded-full bg-secondary text-secondary-foreground"
-      }
-    >
+    <div className="flex items-center gap-2 rounded-full bg-secondary text-secondary-foreground">
       <button
         onClick={handleUpvote}
         className={cn(
