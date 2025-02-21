@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { toast } from "sonner";
+import { Suspense } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getVote, VoteButtons } from "@/features/voting";
+import { Rating, RatingLoader } from "@/features/rating";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import type { Question } from "../types";
@@ -15,12 +15,6 @@ export async function QuestionPreview({
   question: Question;
   className?: string;
 }) {
-  const { data: currentVote, error } = await getVote(question.id);
-
-  if (error) {
-    toast.error(error);
-  }
-
   return (
     <div className={cn("flex flex-col", className)}>
       <h3>
@@ -37,11 +31,9 @@ export async function QuestionPreview({
       <CategoryList {...question} className="mt-4 flex-grow" />
 
       <div className="mt-4 flex gap-4">
-        <VoteButtons
-          questionId={question.id}
-          rating={question.rating}
-          currentVote={currentVote}
-        />
+        <Suspense fallback={<RatingLoader rating={question.rating} />}>
+          <Rating questionId={question.id} />
+        </Suspense>
 
         {question.author ? (
           <Link
