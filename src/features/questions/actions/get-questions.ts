@@ -1,3 +1,5 @@
+"use cache";
+
 import { asc, desc, eq, SQL, sql } from "drizzle-orm";
 
 import { schema } from "@/database";
