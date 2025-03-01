@@ -18,10 +18,10 @@ export default async function Questions({
   searchParams: Promise<{ [key: string]: string }>;
 }) {
   return (
-    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
-      <main className="container grid gap-8 py-16 lg:grid-cols-[18rem,_1fr] xl:grid-cols-[18rem,_1fr,_18rem]">
+      <main className="container grid gap-8 py-16 lg:grid-cols-[18rem_1fr] xl:grid-cols-[18rem_1fr_18rem]">
         <aside className="space-y-4">
           <Link
             href="/questions/new"

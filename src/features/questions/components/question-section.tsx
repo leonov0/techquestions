@@ -47,7 +47,7 @@ export async function QuestionSection({
 
       <CategoryList {...question} className="mt-4" />
 
-      <div className="mt-4 flex flex-grow gap-4">
+      <div className="mt-4 flex grow gap-4">
         <Suspense fallback={<RatingLoader rating={question.rating} />}>
           <Rating questionId={question.id} />
         </Suspense>
@@ -67,7 +67,7 @@ export async function QuestionSection({
               </AvatarFallback>
             </Avatar>
 
-            <p className="text-sm transition-colors group-hover:text-primary">
+            <p className="group-hover:text-primary text-sm transition-colors">
               @{question.author.username}
             </p>
           </Link>

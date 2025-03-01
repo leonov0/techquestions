@@ -15,17 +15,17 @@ export function DropdownMenuThemesSubContent() {
     <DropdownMenuSubContent>
       <DropdownMenuItem onClick={() => setTheme("light")}>
         <Sun />
-        <span className="ml-2">Light</span>
+        Light
       </DropdownMenuItem>
 
       <DropdownMenuItem onClick={() => setTheme("dark")}>
         <Moon />
-        <span className="ml-2">Dark</span>
+        Dark
       </DropdownMenuItem>
 
       <DropdownMenuItem onClick={() => setTheme("system")}>
         <Monitor />
-        <span className="ml-2">System</span>
+        System
       </DropdownMenuItem>
     </DropdownMenuSubContent>
   );

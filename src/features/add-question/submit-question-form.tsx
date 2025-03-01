@@ -72,7 +72,7 @@ export function SubmitQuestionForm({
             Submit a new question
           </h1>
 
-          <p className="mt-2 text-lg text-muted-foreground sm:text-xl">
+          <p className="text-muted-foreground mt-2 text-lg sm:text-xl">
             Contribute to the community by submitting question you&apos;ve been
             asked in interviews.
           </p>
@@ -130,7 +130,7 @@ export function SubmitQuestionForm({
             control={form.control}
             name="isAnonymous"
             render={({ field }) => (
-              <FormItem className="flex items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+              <FormItem className="flex items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -178,7 +178,7 @@ export function SubmitQuestionForm({
                 <FormControl>
                   <MultipleSelect
                     items={companies}
-                    badgeProps={{ variant: "secondary" }}
+                    variant="secondary"
                     {...field}
                   />
                 </FormControl>
@@ -199,11 +199,7 @@ export function SubmitQuestionForm({
                 <FormLabel>Levels</FormLabel>
 
                 <FormControl>
-                  <MultipleSelect
-                    items={levels}
-                    badgeProps={{ variant: "outline" }}
-                    {...field}
-                  />
+                  <MultipleSelect items={levels} variant="outline" {...field} />
                 </FormControl>
 
                 <FormDescription>

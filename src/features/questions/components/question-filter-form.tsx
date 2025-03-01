@@ -88,7 +88,7 @@ export function QuestionFilterForm({
             onChange={(e) => setQuery(e.target.value)}
           />
 
-          <Search className="absolute left-3 top-2.5 z-10 size-4 text-input" />
+          <Search className="text-input absolute top-2.5 left-3 z-10 size-4" />
         </div>
       </CardHeader>
 
@@ -114,7 +114,7 @@ export function QuestionFilterForm({
           label="level"
         />
 
-        <div className="grid grid-cols-[1fr,_auto] gap-2">
+        <div className="grid grid-cols-[1fr__auto] gap-2">
           <Select
             onValueChange={(value) => handleSelect("orderBy", value)}
             value={searchParams.get("orderBy") || "date"}

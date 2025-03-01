@@ -71,11 +71,11 @@ export function VoteButtons({
   }
 
   return (
-    <div className="flex items-center gap-2 rounded-full bg-secondary text-secondary-foreground">
+    <div className="bg-secondary text-secondary-foreground flex items-center gap-2 rounded-full">
       <button
         onClick={handleUpvote}
         className={cn(
-          "inline-flex size-10 items-center justify-center rounded-full transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
           optimisticRating.currentVote > 0 && "text-green-500",
         )}
       >
@@ -97,7 +97,7 @@ export function VoteButtons({
       <button
         onClick={handleDownvote}
         className={cn(
-          "inline-flex size-10 items-center justify-center rounded-full transition-colors hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
           optimisticRating.currentVote < 0 && "text-red-500",
         )}
       >

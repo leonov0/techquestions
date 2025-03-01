@@ -26,7 +26,7 @@ export async function FeaturedQuestionList() {
         <li key={question.id}>
           <QuestionPreview
             question={question}
-            className="motion-preset-focus h-full rounded-xl border bg-card p-6 text-card-foreground shadow"
+            className="motion-preset-focus bg-card text-card-foreground h-full rounded-xl border p-6 shadow-sm"
           />
         </li>
       ))}

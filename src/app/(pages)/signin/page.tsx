@@ -23,10 +23,10 @@ export default async function SignIn({
   const redirectTo = (await searchParams).callbackUrl || "/";
 
   return (
-    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
-      <main className="container max-w-screen-sm py-16">
+      <main className="container max-w-(--breakpoint-sm) py-16">
         <Card>
           <CardHeader>
             <CardTitle>Sign in to your account</CardTitle>
@@ -65,7 +65,7 @@ export default async function SignIn({
           </CardContent>
 
           <CardFooter>
-            <p className="w-full text-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground w-full text-center text-sm">
               By signing in, you agree to our{" "}
               <Link
                 href="/terms"
