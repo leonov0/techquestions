@@ -178,7 +178,7 @@ export function SubmitQuestionForm({
                 <FormControl>
                   <MultipleSelect
                     items={companies}
-                    badgeProps={{ variant: "secondary" }}
+                    variant="secondary"
                     {...field}
                   />
                 </FormControl>
@@ -199,11 +199,7 @@ export function SubmitQuestionForm({
                 <FormLabel>Levels</FormLabel>
 
                 <FormControl>
-                  <MultipleSelect
-                    items={levels}
-                    badgeProps={{ variant: "outline" }}
-                    {...field}
-                  />
+                  <MultipleSelect items={levels} variant="outline" {...field} />
                 </FormControl>
 
                 <FormDescription>

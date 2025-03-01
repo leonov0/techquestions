@@ -1,6 +1,7 @@
+import { VariantProps } from "class-variance-authority";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 
-import { Badge, type BadgeProps } from "@/components/ui/badge";
+import { Badge, badgeVariants } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Command,
@@ -22,14 +23,13 @@ export function MultipleSelect({
   items,
   onChange,
   value = [],
-  badgeProps,
+  variant,
 }: {
   name: string;
   items: { id: string; name: string | null }[];
   onChange: (value: string[]) => void;
   value?: string[];
-  badgeProps?: BadgeProps;
-}) {
+} & VariantProps<typeof badgeVariants>) {
   const itemsMap = new Map(items.map((item) => [item.id, item.name]));
 
   const toggleSelect = (id: string) => {
@@ -62,7 +62,7 @@ export function MultipleSelect({
                       e.stopPropagation();
                       toggleSelect(id);
                     }}
-                    {...badgeProps}
+                    variant={variant}
                   >
                     {itemName}
                     <X className="ml-1" />
