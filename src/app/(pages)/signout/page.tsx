@@ -14,10 +14,10 @@ import { signOut } from "@/features/auth";
 
 export default function SignOut() {
   return (
-    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
-      <main className="container max-w-screen-sm py-16">
+      <main className="container max-w-(--breakpoint-sm) py-16">
         <Card>
           <CardHeader>
             <CardTitle>Sign out of your account</CardTitle>

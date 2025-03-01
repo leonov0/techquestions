@@ -20,7 +20,7 @@ export async function QuestionPreview({
       <h3>
         <Link
           href={`/questions/${question.id}`}
-          className="line-clamp-1 text-lg font-medium text-primary underline-offset-4 hover:underline"
+          className="text-primary line-clamp-1 text-lg font-medium underline-offset-4 hover:underline"
         >
           {question.title}
         </Link>
@@ -28,7 +28,7 @@ export async function QuestionPreview({
 
       <p className="line-clamp-2 text-sm">{question.body}</p>
 
-      <CategoryList {...question} className="mt-4 flex-grow" />
+      <CategoryList {...question} className="mt-4 grow" />
 
       <div className="mt-4 flex gap-4">
         <Suspense fallback={<RatingLoader rating={question.rating} />}>
@@ -51,7 +51,7 @@ export async function QuestionPreview({
             </Avatar>
 
             <div className="text-sm">
-              <p className="transition-colors group-hover:text-primary">
+              <p className="group-hover:text-primary transition-colors">
                 @{question.author.username}
               </p>
 

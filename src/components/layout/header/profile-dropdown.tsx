@@ -46,7 +46,7 @@ export function ProfileDropdown({
         <span className="line-clamp-1">{username}</span>
 
         <ChevronDown
-          className="relative top-[1px] size-3 transition duration-300 group-data-[state=open]:rotate-180"
+          className="relative transition duration-300 group-data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </DropdownMenuTrigger>
@@ -63,10 +63,10 @@ export function ProfileDropdown({
             </Avatar>
 
             <div className="max-w-32 pr-4">
-              <p className="overflow-hidden text-clip text-sm font-medium">
+              <p className="overflow-hidden text-sm font-medium text-clip">
                 {name}
               </p>
-              <p className="overflow-hidden text-clip text-xs">@{username}</p>
+              <p className="overflow-hidden text-xs text-clip">@{username}</p>
             </div>
           </Link>
         </DropdownMenuItem>
@@ -76,15 +76,15 @@ export function ProfileDropdown({
         <DropdownMenuItem asChild>
           <Link href="/settings">
             <Settings />
-            <span className="ml-2">Settings</span>
+            Settings
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger className="[&_svg:not([class*='text-'])]:text-muted-foreground gap-2 [&_svg:not([class*='size-'])]:size-4">
             <Sun className="dark:hidden" />
-            <Moon className="hidden dark:block" />
-            <span className="ml-2">Themes</span>
+            <Moon className="hidden dark:inline" />
+            Themes
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
@@ -97,7 +97,7 @@ export function ProfileDropdown({
         <DropdownMenuItem asChild>
           <Link href="/signout">
             <LogOut />
-            <span className="ml-2">Sign out</span>
+            Sign out
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

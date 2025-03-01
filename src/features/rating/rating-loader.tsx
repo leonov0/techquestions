@@ -4,8 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function RatingLoader({ rating }: { rating: number }) {
   return (
-    <div className="flex items-center gap-2 rounded-full bg-secondary text-secondary-foreground">
-      <Skeleton className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+    <div className="bg-secondary text-secondary-foreground flex items-center gap-2 rounded-full">
+      <Skeleton className="text-muted-foreground inline-flex size-10 items-center justify-center rounded-full [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
         <ChevronUpIcon />
       </Skeleton>
 
@@ -21,7 +21,7 @@ export function RatingLoader({ rating }: { rating: number }) {
         {rating}
       </span>
 
-      <Skeleton className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+      <Skeleton className="text-muted-foreground inline-flex size-10 items-center justify-center rounded-full [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
         <ChevronDownIcon />
       </Skeleton>
     </div>

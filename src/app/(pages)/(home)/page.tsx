@@ -14,7 +14,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <div className="grid min-h-dvh grid-rows-[auto,_1fr,_auto]">
+    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
       <main className="container py-16">

@@ -46,7 +46,7 @@ export function MultipleSelect({
       <PopoverTrigger
         className={cn(
           buttonVariants({ variant: "outline" }),
-          "group h-full justify-between gap-2 hover:bg-background hover:text-foreground",
+          "group hover:bg-background hover:text-foreground h-full justify-between gap-2",
         )}
         role="combobox"
       >
