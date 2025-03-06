@@ -1,8 +1,9 @@
 import { VariantProps } from "class-variance-authority";
 import { Check, ChevronsUpDown, X } from "lucide-react";
+import { useMemo } from "react";
 
 import { Badge, badgeVariants } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -16,7 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 
 export function MultipleSelect({
   name,
@@ -30,32 +30,37 @@ export function MultipleSelect({
   onChange: (value: string[]) => void;
   value?: string[];
 } & VariantProps<typeof badgeVariants>) {
-  const itemsMap = new Map(items.map((item) => [item.id, item.name]));
+  const itemMap = useMemo(
+    () => new Map(items.map((item) => [item.id, item.name])),
+    [items],
+  );
 
-  const toggleSelect = (id: string) => {
-    if (value.includes(id)) {
-      onChange(value.filter((itemId) => itemId !== id));
-      return;
-    }
+  function toggleSelect(id: string) {
+    onChange(
+      value.includes(id)
+        ? value.filter((itemId) => itemId !== id)
+        : [...value, id],
+    );
+  }
 
-    onChange([...value, id]);
-  };
+  function filter(value: string, search: string) {
+    const lowercaseName = itemMap.get(value)?.toLocaleLowerCase() ?? "";
+    const lowercaseSearch = search.toLocaleLowerCase();
+
+    return lowercaseName.includes(lowercaseSearch) ? 1 : 0;
+  }
 
   return (
     <Popover>
-      <PopoverTrigger
-        className={cn(
-          buttonVariants({ variant: "outline" }),
-          "group hover:bg-background hover:text-foreground h-full justify-between gap-2",
-        )}
-        role="combobox"
-      >
-        {value.length > 0 ? (
-          <ul className="flex flex-wrap gap-x-2 gap-y-1">
-            {value.map((id) => {
-              const itemName = itemsMap.get(id);
-
-              return (
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          className="hover:bg-background hover:text-foreground h-full justify-between"
+        >
+          {value.length > 0 ? (
+            <ul className="flex flex-wrap gap-2">
+              {value.map((id) => (
                 <li key={`${name}-badge-${id}`}>
                   <Badge
                     onClick={(e) => {
@@ -64,45 +69,32 @@ export function MultipleSelect({
                     }}
                     variant={variant}
                   >
-                    {itemName}
+                    {itemMap.get(id)}
                     <X className="ml-1" />
                   </Badge>
                 </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <span className="h-[22px]">Select {name}...</span>
-        )}
+              ))}
+            </ul>
+          ) : (
+            <span className="h-[22px]">Select {name}...</span>
+          )}
 
-        <ChevronsUpDown className="opacity-50" />
+          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent align="start" className="p-0">
-        <Command
-          filter={(value, search) => {
-            const itemName = itemsMap.get(value);
-
-            return itemName?.includes(search) ? 1 : 0;
-          }}
-        >
+        <Command filter={filter}>
           <CommandInput placeholder={`Search ${name}...`} className="h-9" />
 
           <CommandList>
             <CommandEmpty>No {name} found.</CommandEmpty>
 
             <CommandGroup>
-              {items.map((item) => (
-                <CommandItem
-                  value={item.id}
-                  key={item.id}
-                  onSelect={toggleSelect}
-                >
-                  <span className="h-5 overflow-hidden text-clip">
-                    {item.name}
-                  </span>
-
-                  {value.includes(item.id) && <Check className="ml-auto" />}
+              {items.map(({ id, name }) => (
+                <CommandItem value={id} key={id} onSelect={toggleSelect}>
+                  {value.includes(id) && <Check />}
+                  <span className="h-5 overflow-hidden text-clip">{name}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
