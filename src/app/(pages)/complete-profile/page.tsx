@@ -8,17 +8,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { auth } from "@/features/auth";
+import { getCallbackUrl } from "@/lib/utils";
 
 import { CompleteProfileForm } from "./form";
 
 export default async function CompleteProfile({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string | string[] }>;
 }) {
   const session = await auth();
 
-  const redirectTo = (await searchParams).callbackUrl;
+  const redirectTo = await getCallbackUrl(searchParams);
 
   if (!session || !session.user.username) {
     throw new Error("Not authenticated");

@@ -9,7 +9,7 @@ import { QuestionPreview } from "./question-preview";
 export async function QuestionList({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { data, error } = await getQuestions(await searchParams);
 

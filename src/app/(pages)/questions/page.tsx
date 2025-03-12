@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 export default async function Questions({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   return (
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
