@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Rating, RatingLoader } from "@/features/rating";
-import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
+import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 import type { Question } from "../types";
 import { CategoryList } from "./category-list";
@@ -16,7 +16,7 @@ export async function QuestionPreview({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={className}>
       <h3>
         <Link
           href={`/questions/${question.id}`}

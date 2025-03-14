@@ -27,7 +27,7 @@ export default async function SignIn({
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
-      <main className="container max-w-(--breakpoint-sm) py-16">
+      <main className="container max-w-screen-sm py-16">
         <Card>
           <CardHeader>
             <CardTitle>Sign in to your account</CardTitle>
@@ -37,7 +37,7 @@ export default async function SignIn({
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="mx-auto grid gap-4 sm:grid-cols-2">
+          <CardContent className="grid gap-4 sm:grid-cols-2">
             <form
               action={async () => {
                 "use server";
