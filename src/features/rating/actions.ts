@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 import { auth } from "@/features/auth";
 
@@ -15,7 +15,8 @@ export async function vote(questionId: string, vote: number) {
 
   try {
     lib.addVote(questionId, session.user.id, vote);
-    revalidatePath(`/questions/${questionId}`);
+    revalidateTag(`questions-${questionId}`);
+    revalidateTag(`questions`);
   } catch {
     return { error: "Failed to vote. Please try again later!" };
   }

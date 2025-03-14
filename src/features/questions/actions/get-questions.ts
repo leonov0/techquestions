@@ -1,6 +1,7 @@
 "use cache";
 
 import { asc, desc, eq, SQL, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { schema } from "@/database";
 
@@ -18,6 +19,8 @@ const orderMappings = new Map<string, SQL>([
 ]);
 
 export async function getQuestions(payload: GetQuestionPayload) {
+  cacheTag("questions");
+
   const result = await getQuestionSchema.safeParseAsync(payload);
 
   if (!result.success) {
