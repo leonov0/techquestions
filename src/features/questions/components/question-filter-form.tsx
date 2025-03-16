@@ -2,10 +2,9 @@
 
 import { ArrowDownNarrowWide, ArrowDownWideNarrow, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +21,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Company, Level, Technology } from "@/database";
-import { useDebounce } from "@/lib/use-debounce";
 
 export function QuestionFilterForm({
   technologies,
@@ -38,135 +36,131 @@ export function QuestionFilterForm({
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("query"));
-  const debouncedQuery = useDebounce(query, 500);
+  const [selectedTechnologies, setSelectedTechnologies] = useState(
+    searchParams.getAll("technologyId"),
+  );
+  const [selectedCompanies, setSelectedCompanies] = useState(
+    searchParams.getAll("companyId"),
+  );
+  const [selectedLevels, setSelectedLevels] = useState(
+    searchParams.getAll("levelId"),
+  );
+  const [selectedOrderBy, setSelectedOrderBy] = useState(
+    searchParams.get("orderBy") || "date",
+  );
+  const [selectedOrder, setSelectedOrder] = useState(
+    searchParams.get("order") || "desc",
+  );
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
+  function applyFilters(event: React.FormEvent) {
+    event.preventDefault();
 
-    if (debouncedQuery !== params.get("query")) {
-      params.delete("page");
+    const params = new URLSearchParams();
+
+    if (query) {
+      params.set("query", query);
     }
 
-    if (debouncedQuery) {
-      params.set("query", debouncedQuery);
-    } else {
-      params.delete("query");
+    selectedTechnologies.forEach((technologyId) => {
+      params.append("technologyId", technologyId);
+    });
+
+    selectedCompanies.forEach((companyId) => {
+      params.append("companyId", companyId);
+    });
+
+    selectedLevels.forEach((levelId) => {
+      params.append("levelId", levelId);
+    });
+
+    if (selectedOrderBy) {
+      params.set("orderBy", selectedOrderBy);
     }
 
-    router.push(`${pathname}?${params.toString()}`);
-  }, [debouncedQuery, pathname, router, searchParams]);
-
-  function handleSelect(key: string, id: string) {
-    const params = new URLSearchParams(searchParams);
-
-    if (id === params.get(key)) {
-      params.delete(key);
-    } else {
-      params.set(key, id);
+    if (selectedOrder) {
+      params.set("order", selectedOrder);
     }
-
-    router.push(`${pathname}?${params.toString()}`);
-  }
-
-  function handleSelectMultiple(key: string, value: string[]) {
-    const params = new URLSearchParams(searchParams);
-
-    params.delete(key);
-
-    if (value.length) {
-      value.forEach((id) => params.append(key, id));
-    }
-
-    router.push(`${pathname}?${params.toString()}`);
-  }
-
-  function selectOrder(order: "asc" | "desc") {
-    const params = new URLSearchParams(searchParams);
-
-    params.set("order", order);
 
     router.push(`${pathname}?${params.toString()}`);
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="relative">
-          <Input
-            className="pl-10"
-            placeholder="Search..."
-            value={query || ""}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-
-          <Search className="text-input absolute top-2.5 left-3 z-10 size-4" />
-        </div>
-      </CardHeader>
-
-      <CardContent className="space-y-4">
-        <MultipleSelect
-          name="technologies"
-          items={technologies}
-          onChange={(value) => handleSelectMultiple("technologyId", value)}
-          value={searchParams.getAll("technologyId")}
-          className="w-full"
+    <form className="space-y-4" onSubmit={applyFilters}>
+      <div className="relative">
+        <Input
+          name="query"
+          className="pl-10"
+          placeholder="Search..."
+          value={query ?? undefined}
+          onChange={(e) => setQuery(e.target.value)}
         />
 
-        <MultipleSelect
-          name="companies"
-          items={companies}
-          onChange={(value) => handleSelectMultiple("companyId", value)}
-          value={searchParams.getAll("companyId")}
-          className="w-full"
-        />
+        <Search className="text-input absolute top-2.5 left-3 z-10 size-4" />
+      </div>
 
-        <MultipleSelect
-          name="levels"
-          items={levels}
-          onChange={(value) => handleSelectMultiple("levelId", value)}
-          value={searchParams.getAll("levelId")}
-          className="w-full"
-        />
+      <MultipleSelect
+        name="technologies"
+        items={technologies}
+        onChange={setSelectedTechnologies}
+        value={selectedTechnologies}
+        className="w-full"
+      />
 
-        <div className="grid grid-cols-[1fr__auto] gap-2">
-          <Select
-            onValueChange={(value) => handleSelect("orderBy", value)}
-            value={searchParams.get("orderBy") || "date"}
+      <MultipleSelect
+        name="companies"
+        items={companies}
+        onChange={setSelectedCompanies}
+        value={selectedCompanies}
+        className="w-full"
+      />
+
+      <MultipleSelect
+        name="levels"
+        items={levels}
+        onChange={setSelectedLevels}
+        value={selectedLevels}
+        className="w-full"
+      />
+
+      <div className="grid grid-cols-[1fr__auto] gap-2">
+        <Select onValueChange={setSelectedOrderBy} value={selectedOrderBy}>
+          <SelectTrigger>
+            <SelectValue placeholder="Date" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="date">Date</SelectItem>
+            <SelectItem value="rating">Rating</SelectItem>
+            <SelectItem value="title">Title</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={buttonVariants({ size: "icon", variant: "secondary" })}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Date" />
-            </SelectTrigger>
+            {selectedOrder === "asc" ? (
+              <ArrowDownNarrowWide />
+            ) : (
+              <ArrowDownWideNarrow />
+            )}
+          </DropdownMenuTrigger>
 
-            <SelectContent>
-              <SelectItem value="date">Date</SelectItem>
-              <SelectItem value="rating">Rating</SelectItem>
-              <SelectItem value="title">Title</SelectItem>
-            </SelectContent>
-          </Select>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setSelectedOrder("asc")}>
+              Ascending
+            </DropdownMenuItem>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={buttonVariants({ size: "icon", variant: "secondary" })}
-            >
-              {searchParams.get("order") === "asc" ? (
-                <ArrowDownNarrowWide />
-              ) : (
-                <ArrowDownWideNarrow />
-              )}
-            </DropdownMenuTrigger>
+            <DropdownMenuItem onClick={() => setSelectedOrder("desc")}>
+              Descending
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => selectOrder("asc")}>
-                Ascending
-              </DropdownMenuItem>
-
-              <DropdownMenuItem onClick={() => selectOrder("desc")}>
-                Descending
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardContent>
-    </Card>
+      <Button type="submit" className="w-full">
+        Apply filters
+      </Button>
+    </form>
   );
 }
