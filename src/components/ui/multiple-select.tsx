@@ -46,7 +46,7 @@ export function MultipleSelect({
 
   const toggleSelection = (id: string) =>
     onChange(
-      normalizedItems[id].isSelected
+      normalizedItems[id]?.isSelected
         ? value.filter((itemId) => itemId !== id)
         : [...value, id],
     );
@@ -66,8 +66,14 @@ export function MultipleSelect({
           role="combobox"
           className={cn("justify-between", className)}
         >
-          {value.map((id) => normalizedItems[id].name).join(", ") || (
-            <span className="text-muted-foreground">Select {name}</span>
+          {value.length > 0 ? (
+            <span className="overflow-hidden text-clip">
+              {value.map((id) => normalizedItems[id]?.name).join(", ")}
+            </span>
+          ) : (
+            <span className="text-muted-foreground overflow-hidden text-clip">
+              Select {name}
+            </span>
           )}
           <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
@@ -87,7 +93,7 @@ export function MultipleSelect({
             <CommandGroup heading="Items">
               {items.map(({ id, name }) => (
                 <CommandItem value={id} key={id} onSelect={toggleSelection}>
-                  {normalizedItems[id].isSelected && <Check />}
+                  {normalizedItems[id]?.isSelected && <Check />}
                   <span className="overflow-hidden text-clip">{name}</span>
                 </CommandItem>
               ))}
