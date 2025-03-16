@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { MultipleSelect } from "@/components/ui/multiple-select";
 import {
   Select,
   SelectContent,
@@ -22,8 +23,6 @@ import {
 } from "@/components/ui/select";
 import type { Company, Level, Technology } from "@/database";
 import { useDebounce } from "@/lib/use-debounce";
-
-import { Combobox } from "./combobox";
 
 export function QuestionFilterForm({
   technologies,
@@ -69,6 +68,18 @@ export function QuestionFilterForm({
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  function handleSelectMultiple(key: string, value: string[]) {
+    const params = new URLSearchParams(searchParams);
+
+    params.delete(key);
+
+    if (value.length) {
+      value.forEach((id) => params.append(key, id));
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
   function selectOrder(order: "asc" | "desc") {
     const params = new URLSearchParams(searchParams);
 
@@ -93,25 +104,28 @@ export function QuestionFilterForm({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <Combobox
+        <MultipleSelect
+          name="technologies"
           items={technologies}
-          selectedItemId={searchParams.get("technologyId")}
-          handleSelect={(id) => handleSelect("technologyId", id)}
-          label="technology"
+          onChange={(value) => handleSelectMultiple("technologyId", value)}
+          value={searchParams.getAll("technologyId")}
+          className="w-full"
         />
 
-        <Combobox
+        <MultipleSelect
+          name="companies"
           items={companies}
-          selectedItemId={searchParams.get("companyId")}
-          handleSelect={(id) => handleSelect("companyId", id)}
-          label="company"
+          onChange={(value) => handleSelectMultiple("companyId", value)}
+          value={searchParams.getAll("companyId")}
+          className="w-full"
         />
 
-        <Combobox
+        <MultipleSelect
+          name="levels"
           items={levels}
-          selectedItemId={searchParams.get("levelId")}
-          handleSelect={(id) => handleSelect("levelId", id)}
-          label="level"
+          onChange={(value) => handleSelectMultiple("levelId", value)}
+          value={searchParams.getAll("levelId")}
+          className="w-full"
         />
 
         <div className="grid grid-cols-[1fr__auto] gap-2">

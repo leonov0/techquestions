@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const getQuestionSchema = z.object({
-  technologyId: z.string().uuid().optional(),
-  companyId: z.string().uuid().optional(),
-  levelId: z.string().uuid().optional(),
+  technologies: z.array(z.string().uuid()).optional(),
+  companies: z.array(z.string().uuid()).optional(),
+  levels: z.array(z.string().uuid()).optional(),
   query: z.string().optional(),
   limit: z.coerce.number().min(1).optional(),
   page: z.coerce.number().min(1).optional(),

@@ -1,8 +1,11 @@
 import { AlertCircle } from "lucide-react";
+import { redirect } from "next/navigation";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { parseToStringArray } from "@/lib/utils";
 
 import { getQuestions } from "../actions";
+import { getQuestionSchema } from "../schemas";
 import { QuestionPagination } from "./pagination";
 import { QuestionPreview } from "./question-preview";
 
@@ -11,7 +14,20 @@ export async function QuestionList({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { data, error } = await getQuestions(await searchParams);
+  const params = await searchParams;
+
+  const parsedParams = await getQuestionSchema.safeParseAsync({
+    technologies: parseToStringArray(params.technologyId),
+    companies: parseToStringArray(params.companyId),
+    levels: parseToStringArray(params.levelId),
+    ...params,
+  });
+
+  if (!parsedParams.success) {
+    redirect("/questions");
+  }
+
+  const { data, error } = await getQuestions(parsedParams.data);
 
   return (
     <>

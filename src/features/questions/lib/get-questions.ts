@@ -15,10 +15,12 @@ export async function getQuestions({
   limit?: number;
   offset?: number;
 }) {
-  const [result] = await database
+  const [{ questionIds, count }] = await database
     .select({
-      ids: sql<string[]>`array_agg(DISTINCT ${schema.questions.id})`,
-      count: countDistinct(schema.questions.id),
+      questionIds: sql<
+        string[]
+      >`COALESCE(json_agg(${schema.questions.id}), '[]'::json)`,
+      count: sql<number>`COALESCE(COUNT(DISTINCT ${schema.questions.id}), 0)`,
     })
     .from(schema.questions)
     .leftJoin(
@@ -39,9 +41,6 @@ export async function getQuestions({
       eq(schema.questions.id, schema.questionsToLevels.questionId),
     )
     .where(filters ? and(...filters) : undefined);
-
-  const ids = result.ids ?? [];
-  const count = result.count ?? 0;
 
   const questions = await database
     .select({
@@ -102,7 +101,7 @@ export async function getQuestions({
       schema.levels,
       eq(schema.questionsToLevels.levelId, schema.levels.id),
     )
-    .where(inArray(schema.questions.id, ids))
+    .where(inArray(schema.questions.id, questionIds))
     .groupBy(schema.questions.id, schema.users.id)
     .orderBy(orderBy)
     .limit(limit)

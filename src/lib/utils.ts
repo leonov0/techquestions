@@ -16,3 +16,10 @@ export async function getCallbackUrl(
 
   return Array.isArray(callbackUrl) ? callbackUrl[0] : callbackUrl;
 }
+
+export function parseToStringArray(
+  value: string | string[] | undefined,
+  fallback?: string[],
+) {
+  return Array.isArray(value) ? value : value ? [value] : fallback;
+}
