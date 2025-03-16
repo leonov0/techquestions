@@ -1,58 +1,45 @@
 "use server";
 
-import { database, schema } from "@/database";
 import { auth } from "@/features/auth";
+import type { ActionResponse } from "@/lib/action-response";
 
+import * as lib from "./lib";
 import { submitQuestionSchema } from "./schemas";
 import type { SubmitQuestionPayload } from "./types";
 
-export async function submitQuestion(payload: SubmitQuestionPayload) {
+export async function submitQuestion(
+  payload: SubmitQuestionPayload,
+): Promise<ActionResponse<null>> {
   const session = await auth();
 
   if (!session?.user.id) {
-    return { error: "You must be logged in to submit a question." };
+    return {
+      success: false,
+      error: "You must be logged in to submit a question.",
+    };
   }
 
   const parsedPayload = await submitQuestionSchema.safeParseAsync(payload);
 
   if (!parsedPayload.success) {
-    return { error: "Invalid payload." };
+    return { success: false, error: "Invalid payload." };
   }
 
-  const [{ questionId }] = await database
-    .insert(schema.questions)
-    .values({
-      ...parsedPayload.data,
-      userId: session.user.id,
-    })
-    .returning({ questionId: schema.questions.id });
+  const { technologies, companies, levels, ...value } = parsedPayload.data;
 
-  if (parsedPayload.data.technologies?.length) {
-    await database.insert(schema.questionsToTechnologies).values(
-      parsedPayload.data.technologies.map((technologyId) => ({
-        questionId,
-        technologyId,
-      })),
-    );
+  try {
+    await lib.createQuestion({
+      value,
+      technologies,
+      companies,
+      levels,
+    });
+  } catch {
+    return {
+      success: false,
+      error: "Failed to submit question. Please try again later.",
+    };
   }
 
-  if (parsedPayload.data.companies?.length) {
-    await database.insert(schema.questionsToCompanies).values(
-      parsedPayload.data.companies.map((companyId) => ({
-        questionId,
-        companyId,
-      })),
-    );
-  }
-
-  if (parsedPayload.data.levels?.length) {
-    await database.insert(schema.questionsToLevels).values(
-      parsedPayload.data.levels.map((levelId) => ({
-        questionId,
-        levelId,
-      })),
-    );
-  }
-
-  return { error: null };
+  return { success: true, data: null };
 }
