@@ -64,11 +64,9 @@ export function ProfileDropdown({
               </AvatarFallback>
             </Avatar>
 
-            <div className="max-w-32 pr-4">
-              <p className="overflow-hidden text-sm font-medium text-clip">
-                {name}
-              </p>
-              <p className="overflow-hidden text-xs text-clip">@{username}</p>
+            <div className="max-w-32 overflow-hidden pr-4 text-nowrap text-clip">
+              <p className="text-sm font-medium">{name}</p>
+              <p className="text-xs">@{username}</p>
             </div>
           </Link>
         </DropdownMenuItem>
