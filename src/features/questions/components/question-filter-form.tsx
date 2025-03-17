@@ -4,13 +4,7 @@ import { ArrowDownNarrowWide, ArrowDownWideNarrow, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MultipleSelect } from "@/components/ui/multiple-select";
 import {
@@ -85,7 +79,7 @@ export function QuestionFilterForm({
   }
 
   return (
-    <form className="space-y-4" onSubmit={applyFilters}>
+    <form className="space-y-3" onSubmit={applyFilters}>
       <div className="relative">
         <Input
           name="query"
@@ -135,27 +129,23 @@ export function QuestionFilterForm({
           </SelectContent>
         </Select>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            className={buttonVariants({ size: "icon", variant: "secondary" })}
+        {selectedOrder === "asc" ? (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setSelectedOrder("desc")}
           >
-            {selectedOrder === "asc" ? (
-              <ArrowDownNarrowWide />
-            ) : (
-              <ArrowDownWideNarrow />
-            )}
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setSelectedOrder("asc")}>
-              Ascending
-            </DropdownMenuItem>
-
-            <DropdownMenuItem onClick={() => setSelectedOrder("desc")}>
-              Descending
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <ArrowDownNarrowWide />
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setSelectedOrder("asc")}
+          >
+            <ArrowDownWideNarrow />
+          </Button>
+        )}
       </div>
 
       <Button type="submit" className="w-full">
