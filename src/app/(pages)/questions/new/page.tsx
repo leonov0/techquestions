@@ -13,7 +13,7 @@ export default async function SubmitQuestion() {
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
-      <main className="container max-w-(--breakpoint-sm) space-y-8 py-16">
+      <main className="container max-w-screen-sm space-y-8 py-16">
         {error && (
           <Alert variant="destructive">
             <AlertCircle className="size-4" />

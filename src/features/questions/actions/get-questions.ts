@@ -1,6 +1,7 @@
 "use cache";
 
-import { asc, desc, eq, SQL, sql } from "drizzle-orm";
+import { asc, desc, inArray, SQL, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { schema } from "@/database";
 
@@ -18,51 +19,63 @@ const orderMappings = new Map<string, SQL>([
 ]);
 
 export async function getQuestions(payload: GetQuestionPayload) {
-  const result = await getQuestionSchema.safeParseAsync(payload);
+  cacheTag("questions");
 
-  if (!result.success) {
+  const parsedPayload = await getQuestionSchema.safeParseAsync(payload);
+
+  if (!parsedPayload.success) {
     return {
       data: {
         questions: [],
         pageCount: 0,
       },
-      error: result.error.message,
+      error: parsedPayload.error.message,
     };
   }
 
   const filters: SQL[] = [];
 
-  if (result.data.technologyId) {
+  if (parsedPayload.data.technologies) {
     filters.push(
-      eq(schema.questionsToTechnologies.technologyId, result.data.technologyId),
+      inArray(
+        schema.questionsToTechnologies.technologyId,
+        parsedPayload.data.technologies,
+      ),
     );
   }
 
-  if (result.data.companyId) {
+  if (parsedPayload.data.companies) {
     filters.push(
-      eq(schema.questionsToCompanies.companyId, result.data.companyId),
+      inArray(
+        schema.questionsToCompanies.companyId,
+        parsedPayload.data.companies,
+      ),
     );
   }
 
-  if (result.data.levelId) {
-    filters.push(eq(schema.questionsToLevels.levelId, result.data.levelId));
+  if (parsedPayload.data.levels) {
+    filters.push(
+      inArray(schema.questionsToLevels.levelId, parsedPayload.data.levels),
+    );
   }
 
-  if (result.data.query) {
+  if (parsedPayload.data.query) {
     filters.push(
       sql`(
       setweight(to_tsvector('english', ${schema.questions.title}), 'A') ||
       setweight(to_tsvector('english', ${schema.questions.body}), 'B'))
-      @@ plainto_tsquery('english', ${result.data.query}
+      @@ plainto_tsquery('english', ${parsedPayload.data.query}
       )`,
     );
   }
 
-  const limit = result.data.limit || 10;
-  const offset = result.data.page ? (result.data.page - 1) * limit : 0;
+  const limit = parsedPayload.data.limit || 10;
+  const offset = parsedPayload.data.page
+    ? (parsedPayload.data.page - 1) * limit
+    : 0;
 
   const orderBy = orderMappings.get(
-    `${result.data.orderBy || "date"}:${result.data.order || "desc"}`,
+    `${parsedPayload.data.orderBy || "date"}:${parsedPayload.data.order || "desc"}`,
   );
 
   try {

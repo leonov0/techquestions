@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -18,12 +19,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MultipleSelect } from "@/components/ui/multiple-select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import type { Company, Level, Technology } from "@/database";
+import type { Company, Level, Technology } from "@/features/questions/types";
 
 import { submitQuestion } from "./actions";
-import { MultipleSelect } from "./multiple-select";
 import { submitQuestionSchema } from "./schemas";
 import type { SubmitQuestionPayload } from "./types";
 
@@ -50,17 +51,21 @@ export function SubmitQuestionForm({
 
   const [isPending, startTransition] = useTransition();
 
+  const router = useRouter();
+
   function onSubmit(payload: SubmitQuestionPayload) {
     startTransition(async () => {
-      const { error } = await submitQuestion(payload);
+      const response = await submitQuestion(payload);
 
-      if (error) {
-        toast.error(error);
+      if (!response.success) {
+        toast.error(response.error);
 
         return;
       }
 
       toast.success("Question submitted successfully. We will review it soon.");
+
+      router.push("/");
     });
   }
 
@@ -163,6 +168,7 @@ export function SubmitQuestionForm({
                 <FormDescription>
                   Select the technologies relevant to the question.
                 </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -176,16 +182,13 @@ export function SubmitQuestionForm({
                 <FormLabel>Companies</FormLabel>
 
                 <FormControl>
-                  <MultipleSelect
-                    items={companies}
-                    variant="secondary"
-                    {...field}
-                  />
+                  <MultipleSelect items={companies} {...field} />
                 </FormControl>
 
                 <FormDescription>
                   Select the companies where you were asked this question.
                 </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -199,12 +202,13 @@ export function SubmitQuestionForm({
                 <FormLabel>Levels</FormLabel>
 
                 <FormControl>
-                  <MultipleSelect items={levels} variant="outline" {...field} />
+                  <MultipleSelect items={levels} {...field} />
                 </FormControl>
 
                 <FormDescription>
                   Select the expected developer levels for this question.
                 </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}

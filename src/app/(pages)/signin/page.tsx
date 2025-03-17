@@ -14,19 +14,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { signIn } from "@/features/auth";
+import { getCallbackUrl } from "@/lib/utils";
 
 export default async function SignIn({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string | string[] }>;
 }) {
-  const redirectTo = (await searchParams).callbackUrl || "/";
+  const redirectTo = await getCallbackUrl(searchParams);
 
   return (
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
-      <main className="container max-w-(--breakpoint-sm) py-16">
+      <main className="container max-w-screen-sm py-16">
         <Card>
           <CardHeader>
             <CardTitle>Sign in to your account</CardTitle>
@@ -36,7 +37,7 @@ export default async function SignIn({
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="mx-auto grid gap-4 sm:grid-cols-2">
+          <CardContent className="grid gap-4 sm:grid-cols-2">
             <form
               action={async () => {
                 "use server";

@@ -15,14 +15,14 @@ import { cn } from "@/lib/utils";
 export default async function Questions({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   return (
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
       <Header />
 
       <main className="container grid gap-8 py-16 lg:grid-cols-[18rem_1fr] xl:grid-cols-[18rem_1fr_18rem]">
-        <aside className="space-y-4">
+        <aside className="space-y-6">
           <Link
             href="/questions/new"
             className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
