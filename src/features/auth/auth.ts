@@ -28,13 +28,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async authorized({ auth, request }) {
-      if (request.nextUrl.pathname === "/signin" && auth) {
+      const pathname = request.nextUrl.pathname;
+
+      if (pathname === "/signin" && auth) {
         const url = new URL("/", request.nextUrl.origin).toString();
 
         return NextResponse.redirect(url);
       }
 
-      if (protectedRoutes.includes(request.nextUrl.pathname) && !auth) {
+      if (protectedRoutes.includes(pathname) && !auth) {
+        return false;
+      }
+
+      if (pathname.startsWith("/admin") && auth?.user.role !== "admin") {
         return false;
       }
 

@@ -1,4 +1,4 @@
-import { ChevronDown, LogOut, Moon, Settings, Sun } from "lucide-react";
+import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -14,6 +14,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { User } from "@/database";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
@@ -23,9 +24,10 @@ export function ProfileDropdown({
   username,
   image,
 }: {
-  name?: string | null;
-  username?: string | null;
-  image?: string | null;
+  name: User["name"];
+  username: User["username"];
+  image: User["image"];
+  role: User["role"];
 }) {
   return (
     <DropdownMenu>
@@ -72,6 +74,13 @@ export function ProfileDropdown({
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem asChild>
+          <Link href="/admin">
+            <Wrench />
+            Admin panel
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
           <Link href="/settings">
