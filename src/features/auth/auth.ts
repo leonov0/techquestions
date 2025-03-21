@@ -47,8 +47,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
     async jwt({ token, user, trigger, session }) {
-      if (trigger === "update" && session?.username) {
-        token.username = session.username;
+      if (trigger === "update" && session) {
+        await updateUser(session.user.id, session);
       }
 
       if (!user?.id || !user?.email) {
@@ -61,10 +61,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         await updateUser(user.id, { username });
       }
 
-      const { role, username } = await getUser(user.id);
+      const existingUser = await getUser(user.id);
 
-      token.role = role;
-      token.username = username;
+      if (existingUser) {
+        token.role = existingUser.role;
+        token.username = existingUser.username;
+      }
 
       return token;
     },

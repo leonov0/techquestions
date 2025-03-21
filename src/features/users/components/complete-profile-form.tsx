@@ -19,10 +19,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateUserSchema } from "@/features/users/schemas";
-import type { UpdateUserPayload } from "@/features/users/types";
 
-import { completeProfile } from "./actions";
+import { completeProfile } from "../actions/complete-profile";
+import { updateUserSchema } from "../schemas";
+import type { UpdateUserPayload } from "../types";
 
 export function CompleteProfileForm({
   username,
@@ -46,18 +46,19 @@ export function CompleteProfileForm({
     startTransition(async () => {
       const result = await completeProfile(values);
 
-      if (result.success) {
-        await update({ ...values });
-        return router.push(redirectTo);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
       }
 
-      toast.error(result.message);
+      await update({ ...values });
+      router.push(redirectTo);
     });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="username"
@@ -79,8 +80,8 @@ export function CompleteProfileForm({
         />
 
         <Button type="submit" className="mt-6" disabled={isPending}>
-          {isPending && <Loader2 className="mr-2 animate-spin" size={15} />}
-          <span>Save</span>
+          {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+          Save
         </Button>
       </form>
     </Form>
