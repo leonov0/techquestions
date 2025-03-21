@@ -2,7 +2,10 @@ import { Suspense } from "react";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { QuestionSection, QuestionSectionLoader } from "@/features/questions";
+import {
+  QuestionSection,
+  QuestionSectionLoader,
+} from "@/widgets/question-section";
 
 export default async function Question({
   params,
@@ -15,7 +18,7 @@ export default async function Question({
 
       <main className="container py-16">
         <Suspense fallback={<QuestionSectionLoader />}>
-          <QuestionSection params={params} />
+          <QuestionSection params={params} className="motion-preset-focus" />
         </Suspense>
       </main>
 

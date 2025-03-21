@@ -3,35 +3,41 @@
 import { revalidateTag } from "next/cache";
 
 import { auth } from "@/features/auth";
+import type { ActionResponse } from "@/lib/action-response";
 
 import * as lib from "./lib";
 
-export async function vote(questionId: string, vote: number) {
+export async function vote(
+  questionId: string,
+  vote: number,
+): Promise<ActionResponse<null>> {
   const session = await auth();
 
   if (!session?.user.id) {
-    return { error: "You need to be signed in to vote." };
+    return { success: false, error: "You need to be signed in to vote." };
   }
 
   try {
     lib.addVote(questionId, session.user.id, vote);
-    revalidateTag(`questions-${questionId}`);
-    revalidateTag(`questions`);
-  } catch {
-    return { error: "Failed to vote. Please try again later!" };
-  }
 
-  return { error: null };
+    revalidateTag("questions");
+
+    return { success: true, data: null };
+  } catch {
+    return { success: false, error: "Failed to vote. Please try again later." };
+  }
 }
 
-export async function getRating(questionId: string) {
+export async function getRating(
+  questionId: string,
+): Promise<ActionResponse<{ rating: number; currentVote: number }>> {
   const session = await auth();
 
   try {
     if (!session?.user.id) {
       const rating = await lib.getRating(questionId);
 
-      return { data: { rating, currentVote: 0 }, error: null };
+      return { success: true, data: { rating, currentVote: 0 } };
     }
 
     const data = await lib.getRatingWithCurrentVote(
@@ -39,11 +45,11 @@ export async function getRating(questionId: string) {
       session.user.id,
     );
 
-    return { data, error: null };
+    return { success: true, data };
   } catch {
     return {
-      data: { rating: 0, currentVote: 0 },
-      error: "Failed to get your vote. Please try again later!",
+      success: false,
+      error: "Failed to get your vote. Please try again later.",
     };
   }
 }

@@ -4,9 +4,9 @@ import { redirect } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { parseToStringArray } from "@/lib/utils";
 
-import { getQuestions } from "../actions";
-import { getQuestionSchema } from "../schemas";
-import { QuestionPagination } from "./pagination";
+import { getQuestions } from "../features/questions/actions";
+import { QuestionPagination } from "../features/questions/components/pagination";
+import { getQuestionSchema } from "../features/questions/schemas";
 import { QuestionPreview } from "./question-preview";
 
 export async function QuestionList({
@@ -64,5 +64,24 @@ export async function QuestionList({
         className="lg:col-span-2 xl:col-span-3"
       />
     </>
+  );
+}
+
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function QuestionListLoader() {
+  return (
+    <ul className="space-y-4">
+      {[...Array(10)].map((_, index) => (
+        <li
+          key={`question-loader-${index}`}
+          className="border-t pt-4 first:border-none first:pt-0"
+        >
+          <Skeleton className="h-40" />
+        </li>
+      ))}
+
+      <Skeleton className="mx-auto h-9 max-w-[19rem] lg:col-span-2 xl:col-span-3" />
+    </ul>
   );
 }

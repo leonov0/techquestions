@@ -4,13 +4,9 @@ import { Suspense } from "react";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  QuestionFilters,
-  QuestionFiltersLoader,
-  QuestionList,
-  QuestionListLoader,
-} from "@/features/questions";
+import { QuestionFilters, QuestionFiltersLoader } from "@/features/questions";
 import { cn } from "@/lib/utils";
+import { QuestionList, QuestionListLoader } from "@/widgets/question-list";
 
 export default async function Questions({
   searchParams,

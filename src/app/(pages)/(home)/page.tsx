@@ -6,7 +6,7 @@ import { auth } from "@/features/auth";
 import {
   FeaturedQuestionList,
   FeaturedQuestionListLoader,
-} from "@/features/questions";
+} from "@/widgets/featured-question-list";
 
 import { HeroSection } from "./hero-section";
 

@@ -40,7 +40,7 @@ export function VoteButtons({
 
       const response = await vote(questionId, value);
 
-      if (response.error) {
+      if (!response.success) {
         toast.error(response.error);
       }
     });
@@ -75,11 +75,11 @@ export function VoteButtons({
       <button
         onClick={handleUpvote}
         className={cn(
-          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden",
           optimisticRating.currentVote > 0 && "text-green-500",
         )}
       >
-        <ChevronUpIcon />
+        <ChevronUpIcon className="pointer-events-none size-4 shrink-0" />
       </button>
 
       <span
@@ -97,11 +97,11 @@ export function VoteButtons({
       <button
         onClick={handleDownvote}
         className={cn(
-          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden",
           optimisticRating.currentVote < 0 && "text-red-500",
         )}
       >
-        <ChevronDownIcon />
+        <ChevronDownIcon className="pointer-events-none size-4 shrink-0" />
       </button>
     </div>
   );
