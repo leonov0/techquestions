@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -87,7 +89,11 @@ export async function QuestionSection({
 
       <Separator className="my-8" />
 
-      <p className="text-lg">{question.body}</p>
+      <div className="prose dark:prose-invert prose-neutral">
+        <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          {question.body}
+        </ReactMarkdown>
+      </div>
     </section>
   );
 }
