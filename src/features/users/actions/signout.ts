@@ -1,5 +1,7 @@
-import { signOut } from "@/features/auth";
+"use server";
 
-export async function SignOut() {
-  await signOut({ redirectTo: "/" });
+import { signOut as performSignOut } from "@/features/auth";
+
+export async function signOut() {
+  await performSignOut({ redirectTo: "/" });
 }
