@@ -4,16 +4,19 @@ import { Suspense } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getQuestion } from "@/features/questions/actions";
 import { Rating, RatingLoader } from "@/features/rating";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
-import { getQuestion } from "../actions";
 import { CategoryList } from "./category-list";
 
 export async function QuestionSection({
   params,
+  className,
 }: {
   params: Promise<{ id: string }>;
+  className?: string;
 }) {
   const { id } = await params;
 
@@ -24,7 +27,7 @@ export async function QuestionSection({
   }
 
   return (
-    <section className="motion-preset-focus">
+    <section className={className}>
       <h1 className="text-3xl font-bold">{question.title}</h1>
 
       <div className="mt-2 flex flex-col gap-4 sm:flex-row">
@@ -57,7 +60,7 @@ export async function QuestionSection({
             href={`users/${question.author.username}`}
             className="group flex gap-2"
           >
-            <Avatar>
+            <Avatar className="size-10">
               {question.author.image && (
                 <AvatarImage src={question.author.image} />
               )}
@@ -73,7 +76,7 @@ export async function QuestionSection({
           </Link>
         ) : (
           <div className="flex gap-2">
-            <Avatar>
+            <Avatar className="size-10">
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
 
@@ -85,6 +88,33 @@ export async function QuestionSection({
       <Separator className="my-8" />
 
       <p className="text-lg">{question.body}</p>
+    </section>
+  );
+}
+
+export function QuestionSectionLoader() {
+  return (
+    <section>
+      <Skeleton className="h-9 w-full" />
+
+      <div className="mt-2 flex flex-col gap-4 sm:flex-row">
+        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-6 w-56" />
+      </div>
+
+      {
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {[...new Array(5)].map((_, index) => (
+            <Skeleton key={`badge-skeleton-${index}`} className="h-6 w-16" />
+          ))}
+        </ul>
+      }
+
+      <Skeleton className="mt-4 h-10 w-56" />
+
+      <Separator className="my-8" />
+
+      <Skeleton className="h-64 w-full" />
     </section>
   );
 }

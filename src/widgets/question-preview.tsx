@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { Question } from "@/features/questions";
 import { Rating, RatingLoader } from "@/features/rating";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
-import type { Question } from "../types";
 import { CategoryList } from "./category-list";
 
 export async function QuestionPreview({
@@ -40,7 +40,7 @@ export async function QuestionPreview({
             href={`users/${question.author.username}`}
             className="group flex gap-2"
           >
-            <Avatar>
+            <Avatar className="size-10">
               {question.author.image && (
                 <AvatarImage src={question.author.image} />
               )}
@@ -62,7 +62,7 @@ export async function QuestionPreview({
           </Link>
         ) : (
           <div className="flex gap-2">
-            <Avatar>
+            <Avatar className="size-10">
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
 
