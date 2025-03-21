@@ -34,9 +34,10 @@ export async function Header() {
 
         {session?.user.id ? (
           <ProfileDropdown
-            name={session.user.name}
-            username={session.user.username}
-            image={session.user.image}
+            name={session.user.name!}
+            username={session.user.username!}
+            image={session.user.image!}
+            role={session.user.role!}
           />
         ) : (
           <div className="flex gap-4">

@@ -1,2 +1,1 @@
-export { Rating } from "./rating";
-export { RatingLoader } from "./rating-loader";
+export { Rating, RatingLoader } from "./rating";

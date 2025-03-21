@@ -1,6 +1,6 @@
 "use cache";
 
-import { asc, desc, inArray, SQL, sql } from "drizzle-orm";
+import { asc, desc, eq, inArray, SQL, sql } from "drizzle-orm";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { schema } from "@/database";
@@ -68,6 +68,8 @@ export async function getQuestions(payload: GetQuestionPayload) {
       )`,
     );
   }
+
+  filters.push(eq(schema.questions.status, "approved"));
 
   const limit = parsedPayload.data.limit || 10;
   const offset = parsedPayload.data.page

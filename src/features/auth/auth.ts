@@ -28,21 +28,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async authorized({ auth, request }) {
-      if (request.nextUrl.pathname === "/signin" && auth) {
+      const pathname = request.nextUrl.pathname;
+
+      if (pathname === "/signin" && auth) {
         const url = new URL("/", request.nextUrl.origin).toString();
 
         return NextResponse.redirect(url);
       }
 
-      if (protectedRoutes.includes(request.nextUrl.pathname) && !auth) {
+      if (protectedRoutes.includes(pathname) && !auth) {
+        return false;
+      }
+
+      if (pathname.startsWith("/admin") && auth?.user.role !== "admin") {
         return false;
       }
 
       return true;
     },
     async jwt({ token, user, trigger, session }) {
-      if (trigger === "update" && session?.username) {
-        token.username = session.username;
+      if (trigger === "update" && session) {
+        await updateUser(session.user.id, session);
       }
 
       if (!user?.id || !user?.email) {
@@ -55,10 +61,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         await updateUser(user.id, { username });
       }
 
-      const { role, username } = await getUser(user.id);
+      const existingUser = await getUser(user.id);
 
-      token.role = role;
-      token.username = username;
+      if (existingUser) {
+        token.role = existingUser.role;
+        token.username = existingUser.username;
+      }
 
       return token;
     },

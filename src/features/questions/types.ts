@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import type { Question as QuestionModel } from "@/database";
+
 import { getQuestionSchema } from "./schemas";
 
 export type GetQuestionPayload = z.infer<typeof getQuestionSchema>;
@@ -20,7 +22,7 @@ type BaseQuestion = {
   id: string;
   title: string;
   body: string | null;
-  status: "pending" | "approved" | "rejected";
+  status: QuestionModel["status"];
   createdAt: Date;
   updatedAt: Date;
   rating: number;

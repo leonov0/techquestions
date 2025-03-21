@@ -1,4 +1,4 @@
-import { ChevronDown, LogOut, Moon, Settings, Sun } from "lucide-react";
+import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -14,6 +14,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { User } from "@/database";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
@@ -23,9 +24,10 @@ export function ProfileDropdown({
   username,
   image,
 }: {
-  name?: string | null;
-  username?: string | null;
-  image?: string | null;
+  name: User["name"];
+  username: User["username"];
+  image: User["image"];
+  role: User["role"];
 }) {
   return (
     <DropdownMenu>
@@ -62,16 +64,21 @@ export function ProfileDropdown({
               </AvatarFallback>
             </Avatar>
 
-            <div className="max-w-32 pr-4">
-              <p className="overflow-hidden text-sm font-medium text-clip">
-                {name}
-              </p>
-              <p className="overflow-hidden text-xs text-clip">@{username}</p>
+            <div className="max-w-32 overflow-hidden pr-4 text-nowrap text-clip">
+              <p className="text-sm font-medium">{name}</p>
+              <p className="text-xs">@{username}</p>
             </div>
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem asChild>
+          <Link href="/admin">
+            <Wrench />
+            Admin panel
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
           <Link href="/settings">

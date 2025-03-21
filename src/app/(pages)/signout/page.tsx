@@ -1,8 +1,5 @@
-import { LogOut } from "lucide-react";
-
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signOut } from "@/features/auth";
+import { SignOutForm } from "@/features/users";
 
 export default function SignOut() {
   return (
@@ -28,18 +25,7 @@ export default function SignOut() {
           </CardHeader>
 
           <CardContent>
-            <form
-              action={async () => {
-                "use server";
-
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <Button variant="destructive">
-                <LogOut />
-                <span className="ml-2">Sign out</span>
-              </Button>
-            </form>
+            <SignOutForm />
           </CardContent>
         </Card>
       </main>

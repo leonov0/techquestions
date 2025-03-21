@@ -85,7 +85,7 @@ export function QuestionFilterForm({
           name="query"
           className="pl-10"
           placeholder="Search..."
-          value={query ?? undefined}
+          value={query ?? ""}
           onChange={(e) => setQuery(e.target.value)}
         />
 

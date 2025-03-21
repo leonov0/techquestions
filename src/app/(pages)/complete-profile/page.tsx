@@ -8,9 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { auth } from "@/features/auth";
-import { getCallbackUrl } from "@/lib/utils";
-
-import { CompleteProfileForm } from "./form";
+import { CompleteProfileForm } from "@/features/users";
+import { parseToString } from "@/lib/utils";
 
 export default async function CompleteProfile({
   searchParams,
@@ -19,11 +18,13 @@ export default async function CompleteProfile({
 }) {
   const session = await auth();
 
-  const redirectTo = await getCallbackUrl(searchParams);
-
-  if (!session || !session.user.username) {
-    throw new Error("Not authenticated");
+  if (!session?.user.username) {
+    throw new Error("Unauthorized.");
   }
+
+  const params = await searchParams;
+
+  const redirectTo = parseToString(params.callbackUrl);
 
   return (
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">

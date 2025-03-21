@@ -9,17 +9,16 @@ export function getCapitalizedFirstLetter(value: string) {
   return value.charAt(0).toUpperCase();
 }
 
-export async function getCallbackUrl(
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>,
-) {
-  const { callbackUrl } = await searchParams;
-
-  return Array.isArray(callbackUrl) ? callbackUrl[0] : callbackUrl;
-}
-
 export function parseToStringArray(
   value: string | string[] | undefined,
   fallback?: string[],
 ) {
   return Array.isArray(value) ? value : value ? [value] : fallback;
+}
+
+export function parseToString(
+  value: string | string[] | undefined,
+  fallback?: string,
+) {
+  return Array.isArray(value) ? value[0] : value || fallback;
 }

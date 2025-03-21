@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import type { Company, Level, Technology } from "@/features/questions";
 import { cn } from "@/lib/utils";
-
-import type { Company, Level, Technology } from "../types";
 
 export function CategoryList({
   id,
