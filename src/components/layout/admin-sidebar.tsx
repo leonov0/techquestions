@@ -26,8 +26,8 @@ import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 const items = [
   {
-    title: "Questions",
-    url: "/admin/questions",
+    title: "Pending questions",
+    url: "/admin/pending-questions",
     icon: Library,
   },
   {
@@ -45,6 +45,7 @@ export async function AdminSidebar() {
   }
 
   const { image, username, name } = session.user;
+
   return (
     <Sidebar>
       <SidebarHeader>
