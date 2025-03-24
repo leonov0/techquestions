@@ -21,11 +21,6 @@ export async function ReviewQuestionSection() {
     status: "pending",
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
-  await sleep(1000);
-
   if (!response.success) {
     return (
       <Alert>
