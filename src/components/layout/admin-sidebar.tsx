@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +23,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { auth } from "@/features/auth";
+import { getPendingQuestionCount } from "@/features/review-questions";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
-
-const items = [
-  {
-    title: "Pending questions",
-    url: "/admin/pending-questions",
-    icon: Library,
-  },
-  {
-    title: "Users",
-    url: "/admin/users",
-    icon: Users,
-  },
-];
 
 export async function AdminSidebar() {
   const session = await auth();
@@ -45,6 +34,8 @@ export async function AdminSidebar() {
   }
 
   const { image, username, name } = session.user;
+
+  const getPendingQuestionCountResponse = await getPendingQuestionCount();
 
   return (
     <Sidebar>
@@ -69,16 +60,26 @@ export async function AdminSidebar() {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/admin/pending-questions">
+                    <Library />
+                    <span>Pending questions</span>
+                    {getPendingQuestionCountResponse.success &&
+                      getPendingQuestionCountResponse.data > 0 && (
+                        <Badge>{getPendingQuestionCountResponse.data}</Badge>
+                      )}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/admin/users">
+                    <Users />
+                    <span>Users</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
@@ -22,6 +21,4 @@ export async function reviewQuestion(
       .set({ status: payload.status })
       .where(eq(schema.questions.id, questionId)),
   ]);
-
-  revalidateTag("questions");
 }
