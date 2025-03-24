@@ -89,7 +89,7 @@ export async function QuestionSection({
 
       <Separator className="my-8" />
 
-      <div className="prose dark:prose-invert prose-neutral">
+      <div className="prose dark:prose-invert prose-neutral !max-w-full">
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>
           {question.body}
         </ReactMarkdown>
