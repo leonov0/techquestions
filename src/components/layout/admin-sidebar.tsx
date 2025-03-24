@@ -1,4 +1,4 @@
-import { ChevronsUpDown, Library, Users } from "lucide-react";
+import { ChevronsUpDown, Database, Library, Users } from "lucide-react";
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
@@ -72,6 +72,16 @@ export async function AdminSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/admin/questions">
+                    <Database />
+                    <span>Questions</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href="/admin/users">
