@@ -6,7 +6,7 @@ import type { Question } from "../types";
 
 export async function getQuestions({
   filters,
-  orderBy = desc(schema.questions.updatedAt),
+  orderBy = desc(schema.questions.createdAt),
   limit = 10,
   offset = 0,
 }: {

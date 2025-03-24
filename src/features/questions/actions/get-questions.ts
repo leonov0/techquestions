@@ -10,8 +10,8 @@ import { getQuestionSchema } from "../schemas";
 import type { GetQuestionPayload } from "../types";
 
 const orderMappings = new Map<string, SQL>([
-  ["date:asc", asc(schema.questions.updatedAt)],
-  ["date:desc", desc(schema.questions.updatedAt)],
+  ["date:asc", asc(schema.questions.createdAt)],
+  ["date:desc", desc(schema.questions.createdAt)],
   ["rating:asc", asc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)],
   ["rating:desc", desc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)],
   ["title:asc", asc(schema.questions.title)],
