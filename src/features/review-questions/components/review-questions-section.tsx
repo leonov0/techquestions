@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { QuestionPreview } from "@/widgets/question-preview";
 
 import { getQuestions } from "../actions";
@@ -19,6 +20,11 @@ export async function ReviewQuestionSection() {
   const response = await getQuestions({
     status: "pending",
   });
+
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  await sleep(1000);
 
   if (!response.success) {
     return (
@@ -61,6 +67,21 @@ export async function ReviewQuestionSection() {
               <ReviewQuestionForm questionId={question.id} />
             </DialogContent>
           </Dialog>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function ReviewQuestionSectionLoader() {
+  return (
+    <ul className="space-y-4">
+      {[...Array(10)].map((_, index) => (
+        <li
+          key={`question-loader-${index}`}
+          className="border-t pt-4 first:border-none first:pt-0"
+        >
+          <Skeleton className="h-54" />
         </li>
       ))}
     </ul>

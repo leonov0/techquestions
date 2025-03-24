@@ -1,2 +1,5 @@
 export { getPendingQuestionCount } from "./actions";
-export { ReviewQuestionSection } from "./components/review-questions-section";
+export {
+  ReviewQuestionSection,
+  ReviewQuestionSectionLoader,
+} from "./components/review-questions-section";

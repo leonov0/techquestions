@@ -2,6 +2,7 @@ import { AlertCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { parseToStringArray } from "@/lib/utils";
 
 import { getQuestions } from "../features/questions/actions";
@@ -66,8 +67,6 @@ export async function QuestionList({
     </>
   );
 }
-
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function QuestionListLoader() {
   return (

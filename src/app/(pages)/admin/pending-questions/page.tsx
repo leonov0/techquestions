@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 
-import { ReviewQuestionSection } from "@/features/review-questions";
+import {
+  ReviewQuestionSection,
+  ReviewQuestionSectionLoader,
+} from "@/features/review-questions";
 
 export default async function ReviewQuestions() {
   return (
@@ -10,7 +13,7 @@ export default async function ReviewQuestions() {
       </h1>
 
       <section className="mt-8">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<ReviewQuestionSectionLoader />}>
           <ReviewQuestionSection />
         </Suspense>
       </section>
