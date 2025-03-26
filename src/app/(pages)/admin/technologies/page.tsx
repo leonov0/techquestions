@@ -1,19 +1,27 @@
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 
+import { buttonVariants } from "@/components/ui/button";
 import { ListLoader, TechnologyList } from "@/features/categories";
 
 export default function ManageTechnologies() {
   return (
-    <div>
-      <h1 className="text-3xl font-semibold tracking-tight">
-        Manage technologies
-      </h1>
+    <div className="space-y-8">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Manage technologies
+        </h1>
 
-      <section className="mt-8">
-        <Suspense fallback={<ListLoader />}>
-          <TechnologyList />
-        </Suspense>
-      </section>
+        <Link href="/admin/technologies/new" className={buttonVariants()}>
+          <Plus />
+          Create Technology
+        </Link>
+      </div>
+
+      <Suspense fallback={<ListLoader />}>
+        <TechnologyList />
+      </Suspense>
     </div>
   );
 }
