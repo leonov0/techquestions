@@ -16,9 +16,8 @@ export async function getTechnology(
   }
 
   try {
-    const technology = await lib.getTechnology(id);
-
-    return { success: true, data: technology };
+    const data = await lib.getTechnology(id);
+    return { success: true, data };
   } catch {
     return {
       success: false,

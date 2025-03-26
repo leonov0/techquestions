@@ -1,7 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-
 import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
 
@@ -27,8 +25,6 @@ export async function updateTechnology(
 
   try {
     await lib.updateTechnology(id, parsedPayload.data);
-
-    revalidateTag("technologies");
 
     return { success: true, data: null };
   } catch {

@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
@@ -15,4 +16,6 @@ export async function updateTechnology(
       updatedAt: new Date(),
     })
     .where(eq(schema.technologies.id, id));
+
+  revalidateTag("technologies");
 }
