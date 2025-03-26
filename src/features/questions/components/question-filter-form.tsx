@@ -116,9 +116,9 @@ export function QuestionFilterForm({
         className="w-full"
       />
 
-      <div className="grid grid-cols-[1fr__auto] gap-2">
+      <div className="grid grid-cols-[1fr_auto] gap-2">
         <Select onValueChange={setSelectedOrderBy} value={selectedOrderBy}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Date" />
           </SelectTrigger>
 
