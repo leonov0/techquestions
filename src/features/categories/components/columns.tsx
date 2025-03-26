@@ -22,14 +22,14 @@ export const columns: ColumnDef<Technology>[] = [
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Updated at" />
+      <DataTableColumnHeader column={column} title="Updated At" />
     ),
     cell: ({ row }) => <div>{row.original.updatedAt.toLocaleString()}</div>,
   },
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Created at" />
+      <DataTableColumnHeader column={column} title="Created At" />
     ),
     cell: ({ row }) => <div>{row.original.createdAt.toLocaleString()}</div>,
   },
