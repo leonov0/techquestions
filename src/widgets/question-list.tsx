@@ -2,6 +2,7 @@ import { AlertCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { parseToStringArray } from "@/lib/utils";
 
 import { getQuestions } from "../features/questions/actions";
@@ -29,21 +30,35 @@ export async function QuestionList({
 
   const { data, error } = await getQuestions(parsedParams.data);
 
+  if (error) {
+    return (
+      <Alert variant="destructive" className="h-fit">
+        <AlertCircle className="size-4" />
+
+        <AlertTitle>An error occurred while fetching the questions.</AlertTitle>
+
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (data.questions.length === 0) {
+    return (
+      <Alert className="h-fit">
+        <AlertCircle className="size-4" />
+
+        <AlertTitle>No questions found.</AlertTitle>
+
+        <AlertDescription>
+          Try changing the filters or submitting a new question.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <>
-      <div className="space-y-8">
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="size-4" />
-
-            <AlertTitle>
-              An error occurred while fetching the questions.
-            </AlertTitle>
-
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
+      <div>
         <ul className="space-y-4">
           {data.questions.map((question) => (
             <li
@@ -66,8 +81,6 @@ export async function QuestionList({
     </>
   );
 }
-
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function QuestionListLoader() {
   return (

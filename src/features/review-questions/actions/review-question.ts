@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
+
 import { auth } from "@/features/auth";
 import { ActionResponse } from "@/lib/action-response";
 
@@ -31,6 +33,7 @@ export async function reviewQuestion(
 
   try {
     await lib.reviewQuestion(id, session.user.id, payload);
+    revalidateTag("questions");
 
     return {
       success: true,
