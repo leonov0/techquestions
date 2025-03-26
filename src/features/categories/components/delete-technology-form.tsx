@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -88,6 +89,7 @@ export function DeleteTechnologyForm({
           </DialogClose>
 
           <Button type="submit" variant="destructive" disabled={isPending}>
+            {isPending && <Loader2 className="animate-spin" />}
             Delete
           </Button>
         </div>

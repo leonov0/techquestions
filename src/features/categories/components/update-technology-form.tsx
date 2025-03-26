@@ -76,7 +76,7 @@ export function UpdateTechnologyForm({
         />
 
         <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending && <Loader2 className="mr-2 animate-spin" />}
+          {isPending && <Loader2 className="animate-spin" />}
           Save
         </Button>
       </form>
