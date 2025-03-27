@@ -29,7 +29,10 @@ export async function submitQuestion(
 
   try {
     await lib.createQuestion({
-      value,
+      value: {
+        ...value,
+        userId: session.user.id,
+      },
       technologies,
       companies,
       levels,
