@@ -23,6 +23,7 @@ export function ProfileDropdown({
   name,
   username,
   image,
+  role,
 }: {
   name: User["name"];
   username: User["username"];
@@ -73,12 +74,14 @@ export function ProfileDropdown({
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem asChild>
-          <Link href="/admin">
-            <Wrench />
-            Admin panel
-          </Link>
-        </DropdownMenuItem>
+        {role === "admin" && (
+          <DropdownMenuItem asChild>
+            <Link href="/admin">
+              <Wrench />
+              Admin panel
+            </Link>
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuItem asChild>
           <Link href="/settings">
@@ -88,9 +91,9 @@ export function ProfileDropdown({
         </DropdownMenuItem>
 
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="[&_svg:not([class*='text-'])]:text-muted-foreground gap-2 [&_svg:not([class*='size-'])]:size-4">
-            <Sun className="dark:hidden" />
-            <Moon className="hidden dark:inline" />
+          <DropdownMenuSubTrigger>
+            <Sun className="text-muted-foreground mr-2 size-4 dark:hidden" />
+            <Moon className="text-muted-foreground mr-2 hidden size-4 dark:inline" />
             Themes
           </DropdownMenuSubTrigger>
 
