@@ -1,4 +1,13 @@
-import { ChevronsUpDown, Database, Library, Users } from "lucide-react";
+import {
+  Brain,
+  Building2,
+  ChartColumnStacked,
+  ChevronRight,
+  ChevronsUpDown,
+  CodeXml,
+  Database,
+  Library,
+} from "lucide-react";
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
@@ -21,10 +30,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { auth } from "@/features/auth";
 import { getPendingQuestionCount } from "@/features/review-questions";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
 
 export async function AdminSidebar() {
   const session = await auth();
@@ -64,7 +81,7 @@ export async function AdminSidebar() {
                 <SidebarMenuButton asChild>
                   <Link href="/admin/pending-questions">
                     <Library />
-                    <span>Pending questions</span>
+                    <span>Pending Questions</span>
                     {getPendingQuestionCountResponse.success &&
                       getPendingQuestionCountResponse.data > 0 && (
                         <Badge>{getPendingQuestionCountResponse.data}</Badge>
@@ -82,14 +99,54 @@ export async function AdminSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/admin/users">
-                    <Users />
-                    <span>Users</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <SidebarMenu>
+                <Collapsible defaultOpen className="group/collapsible">
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton>
+                        <ChartColumnStacked />
+                        Question Categories
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuButton asChild>
+                            <Link href="/admin/technologies">
+                              <CodeXml />
+                              Technologies
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuButton asChild>
+                            <Link href="/admin/companies">
+                              <Building2 />
+                              Companies
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuButton asChild>
+                            <Link href="/admin/levels">
+                              <Brain />
+                              Levels
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              </SidebarMenu>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

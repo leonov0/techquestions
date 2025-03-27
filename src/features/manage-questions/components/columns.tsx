@@ -11,7 +11,6 @@ export const columns: ColumnDef<Question>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    // cell: ({ row }) => <div>{row.original.id.split("-").at(0)}</div>,
   },
   {
     accessorKey: "title",
