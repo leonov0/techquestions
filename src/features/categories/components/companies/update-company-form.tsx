@@ -67,9 +67,7 @@ export function UpdateCompanyForm({
                 <Input placeholder="name" {...field} />
               </FormControl>
 
-              <FormDescription>
-                This is technology display name.
-              </FormDescription>
+              <FormDescription>This is level display name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
