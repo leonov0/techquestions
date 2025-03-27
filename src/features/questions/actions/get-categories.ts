@@ -1,20 +1,36 @@
-"use cache";
+"use server";
 
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import type { Company, Level, Technology } from "@/database";
+import type { ActionResponse } from "@/lib/action-response";
 
 import * as lib from "../lib";
 
-export async function getCategories() {
-  cacheTag("categories");
-
+export async function getCategories(): Promise<
+  ActionResponse<{
+    technologies: Technology[];
+    companies: Company[];
+    levels: Level[];
+  }>
+> {
   try {
-    const data = await lib.getCategories();
+    const [technologies, companies, levels] = await Promise.all([
+      lib.getTechnologies(),
+      lib.getCompanies(),
+      lib.getLevels(),
+    ]);
 
-    return { data, error: null };
+    return {
+      success: true,
+      data: {
+        technologies,
+        companies,
+        levels,
+      },
+    };
   } catch {
     return {
-      data: { technologies: [], companies: [], levels: [] },
-      error: "Failed to get categories",
+      success: false,
+      error: "Failed to get categories. Please try again later.",
     };
   }
 }

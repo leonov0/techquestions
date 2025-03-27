@@ -19,7 +19,7 @@ const orderMappings = new Map<string, SQL>([
 ]);
 
 export async function getQuestions(payload: GetQuestionPayload) {
-  cacheTag("questions");
+  cacheTag("questions", "technologies", "companies", "levels");
 
   const parsedPayload = await getQuestionSchema.safeParseAsync(payload);
 
