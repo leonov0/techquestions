@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
-import type { UpdateCategoryPayload } from "../types";
+import type { UpdateCategoryPayload } from "../../types";
 
 export async function updateTechnology(
   id: string,

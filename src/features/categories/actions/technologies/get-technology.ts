@@ -4,7 +4,7 @@ import type { Technology } from "@/database";
 import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib/get-technology";
+import * as lib from "../../lib/technologies/get-technology";
 
 export async function getTechnology(
   id: string,

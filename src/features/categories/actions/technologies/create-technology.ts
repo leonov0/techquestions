@@ -3,13 +3,12 @@
 import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib/update-technology";
-import { updateCategorySchema } from "../schemas";
-import type { UpdateCategoryPayload } from "../types";
+import * as lib from "../../lib/technologies/create-technology";
+import { createCategorySchema } from "../../schemas";
+import type { CreateCategoryPayload } from "../../types";
 
-export async function updateTechnology(
-  id: string,
-  payload: UpdateCategoryPayload,
+export async function createTechnology(
+  payload: CreateCategoryPayload,
 ): Promise<ActionResponse<null>> {
   const session = await auth();
 
@@ -17,20 +16,19 @@ export async function updateTechnology(
     return { success: false, error: "Forbidden." };
   }
 
-  const parsedPayload = await updateCategorySchema.safeParseAsync(payload);
+  const parsedPayload = await createCategorySchema.safeParseAsync(payload);
 
   if (!parsedPayload.success) {
     return { success: false, error: "Invalid payload." };
   }
 
   try {
-    await lib.updateTechnology(id, parsedPayload.data);
-
+    await lib.createTechnology(parsedPayload.data);
     return { success: true, data: null };
   } catch {
     return {
       success: false,
-      error: "Failed to update technology. Please try again later.",
+      error: "Failed to create technology. Please try again later.",
     };
   }
 }

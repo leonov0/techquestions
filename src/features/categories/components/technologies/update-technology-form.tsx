@@ -19,32 +19,36 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { createTechnology } from "../actions/create-technology";
-import { createCategorySchema } from "../schemas";
-import type { CreateCategoryPayload } from "../types";
+import { updateTechnology } from "../../actions/technologies/update-technology";
+import { updateCategorySchema } from "../../schemas";
+import type { UpdateCategoryPayload } from "../../types";
 
-export function CreateTechnologyForm() {
-  const form = useForm<CreateCategoryPayload>({
-    resolver: zodResolver(createCategorySchema),
-    defaultValues: {
-      name: "",
-    },
+export function UpdateTechnologyForm({
+  id,
+  defaultValues,
+}: {
+  id: string;
+  defaultValues: UpdateCategoryPayload;
+}) {
+  const form = useForm<UpdateCategoryPayload>({
+    resolver: zodResolver(updateCategorySchema),
+    defaultValues,
   });
 
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
 
-  function onSubmit(payload: CreateCategoryPayload) {
+  function onSubmit(payload: UpdateCategoryPayload) {
     startTransition(async () => {
-      const response = await createTechnology(payload);
+      const response = await updateTechnology(id, payload);
 
       if (!response.success) {
         toast.error(response.error);
         return;
       }
 
-      toast.success("Technology created successfully.");
+      toast.success("Technology updated successfully.");
       router.push("/admin/technologies");
     });
   }
@@ -73,7 +77,7 @@ export function CreateTechnologyForm() {
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="animate-spin" />}
-          Create
+          Save
         </Button>
       </form>
     </Form>

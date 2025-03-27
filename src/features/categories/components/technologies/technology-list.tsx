@@ -2,9 +2,9 @@ import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-import { getTechnologies } from "../actions/get-technologies";
+import { getTechnologies } from "../../actions/technologies/get-technologies";
+import { DataTable } from "../data-table";
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
 
 export async function TechnologyList() {
   const response = await getTechnologies();

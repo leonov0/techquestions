@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { updateTechnology } from "../actions/update-technology";
-import type { DeleteCategoryPayload } from "../types";
+import { updateTechnology } from "../../actions/technologies/update-technology";
+import type { DeleteCategoryPayload } from "../../types";
 
 export function DeleteTechnologyForm({
   id,

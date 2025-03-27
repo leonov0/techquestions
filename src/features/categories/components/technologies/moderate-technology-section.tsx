@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-import { getTechnology } from "../actions/get-technology";
+import { getTechnology } from "../../actions/technologies/get-technology";
 import { DeleteTechnologyForm } from "./delete-technology-form";
 import { UpdateTechnologyForm } from "./update-technology-form";
 

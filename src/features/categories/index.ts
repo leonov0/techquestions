@@ -1,4 +1,4 @@
-export { CreateTechnologyForm } from "./components/create-technology-form";
 export { ListLoader } from "./components/list-loader";
-export { ModerateTechnologySection } from "./components/moderate-technology-section";
-export { TechnologyList } from "./components/technology-list";
+export { CreateTechnologyForm } from "./components/technologies/create-technology-form";
+export { ModerateTechnologySection } from "./components/technologies/moderate-technology-section";
+export { TechnologyList } from "./components/technologies/technology-list";

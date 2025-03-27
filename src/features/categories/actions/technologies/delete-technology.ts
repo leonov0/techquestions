@@ -3,7 +3,7 @@
 import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib/delete-technology";
+import * as lib from "../../lib/technologies/delete-technology";
 
 export async function deleteTechnology(
   id: string,

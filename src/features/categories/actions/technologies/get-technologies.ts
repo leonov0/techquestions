@@ -4,7 +4,7 @@ import type { Technology } from "@/database";
 import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib/get-technologies";
+import * as lib from "../../lib/technologies/get-technologies";
 
 export async function getTechnologies(): Promise<ActionResponse<Technology[]>> {
   const session = await auth();
