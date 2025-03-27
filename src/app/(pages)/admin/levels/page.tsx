@@ -13,7 +13,7 @@ export default function ManageLevels() {
           Manage Companies
         </h1>
 
-        <Link href="/admin/technologies/new" className={buttonVariants()}>
+        <Link href="/admin/levels/new" className={buttonVariants()}>
           <Plus />
           Create Level
         </Link>

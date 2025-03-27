@@ -13,7 +13,7 @@ export default function ManageCompanies() {
           Manage Companies
         </h1>
 
-        <Link href="/admin/technologies/new" className={buttonVariants()}>
+        <Link href="/admin/companies/new" className={buttonVariants()}>
           <Plus />
           Create Company
         </Link>
