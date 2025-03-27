@@ -6,13 +6,21 @@ import { getCategories } from "../actions";
 import { QuestionFilterForm } from "./question-filter-form";
 
 export async function QuestionFilters() {
-  const { data, error } = await getCategories();
+  const response = await getCategories();
 
-  if (error) {
-    toast.error(error);
+  if (!response.success) {
+    toast.error(response.error);
   }
 
-  return <QuestionFilterForm {...data} />;
+  const categories = response.success
+    ? response.data
+    : {
+        technologies: [],
+        companies: [],
+        levels: [],
+      };
+
+  return <QuestionFilterForm {...categories} />;
 }
 
 export function QuestionFiltersLoader() {
