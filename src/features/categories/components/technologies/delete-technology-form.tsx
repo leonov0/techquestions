@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { updateTechnology } from "../../actions/technologies/update-technology";
+import { deleteTechnology } from "../../actions/technologies/delete-technology";
 import type { DeleteCategoryPayload } from "../../types";
 
 export function DeleteTechnologyForm({
@@ -38,9 +38,9 @@ export function DeleteTechnologyForm({
 
   const router = useRouter();
 
-  function onSubmit(payload: DeleteCategoryPayload) {
+  function onSubmit() {
     startTransition(async () => {
-      const response = await updateTechnology(id, payload);
+      const response = await deleteTechnology(id);
 
       if (!response.success) {
         toast.error(response.error);
