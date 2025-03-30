@@ -1,14 +1,14 @@
 "use cache";
 
 import { sql } from "drizzle-orm";
-import { unstable_cacheLife as cacheLife } from "next/cache";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 
 import { schema } from "@/database";
 
 import { getQuestions } from "../lib";
 
 export async function getFeaturedQuestions({ limit }: { limit: number }) {
-  cacheLife("default");
+  cacheTag("questions");
 
   const orderBy = sql<number>`COALESCE(SUM(${schema.questionVotes.vote}), 0) DESC`;
 
