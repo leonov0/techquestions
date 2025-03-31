@@ -13,13 +13,11 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { QuestionPreview } from "@/widgets/question-preview";
 
-import { getQuestions } from "../actions";
+import { getPendingQuestions } from "../actions/get-pending-questions";
 import { ReviewQuestionForm } from "./review-question-form";
 
 export async function ReviewQuestionSection() {
-  const response = await getQuestions({
-    status: "pending",
-  });
+  const response = await getPendingQuestions();
 
   if (!response.success) {
     return (

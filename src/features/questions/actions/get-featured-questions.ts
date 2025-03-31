@@ -1,26 +1,21 @@
-"use cache";
+"use server";
 
-import { sql } from "drizzle-orm";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import type { ActionResponse } from "@/lib/action-response";
 
-import { schema } from "@/database";
+import { getQuestions } from "../lib/get-questions";
+import type { Question } from "../types";
 
-import { getQuestions } from "../lib";
-
-export async function getFeaturedQuestions({ limit }: { limit: number }) {
-  cacheTag("questions");
-
-  const orderBy = sql<number>`COALESCE(SUM(${schema.questionVotes.vote}), 0) DESC`;
-
+export async function getFeaturedQuestions(): Promise<
+  ActionResponse<Question[]>
+> {
   try {
-    const { questions, count } = await getQuestions({ orderBy, limit });
+    const { questions: data } = await getQuestions({ countPerPage: 3 });
 
-    if (count === 0) {
-      return { data: [], error: "No featured questions found" };
-    }
-
-    return { data: questions, error: null };
+    return { success: true, data };
   } catch {
-    return { data: [], error: "Failed to get featured questions" };
+    return {
+      success: false,
+      error: "Failed to get featured questions. Please try again later.",
+    };
   }
 }

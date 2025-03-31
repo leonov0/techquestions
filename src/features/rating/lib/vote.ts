@@ -1,15 +1,9 @@
-"use cache";
-
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
-export async function addVote(
-  questionId: string,
-  userId: string,
-  vote: number,
-) {
-  cacheTag("questions");
+export async function vote(questionId: string, userId: string, vote: number) {
+  revalidateTag("rating");
 
   if (vote !== 1 && vote !== -1 && vote !== 0) {
     throw new Error("Invalid vote");

@@ -3,7 +3,7 @@
 import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib";
+import * as lib from "../lib/get-pending-question-count";
 
 export async function getPendingQuestionCount(): Promise<
   ActionResponse<number>

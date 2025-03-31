@@ -5,7 +5,7 @@ import { revalidateTag } from "next/cache";
 import { auth } from "@/features/auth";
 import { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib";
+import * as lib from "../lib/review-question";
 import { reviewQuestionSchema } from "../schemas";
 import { ReviewQuestionPayload } from "../types";
 

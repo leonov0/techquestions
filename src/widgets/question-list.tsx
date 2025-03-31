@@ -3,11 +3,11 @@ import { redirect } from "next/navigation";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getQuestions } from "@/features/questions/actions";
+import { QuestionPagination } from "@/features/questions/components/pagination";
+import { getQuestionSchema } from "@/features/questions/schemas";
 import { parseToStringArray } from "@/lib/utils";
 
-import { getQuestions } from "../features/questions/actions";
-import { QuestionPagination } from "../features/questions/components/pagination";
-import { getQuestionSchema } from "../features/questions/schemas";
 import { QuestionPreview } from "./question-preview";
 
 export async function QuestionList({
@@ -28,21 +28,21 @@ export async function QuestionList({
     redirect("/questions");
   }
 
-  const { data, error } = await getQuestions(parsedParams.data);
+  const response = await getQuestions(parsedParams.data);
 
-  if (error) {
+  if (!response.success) {
     return (
       <Alert variant="destructive" className="h-fit">
         <AlertCircle className="size-4" />
 
         <AlertTitle>An error occurred while fetching the questions.</AlertTitle>
 
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{response.error}</AlertDescription>
       </Alert>
     );
   }
 
-  if (data.questions.length === 0) {
+  if (response.data.questions.length === 0) {
     return (
       <Alert className="h-fit">
         <AlertCircle className="size-4" />
@@ -60,7 +60,7 @@ export async function QuestionList({
     <>
       <div>
         <ul className="space-y-4">
-          {data.questions.map((question) => (
+          {response.data.questions.map((question) => (
             <li
               key={question.id}
               className="border-t pt-4 first:border-none first:pt-0"
@@ -75,7 +75,7 @@ export async function QuestionList({
       </div>
 
       <QuestionPagination
-        pageCount={data.pageCount}
+        pageCount={response.data.pageCount}
         className="lg:col-span-2 xl:col-span-3"
       />
     </>
