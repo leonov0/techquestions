@@ -28,8 +28,8 @@ export async function QuestionPreview({
 
       <p className="line-clamp-2 text-sm">{question.body}</p>
 
-      <div className="mt-4 grow">
-        <CategoryList {...question} />
+      <div className="grow">
+        <CategoryList {...question} className="mt-4" />
       </div>
 
       <div className="mt-4 flex gap-4">
