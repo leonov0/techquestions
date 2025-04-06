@@ -39,7 +39,7 @@ export async function QuestionPreview({
 
         {question.author ? (
           <Link
-            href={`users/${question.author.username}`}
+            href={`/users/${question.author.username}`}
             className="group flex gap-2"
           >
             <Avatar className="size-10">
