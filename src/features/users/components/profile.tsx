@@ -1,24 +1,44 @@
-import { AlertCircle } from "lucide-react";
-import { notFound } from "next/navigation";
+import { AlertCircle, ArrowBigUpDash, Flame, Search, User } from "lucide-react";
+import Form from "next/form";
+import { notFound, redirect } from "next/navigation";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { QuestionPagination } from "@/features/questions/components/pagination";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 import { QuestionPreview } from "@/widgets/question-preview";
 
 import { getQuestionsByUserId } from "../actions/get-questions-by-user-id";
 import { getUserByUsername } from "../actions/get-user-by-username";
+import { getUserQuestionsSchema } from "../schemas";
 
 export async function Profile({
   params,
+  searchParams,
   className,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
   className?: string;
 }) {
   const { id: username } = await params;
+
+  const parsedSearchParams = await getUserQuestionsSchema.safeParseAsync(
+    await searchParams,
+  );
+
+  if (!parsedSearchParams.success) {
+    redirect(`/users/${username}`);
+  }
 
   const response = await getUserByUsername(username);
 
@@ -36,7 +56,10 @@ export async function Profile({
     notFound();
   }
 
-  const getQuestionsResponse = await getQuestionsByUserId(response.data.id);
+  const getQuestionsResponse = await getQuestionsByUserId(
+    response.data.id,
+    parsedSearchParams.data,
+  );
 
   return (
     <div className={className}>
@@ -60,31 +83,73 @@ export async function Profile({
         </div>
       </section>
 
-      <Separator className="my-8" />
+      <section className="mt-16 space-y-8">
+        <Form action={`/users/${username}`} className="flex gap-2">
+          <Select name="orderBy" defaultValue={parsedSearchParams.data.orderBy}>
+            <SelectTrigger className="w-42">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="new">
+                <Flame />
+                New
+              </SelectItem>
+              <SelectItem value="top">
+                <ArrowBigUpDash />
+                Top
+              </SelectItem>
+              <SelectItem value="relevance">
+                <User />
+                Relevance
+              </SelectItem>
+            </SelectContent>
+          </Select>
 
-      {getQuestionsResponse.success ? (
-        getQuestionsResponse.data.questions.length > 0 ? (
-          <ul className="grid gap-4">
-            {getQuestionsResponse.data.questions.map((question) => (
-              <li key={question.id}>
-                <QuestionPreview question={question} />
-              </li>
-            ))}
-          </ul>
+          <Button variant="secondary" size="icon">
+            <Search />
+          </Button>
+        </Form>
+
+        {getQuestionsResponse.success ? (
+          getQuestionsResponse.data.questions.length > 0 ? (
+            <>
+              <ul className="space-y-4">
+                {getQuestionsResponse.data.questions.map((question) => (
+                  <li
+                    key={question.id}
+                    className="border-t pt-4 first:border-none first:pt-0"
+                  >
+                    <QuestionPreview
+                      question={question}
+                      className="motion-preset-focus"
+                    />
+                  </li>
+                ))}
+              </ul>
+
+              <QuestionPagination
+                pageCount={getQuestionsResponse.data.pageCount}
+              />
+            </>
+          ) : (
+            <Alert variant="destructive">
+              <AlertCircle />
+              <AlertTitle>
+                No questions found for{" "}
+                <span className="font-medium">@{response.data.username}</span>.
+              </AlertTitle>
+            </Alert>
+          )
         ) : (
-          <p className="text-muted-foreground text-center">
-            No questions found.
-          </p>
-        )
-      ) : (
-        <Alert variant="destructive" className="mt-8">
-          <AlertCircle />
-          <AlertTitle>
-            An error occurred while fetching the questions.
-          </AlertTitle>
-          <AlertDescription>{getQuestionsResponse.error}</AlertDescription>
-        </Alert>
-      )}
+          <Alert variant="destructive">
+            <AlertCircle />
+            <AlertTitle>
+              An error occurred while fetching the questions.
+            </AlertTitle>
+            <AlertDescription>{getQuestionsResponse.error}</AlertDescription>
+          </Alert>
+        )}
+      </section>
     </div>
   );
 }
@@ -103,15 +168,23 @@ export function ProfileLoader() {
         </div>
       </section>
 
-      <Separator className="my-8" />
+      <section className="mt-16 space-y-8">
+        <Skeleton className="h-9 w-53" />
 
-      <ul className="space-y-4">
-        {[...Array(3)].map((_, index) => (
-          <li key={`question-loader-${index}`}>
+        <ul>
+          <li className="border-t pt-4 first:border-none first:pt-0">
             <Skeleton className="h-40" />
           </li>
-        ))}
-      </ul>
+          <li className="border-t pt-4 first:border-none first:pt-0">
+            <Skeleton className="h-40" />
+          </li>
+          <li className="border-t pt-4 first:border-none first:pt-0">
+            <Skeleton className="h-40" />
+          </li>
+        </ul>
+
+        <Skeleton className="mx-auto h-9 max-w-[19rem]" />
+      </section>
     </>
   );
 }
