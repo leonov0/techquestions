@@ -1,28 +1,43 @@
 import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getFeaturedQuestions } from "@/features/questions/actions";
 
 import { QuestionPreview } from "./question-preview";
 
 export async function FeaturedQuestionList() {
-  const { data: questions, error } = await getFeaturedQuestions({ limit: 3 });
+  const response = await getFeaturedQuestions();
 
-  if (error) {
+  if (!response.success) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="size-4" />
 
         <AlertTitle>An error occurred while fetching the questions.</AlertTitle>
 
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{response.error}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (response.data.length === 0) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="size-4" />
+
+        <AlertTitle>No questions found.</AlertTitle>
+
+        <AlertDescription>
+          There are no questions available at the moment.
+        </AlertDescription>
       </Alert>
     );
   }
 
   return (
     <ul className="grid gap-4 lg:grid-cols-3">
-      {questions.map((question) => (
+      {response.data.map((question) => (
         <li key={question.id}>
           <QuestionPreview
             question={question}
@@ -33,8 +48,6 @@ export async function FeaturedQuestionList() {
     </ul>
   );
 }
-
-import { Skeleton } from "@/components/ui/skeleton";
 
 export function FeaturedQuestionListLoader() {
   return (

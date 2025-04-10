@@ -1,106 +1,34 @@
-"use cache";
+"use server";
 
-import { asc, desc, eq, inArray, SQL, sql } from "drizzle-orm";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { ActionResponse } from "@/lib/action-response";
 
-import { schema } from "@/database";
-
-import * as lib from "../lib";
+import * as lib from "../lib/get-questions";
 import { getQuestionSchema } from "../schemas";
-import type { GetQuestionPayload } from "../types";
+import type { GetQuestionPayload, Question } from "../types";
 
-const orderMappings = new Map<string, SQL>([
-  ["date:asc", asc(schema.questions.createdAt)],
-  ["date:desc", desc(schema.questions.createdAt)],
-  ["rating:asc", asc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)],
-  ["rating:desc", desc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)],
-  ["title:asc", asc(schema.questions.title)],
-  ["title:desc", desc(schema.questions.title)],
-]);
-
-export async function getQuestions(payload: GetQuestionPayload) {
-  cacheTag("questions", "technologies", "companies", "levels");
-
+export async function getQuestions(
+  payload: GetQuestionPayload,
+): Promise<ActionResponse<{ questions: Question[]; pageCount: number }>> {
   const parsedPayload = await getQuestionSchema.safeParseAsync(payload);
 
   if (!parsedPayload.success) {
     return {
-      data: {
-        questions: [],
-        pageCount: 0,
-      },
+      success: false,
       error: parsedPayload.error.message,
     };
   }
 
-  const filters: SQL[] = [];
-
-  if (parsedPayload.data.technologies) {
-    filters.push(
-      inArray(
-        schema.questionsToTechnologies.technologyId,
-        parsedPayload.data.technologies,
-      ),
-    );
-  }
-
-  if (parsedPayload.data.companies) {
-    filters.push(
-      inArray(
-        schema.questionsToCompanies.companyId,
-        parsedPayload.data.companies,
-      ),
-    );
-  }
-
-  if (parsedPayload.data.levels) {
-    filters.push(
-      inArray(schema.questionsToLevels.levelId, parsedPayload.data.levels),
-    );
-  }
-
-  if (parsedPayload.data.query) {
-    filters.push(
-      sql`(
-      setweight(to_tsvector('english', ${schema.questions.title}), 'A') ||
-      setweight(to_tsvector('english', ${schema.questions.body}), 'B'))
-      @@ plainto_tsquery('english', ${parsedPayload.data.query}
-      )`,
-    );
-  }
-
-  filters.push(eq(schema.questions.status, "approved"));
-
-  const limit = parsedPayload.data.limit || 10;
-  const offset = parsedPayload.data.page
-    ? (parsedPayload.data.page - 1) * limit
-    : 0;
-
-  const orderBy = orderMappings.get(
-    `${parsedPayload.data.orderBy || "date"}:${parsedPayload.data.order || "desc"}`,
-  );
-
   try {
-    const { questions, count } = await lib.getQuestions({
-      filters,
-      limit,
-      offset,
-      orderBy,
+    const data = await lib.getQuestions({
+      query: parsedPayload.data.query,
+      status: "pending",
     });
 
-    const pageCount = Math.ceil(count / limit);
-
-    return {
-      data: { questions, pageCount },
-      error: null,
-    };
+    return { success: true, data };
   } catch {
     return {
-      data: {
-        questions: [],
-        pageCount: 0,
-      },
-      error: "Failed to get questions",
+      success: false,
+      error: "Failed to get questions. Please try again later.",
     };
   }
 }

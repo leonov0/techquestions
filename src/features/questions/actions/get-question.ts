@@ -18,12 +18,10 @@ export async function getQuestion(id: string) {
     }
 
     return { data, error: null };
-  } catch (e) {
-    const error =
-      e instanceof Error
-        ? e.message
-        : "Unexpected error. Please try again later.";
-
-    return { data: null, error };
+  } catch {
+    return {
+      data: null,
+      error: "Failed to get question. Please try again later.",
+    };
   }
 }

@@ -1,26 +1,67 @@
-import { and, countDistinct, desc, eq, inArray, SQL, sql } from "drizzle-orm";
+"use cache";
+
+import { and, asc, countDistinct, eq, inArray, SQL, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
 import type { Question } from "../types";
 
 export async function getQuestions({
-  filters,
-  orderBy = desc(schema.questions.createdAt),
-  limit = 10,
-  offset = 0,
+  query,
+  status,
+  technologies,
+  companies,
+  levels,
+  page = 1,
+  countPerPage = 10,
 }: {
-  filters?: SQL[];
-  orderBy?: SQL;
-  limit?: number;
-  offset?: number;
+  query?: string;
+  status?: Question["status"];
+  technologies?: string[];
+  companies?: string[];
+  levels?: string[];
+  page?: number;
+  countPerPage?: number;
 }) {
-  const [{ questionIds, count }] = await database
+  cacheTag("questions", "rating", "technologies", "companies", "levels");
+
+  const filters: SQL[] = [];
+
+  if (status) {
+    filters.push(eq(schema.questions.status, status));
+  }
+
+  if (query) {
+    filters.push(
+      sql`(
+        setweight(to_tsvector('english', ${schema.questions.title}), 'A') ||
+        setweight(to_tsvector('english', ${schema.questions.body}), 'B'))
+        @@ plainto_tsquery('english', ${query}
+      )`,
+    );
+  }
+
+  if (technologies) {
+    filters.push(
+      inArray(schema.questionsToTechnologies.technologyId, technologies),
+    );
+  }
+
+  if (companies) {
+    filters.push(inArray(schema.questionsToCompanies.companyId, companies));
+  }
+
+  if (levels) {
+    filters.push(inArray(schema.questionsToLevels.levelId, levels));
+  }
+
+  const [{ questionIds, pageCount }] = await database
     .select({
       questionIds: sql<
         string[]
-      >`COALESCE(json_agg(${schema.questions.id}), '[]'::json)`,
-      count: sql<number>`COALESCE(COUNT(DISTINCT ${schema.questions.id}), 0)`,
+      >`COALESCE(json_agg(DISTINCT ${schema.questions.id}), '[]'::json)`,
+      pageCount: sql<number>`CEIL(COUNT(DISTINCT ${schema.questions.id})::FLOAT / ${countPerPage})`,
     })
     .from(schema.questions)
     .leftJoin(
@@ -40,7 +81,7 @@ export async function getQuestions({
       schema.questionsToLevels,
       eq(schema.questions.id, schema.questionsToLevels.questionId),
     )
-    .where(filters ? and(...filters) : undefined);
+    .where(and(...filters));
 
   const questions = await database
     .select({
@@ -103,9 +144,12 @@ export async function getQuestions({
     )
     .where(inArray(schema.questions.id, questionIds))
     .groupBy(schema.questions.id, schema.users.id)
-    .orderBy(orderBy)
-    .limit(limit)
-    .offset(offset);
+    .orderBy(asc(schema.questions.createdAt))
+    .limit(countPerPage)
+    .offset(countPerPage * (page - 1));
 
-  return { questions, count } as { questions: Question[]; count: number };
+  return { questions, pageCount } as {
+    questions: Question[];
+    pageCount: number;
+  };
 }

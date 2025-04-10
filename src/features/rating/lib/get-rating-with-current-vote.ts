@@ -9,7 +9,7 @@ export async function getRatingWithCurrentVote(
   questionId: string,
   userId: string,
 ) {
-  cacheTag("questions");
+  cacheTag("rating");
 
   const getCurrentVoteQuery = database
     .select({

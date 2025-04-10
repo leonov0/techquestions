@@ -1,3 +1,5 @@
+import { revalidateTag } from "next/cache";
+
 import { database, NewQuestion, schema } from "@/database";
 
 export async function createQuestion({
@@ -11,6 +13,8 @@ export async function createQuestion({
   companies: string[];
   levels: string[];
 }) {
+  revalidateTag("pending-questions");
+
   const [{ questionId }] = await database
     .insert(schema.questions)
     .values(value)

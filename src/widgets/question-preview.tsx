@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Question } from "@/features/questions";
 import { Rating, RatingLoader } from "@/features/rating";
-import { getCapitalizedFirstLetter } from "@/lib/utils";
+import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { CategoryList } from "./category-list";
 
@@ -16,7 +16,7 @@ export async function QuestionPreview({
   className?: string;
 }) {
   return (
-    <div className={className}>
+    <div className={cn("flex flex-col", className)}>
       <h3>
         <Link
           href={`/questions/${question.id}`}
@@ -28,7 +28,9 @@ export async function QuestionPreview({
 
       <p className="line-clamp-2 text-sm">{question.body}</p>
 
-      <CategoryList {...question} className="mt-4 grow" />
+      <div className="mt-4 grow">
+        <CategoryList {...question} />
+      </div>
 
       <div className="mt-4 flex gap-4">
         <Suspense fallback={<RatingLoader rating={question.rating} />}>

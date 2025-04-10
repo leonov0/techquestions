@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 
-import { vote } from "./actions";
+import { vote } from "./actions/vote";
 
 export function VoteButtons({
   questionId,

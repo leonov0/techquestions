@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 
-import { reviewQuestion } from "../actions";
+import { reviewQuestion } from "../actions/review-question";
 import { reviewQuestionSchema } from "../schemas";
 import type { ReviewQuestionPayload } from "../types";
 

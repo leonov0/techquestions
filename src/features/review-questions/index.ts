@@ -1,4 +1,4 @@
-export { getPendingQuestionCount } from "./actions";
+export { getPendingQuestionCount } from "./actions/get-pending-question-count";
 export {
   ReviewQuestionSection,
   ReviewQuestionSectionLoader,

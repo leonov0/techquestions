@@ -4,10 +4,12 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@/features/auth";
 
-import { getRating } from "./actions";
+import { getRating } from "./actions/get-rating";
 import { VoteButtons } from "./vote-buttons";
 
 export async function Rating({ questionId }: { questionId: string }) {
+  "use server";
+
   const session = await auth();
 
   const response = await getRating(questionId);
