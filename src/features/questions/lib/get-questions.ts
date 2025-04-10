@@ -15,6 +15,8 @@ export async function getQuestions({
   levels,
   page = 1,
   countPerPage = 10,
+  isAnonymous,
+  userId,
 }: {
   query?: string;
   status?: Question["status"];
@@ -23,6 +25,8 @@ export async function getQuestions({
   levels?: string[];
   page?: number;
   countPerPage?: number;
+  isAnonymous?: boolean;
+  userId?: string;
 }) {
   cacheTag("questions", "rating", "technologies", "companies", "levels");
 
@@ -54,6 +58,14 @@ export async function getQuestions({
 
   if (levels) {
     filters.push(inArray(schema.questionsToLevels.levelId, levels));
+  }
+
+  if (isAnonymous) {
+    filters.push(eq(schema.questions.isAnonymous, isAnonymous));
+  }
+
+  if (userId) {
+    filters.push(eq(schema.questions.userId, userId));
   }
 
   const [{ questionIds, pageCount }] = await database

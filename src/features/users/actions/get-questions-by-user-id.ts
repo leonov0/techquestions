@@ -1,16 +1,14 @@
 "use server";
 
-import { desc, eq, type SQL, sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 
 import { schema } from "@/database";
 import type { Question } from "@/features/questions";
-import { getQuestions } from "@/features/questions/lib";
+import { getQuestions } from "@/features/questions/lib/get-questions";
 import type { ActionResponse } from "@/lib/action-response";
 
 import { getUserQuestionsSchema } from "../schemas";
 import type { GetUserQuestionsPayload } from "../types";
-
-const COUNT_PER_PAGE = 10;
 
 export async function getQuestionsByUserId(
   userId: string,
@@ -31,32 +29,18 @@ export async function getQuestionsByUserId(
   }
 
   try {
-    const filters: SQL[] = [
-      eq(schema.questions.isAnonymous, false),
-      eq(schema.questions.status, "approved"),
-      eq(schema.questions.userId, userId),
-    ];
-
     const orderBy = ["relevance", "top"].includes(parsedPayload.data.orderBy)
       ? desc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)
       : desc(schema.questions.createdAt);
 
-    const { questions, count } = await getQuestions({
-      offset: (parsedPayload.data.page - 1) * COUNT_PER_PAGE,
-      limit: COUNT_PER_PAGE,
-      filters,
-      orderBy,
+    const data = await getQuestions({
+      page: parsedPayload.data.page,
+      status: "approved",
+      isAnonymous: false,
+      userId,
     });
 
-    const pageCount = Math.ceil(count / COUNT_PER_PAGE);
-
-    return {
-      success: true,
-      data: {
-        questions,
-        pageCount,
-      },
-    };
+    return { success: true, data };
   } catch {
     return {
       success: false,
