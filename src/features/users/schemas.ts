@@ -13,5 +13,5 @@ export const updateUserSchema = z.object({
 
 export const getUserQuestionsSchema = z.object({
   page: z.coerce.number().min(1).default(1),
-  orderBy: z.enum(["new", "top", "relevance"]).default("new"),
+  order: z.enum(["new", "top", "relevance"]).default("new"),
 });

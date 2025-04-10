@@ -85,7 +85,7 @@ export async function Profile({
 
       <section className="mt-16 space-y-8">
         <Form action={`/users/${username}`} className="flex gap-2">
-          <Select name="orderBy" defaultValue={parsedSearchParams.data.orderBy}>
+          <Select name="order" defaultValue={parsedSearchParams.data.order}>
             <SelectTrigger className="w-42">
               <SelectValue />
             </SelectTrigger>
