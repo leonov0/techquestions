@@ -28,8 +28,8 @@ export async function QuestionPreview({
 
       <p className="line-clamp-2 text-sm">{question.body}</p>
 
-      <div className="mt-4 grow">
-        <CategoryList {...question} />
+      <div className="grow">
+        <CategoryList {...question} className="mt-4" />
       </div>
 
       <div className="mt-4 flex gap-4">
@@ -39,7 +39,7 @@ export async function QuestionPreview({
 
         {question.author ? (
           <Link
-            href={`users/${question.author.username}`}
+            href={`/users/${question.author.username}`}
             className="group flex gap-2"
           >
             <Avatar className="size-10">

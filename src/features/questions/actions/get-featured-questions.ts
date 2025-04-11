@@ -9,7 +9,10 @@ export async function getFeaturedQuestions(): Promise<
   ActionResponse<Question[]>
 > {
   try {
-    const { questions: data } = await getQuestions({ countPerPage: 3 });
+    const { questions: data } = await getQuestions({
+      countPerPage: 3,
+      status: "approved",
+    });
 
     return { success: true, data };
   } catch {

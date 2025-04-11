@@ -1,6 +1,6 @@
 "use cache";
 
-import { and, asc, countDistinct, eq, inArray, SQL, sql } from "drizzle-orm";
+import { and, countDistinct, desc, eq, inArray, SQL, sql } from "drizzle-orm";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { database, schema } from "@/database";
@@ -15,6 +15,9 @@ export async function getQuestions({
   levels,
   page = 1,
   countPerPage = 10,
+  isAnonymous,
+  userId,
+  order = "relevance",
 }: {
   query?: string;
   status?: Question["status"];
@@ -23,6 +26,9 @@ export async function getQuestions({
   levels?: string[];
   page?: number;
   countPerPage?: number;
+  isAnonymous?: boolean;
+  userId?: string;
+  order?: "new" | "top" | "relevance";
 }) {
   cacheTag("questions", "rating", "technologies", "companies", "levels");
 
@@ -55,6 +61,18 @@ export async function getQuestions({
   if (levels) {
     filters.push(inArray(schema.questionsToLevels.levelId, levels));
   }
+
+  if (isAnonymous) {
+    filters.push(eq(schema.questions.isAnonymous, isAnonymous));
+  }
+
+  if (userId) {
+    filters.push(eq(schema.questions.userId, userId));
+  }
+
+  const orderBy = ["relevance", "top"].includes(order)
+    ? desc(sql`COALESCE(SUM(${schema.questionVotes.vote}), 0)`)
+    : desc(schema.questions.createdAt);
 
   const [{ questionIds, pageCount }] = await database
     .select({
@@ -144,7 +162,7 @@ export async function getQuestions({
     )
     .where(inArray(schema.questions.id, questionIds))
     .groupBy(schema.questions.id, schema.users.id)
-    .orderBy(asc(schema.questions.createdAt))
+    .orderBy(orderBy)
     .limit(countPerPage)
     .offset(countPerPage * (page - 1));
 

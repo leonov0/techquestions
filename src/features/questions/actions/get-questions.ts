@@ -20,8 +20,8 @@ export async function getQuestions(
 
   try {
     const data = await lib.getQuestions({
-      query: parsedPayload.data.query,
-      status: "pending",
+      status: "approved",
+      ...parsedPayload.data,
     });
 
     return { success: true, data };

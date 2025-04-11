@@ -28,7 +28,9 @@ export async function QuestionList({
     redirect("/questions");
   }
 
-  const response = await getQuestions(parsedParams.data);
+  const response = await getQuestions({
+    ...parsedParams.data,
+  });
 
   if (!response.success) {
     return (
