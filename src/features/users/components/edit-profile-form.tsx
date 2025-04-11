@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -24,21 +23,15 @@ import { updateProfile } from "../actions/update-profile";
 import { updateUserSchema } from "../schemas";
 import type { UpdateUserPayload } from "../types";
 
-export function CompleteProfileForm({
-  username,
-  redirectTo = "/",
-}: {
-  username: string;
-  redirectTo?: string;
-}) {
+export function EditProfileForm({ username }: { username: string }) {
   const form = useForm<UpdateUserPayload>({
     resolver: zodResolver(updateUserSchema),
-    defaultValues: { username },
+    defaultValues: {
+      username,
+    },
   });
 
   const [isPending, startTransition] = useTransition();
-
-  const router = useRouter();
 
   const { update } = useSession();
 
@@ -52,7 +45,6 @@ export function CompleteProfileForm({
       }
 
       await update({ ...values });
-      router.push(redirectTo);
     });
   }
 
@@ -79,8 +71,8 @@ export function CompleteProfileForm({
           )}
         />
 
-        <Button type="submit" className="mt-6" disabled={isPending}>
-          {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+        <Button type="submit" className="mt-6 w-full" disabled={isPending}>
+          {isPending && <Loader2 className="animate-spin" />}
           Save
         </Button>
       </form>
