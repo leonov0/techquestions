@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownNarrowWide, ArrowDownWideNarrow, Search } from "lucide-react";
+import { ArrowBigUpDash, Flame, Search, User } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -40,10 +40,7 @@ export function QuestionFilterForm({
     searchParams.getAll("levelId"),
   );
   const [selectedOrderBy, setSelectedOrderBy] = useState(
-    searchParams.get("orderBy") || "date",
-  );
-  const [selectedOrder, setSelectedOrder] = useState(
-    searchParams.get("order") || "desc",
+    searchParams.get("order") || "relevance",
   );
 
   function applyFilters(event: React.FormEvent) {
@@ -68,11 +65,7 @@ export function QuestionFilterForm({
     });
 
     if (selectedOrderBy) {
-      params.set("orderBy", selectedOrderBy);
-    }
-
-    if (selectedOrder) {
-      params.set("order", selectedOrder);
+      params.set("order", selectedOrderBy);
     }
 
     router.push(`${pathname}?${params.toString()}`);
@@ -116,37 +109,26 @@ export function QuestionFilterForm({
         className="w-full"
       />
 
-      <div className="grid grid-cols-[1fr_auto] gap-2">
-        <Select onValueChange={setSelectedOrderBy} value={selectedOrderBy}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Date" />
-          </SelectTrigger>
+      <Select onValueChange={setSelectedOrderBy} value={selectedOrderBy}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Date" />
+        </SelectTrigger>
 
-          <SelectContent>
-            <SelectItem value="date">Date</SelectItem>
-            <SelectItem value="rating">Rating</SelectItem>
-            <SelectItem value="title">Title</SelectItem>
-          </SelectContent>
-        </Select>
-
-        {selectedOrder === "asc" ? (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setSelectedOrder("desc")}
-          >
-            <ArrowDownNarrowWide />
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setSelectedOrder("asc")}
-          >
-            <ArrowDownWideNarrow />
-          </Button>
-        )}
-      </div>
+        <SelectContent>
+          <SelectItem value="relevance">
+            <User />
+            Relevance
+          </SelectItem>
+          <SelectItem value="new">
+            <Flame />
+            New
+          </SelectItem>
+          <SelectItem value="top">
+            <ArrowBigUpDash />
+            Top
+          </SelectItem>
+        </SelectContent>
+      </Select>
 
       <Button type="submit" className="w-full">
         Apply filters
