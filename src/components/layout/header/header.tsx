@@ -33,12 +33,7 @@ export async function Header() {
         </nav>
 
         {session?.user.id ? (
-          <ProfileDropdown
-            name={session.user.name!}
-            username={session.user.username!}
-            image={session.user.image!}
-            role={session.user.role!}
-          />
+          <ProfileDropdown placeholder={session.user} />
         ) : (
           <div className="flex gap-4">
             <ThemeToggle />
