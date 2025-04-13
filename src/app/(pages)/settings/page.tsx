@@ -12,6 +12,7 @@ export default async function Settings() {
   const session = await auth();
 
   const defaultValues = {
+    name: session?.user.name || "",
     username: session?.user.username || "",
   };
 
@@ -20,7 +21,10 @@ export default async function Settings() {
       <Card>
         <CardHeader>
           <CardTitle>Update Profile</CardTitle>
-          <CardDescription></CardDescription>
+          <CardDescription>
+            Update your profile information. This will be reflected in your
+            account.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <EditProfileForm {...defaultValues} />

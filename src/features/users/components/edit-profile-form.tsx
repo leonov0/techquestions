@@ -23,10 +23,17 @@ import { updateProfile } from "../actions/update-profile";
 import { updateUserSchema } from "../schemas";
 import type { UpdateUserPayload } from "../types";
 
-export function EditProfileForm({ username }: { username: string }) {
+export function EditProfileForm({
+  name,
+  username,
+}: {
+  name: string;
+  username: string;
+}) {
   const form = useForm<UpdateUserPayload>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
+      name,
       username,
     },
   });
@@ -50,7 +57,23 @@ export function EditProfileForm({ username }: { username: string }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+
+              <FormControl>
+                <Input placeholder={name} {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="username"
@@ -71,7 +94,7 @@ export function EditProfileForm({ username }: { username: string }) {
           )}
         />
 
-        <Button type="submit" className="mt-6 w-full" disabled={isPending}>
+        <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="animate-spin" />}
           Save
         </Button>
