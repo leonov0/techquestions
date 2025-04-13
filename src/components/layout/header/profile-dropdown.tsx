@@ -2,7 +2,7 @@
 
 import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
 import Link from "next/link";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
