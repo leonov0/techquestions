@@ -1,6 +1,10 @@
+"use client";
+
 import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
@@ -14,22 +18,25 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { User } from "@/database";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
 export function ProfileDropdown({
-  name,
-  username,
-  image,
-  role,
+  placeholder,
 }: {
-  name: User["name"];
-  username: User["username"];
-  image: User["image"];
-  role: User["role"];
+  placeholder: Session["user"];
 }) {
+  const [user, setUser] = useState(placeholder);
+
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      setUser(session.data.user);
+    }
+  }, [session]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -39,14 +46,14 @@ export function ProfileDropdown({
         )}
       >
         <Avatar className="size-5 rounded-sm">
-          <AvatarImage src={image ?? undefined} />
+          <AvatarImage src={user.image ?? undefined} />
 
           <AvatarFallback className="rounded-sm">
-            {username && getCapitalizedFirstLetter(username)}
+            {user.username && getCapitalizedFirstLetter(user.username)}
           </AvatarFallback>
         </Avatar>
 
-        <span className="line-clamp-1">{username}</span>
+        <span className="line-clamp-1">{user.username}</span>
 
         <ChevronDown
           className="relative transition duration-300 group-data-[state=open]:rotate-180"
@@ -56,25 +63,28 @@ export function ProfileDropdown({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/users/${username}`} className="flex items-center gap-4">
+          <Link
+            href={`/users/${user.username}`}
+            className="flex items-center gap-4"
+          >
             <Avatar className="size-8 rounded-sm">
-              <AvatarImage src={image ?? undefined} />
+              <AvatarImage src={user.image ?? undefined} />
 
               <AvatarFallback className="rounded-sm">
-                {username && getCapitalizedFirstLetter(username)}
+                {user.username && getCapitalizedFirstLetter(user.username)}
               </AvatarFallback>
             </Avatar>
 
             <div className="max-w-32 overflow-hidden pr-4 text-nowrap text-clip">
-              <p className="text-sm font-medium">{name}</p>
-              <p className="text-xs">@{username}</p>
+              <p className="text-sm font-medium">{user.name}</p>
+              <p className="text-xs">@{user.username}</p>
             </div>
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        {role === "admin" && (
+        {user.role === "admin" && (
           <DropdownMenuItem asChild>
             <Link href="/admin">
               <Wrench />

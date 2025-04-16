@@ -10,7 +10,7 @@ export function SignInWithGoogleForm({ redirectTo }: { redirectTo?: string }) {
     <form action={signIn}>
       <Button className="w-full">
         <Google />
-        <span className="ml-2">Google</span>
+        Google
       </Button>
     </form>
   );

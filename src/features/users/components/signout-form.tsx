@@ -9,7 +9,7 @@ export function SignOutForm() {
     <form action={signOut}>
       <Button variant="destructive">
         <LogOut />
-        <span className="ml-2">Sign out</span>
+        Sign out
       </Button>
     </form>
   );

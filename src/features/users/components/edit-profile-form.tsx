@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -24,21 +23,22 @@ import { updateProfile } from "../actions/update-profile";
 import { updateUserSchema } from "../schemas";
 import type { UpdateUserPayload } from "../types";
 
-export function CompleteProfileForm({
+export function EditProfileForm({
+  name,
   username,
-  redirectTo = "/",
 }: {
+  name: string;
   username: string;
-  redirectTo?: string;
 }) {
   const form = useForm<UpdateUserPayload>({
     resolver: zodResolver(updateUserSchema),
-    defaultValues: { username },
+    defaultValues: {
+      name,
+      username,
+    },
   });
 
   const [isPending, startTransition] = useTransition();
-
-  const router = useRouter();
 
   const { update } = useSession();
 
@@ -52,13 +52,28 @@ export function CompleteProfileForm({
       }
 
       await update({ ...values });
-      router.push(redirectTo);
     });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+
+              <FormControl>
+                <Input placeholder={name} {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="username"
@@ -79,8 +94,8 @@ export function CompleteProfileForm({
           )}
         />
 
-        <Button type="submit" className="mt-6" disabled={isPending}>
-          {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending && <Loader2 className="animate-spin" />}
           Save
         </Button>
       </form>
