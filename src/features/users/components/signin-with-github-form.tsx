@@ -10,7 +10,7 @@ export function SignInWithGitHubForm({ redirectTo }: { redirectTo?: string }) {
     <form action={signIn}>
       <Button className="w-full">
         <GitHub />
-        <span className="ml-2">GitHub</span>
+        GitHub
       </Button>
     </form>
   );
