@@ -7,6 +7,7 @@ import {
   CodeXml,
   Database,
   Library,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -81,7 +82,7 @@ export async function AdminSidebar() {
                 <SidebarMenuButton asChild>
                   <Link href="/admin/pending-questions">
                     <Library />
-                    <span>Pending Questions</span>
+                    Pending Questions
                     {getPendingQuestionCountResponse.success &&
                       getPendingQuestionCountResponse.data > 0 && (
                         <Badge>{getPendingQuestionCountResponse.data}</Badge>
@@ -94,7 +95,7 @@ export async function AdminSidebar() {
                 <SidebarMenuButton asChild>
                   <Link href="/admin/questions">
                     <Database />
-                    <span>Questions</span>
+                    Questions
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -146,6 +147,15 @@ export async function AdminSidebar() {
                     </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href="/admin/users">
+                      <Users />
+                      Users
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarMenu>
           </SidebarGroupContent>
