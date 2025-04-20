@@ -3,11 +3,11 @@ import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { questionsToCompanies } from "./questions-to-companies";
 
-export const companies = pgTable("company", {
+export const companies = pgTable("companies", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
-  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const companiesRelations = relations(companies, ({ many }) => ({

@@ -17,21 +17,23 @@ import { questionsToTechnologies } from "./questions-to-technologies";
 import { users } from "./users";
 
 export const questions = pgTable(
-  "question",
+  "questions",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     title: varchar("title", { length: 255 }).notNull(),
     body: text("body"),
-    userId: uuid("userId").references(() => users.id),
-    isAnonymous: boolean("isAnonymous").notNull().default(false),
+    userId: uuid("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    isAnonymous: boolean("is_anonymous").notNull().default(false),
     status: varchar("status", {
       length: 32,
       enum: ["pending", "approved", "rejected"],
     })
       .notNull()
       .default("pending"),
-    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
-    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
   },
   (table) => [
     index("search_index").using(

@@ -1,18 +1,18 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { questionsToTechnologies } from "./questions-to-technologies";
+import { questionsToLevels } from "./questions-to-levels";
 
-export const technologies = pgTable("technologies", {
+export const seniorityLevels = pgTable("seniority_levels", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
-export const technologiesRelations = relations(technologies, ({ many }) => ({
-  questionsToTechnologies: many(questionsToTechnologies),
+export const levelsRelations = relations(seniorityLevels, ({ many }) => ({
+  questionsToLevels: many(questionsToLevels),
 }));
 
-export type Technology = typeof technologies.$inferSelect;
-export type NewTechnology = typeof technologies.$inferInsert;
+export type Level = typeof seniorityLevels.$inferSelect;
+export type NewLevel = typeof seniorityLevels.$inferInsert;

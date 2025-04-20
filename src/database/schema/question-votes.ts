@@ -11,15 +11,15 @@ import { questions } from "./questions";
 import { users } from "./users";
 
 export const questionVotes = pgTable(
-  "question_vote",
+  "question_votes",
   {
-    questionId: uuid("questionId")
+    questionId: uuid("question_id")
       .notNull()
       .references(() => questions.id, { onDelete: "cascade" }),
-    userId: uuid("userId").references(() => users.id),
-    vote: integer("vote"),
-    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
-    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+    vote: integer("vote").notNull(),
+    createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.questionId, table.userId] })],
 );

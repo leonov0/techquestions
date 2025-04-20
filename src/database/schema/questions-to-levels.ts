@@ -1,18 +1,18 @@
 import { relations } from "drizzle-orm";
 import { pgTable, primaryKey, uuid } from "drizzle-orm/pg-core";
 
-import { levels } from "./levels";
 import { questions } from "./questions";
+import { seniorityLevels } from "./seniority-levels";
 
 export const questionsToLevels = pgTable(
   "questions_to_levels",
   {
-    questionId: uuid("questionId")
+    questionId: uuid("question_id")
       .notNull()
-      .references(() => questions.id),
-    levelId: uuid("levelId")
+      .references(() => questions.id, { onDelete: "cascade" }),
+    levelId: uuid("level_id")
       .notNull()
-      .references(() => levels.id),
+      .references(() => seniorityLevels.id, { onDelete: "cascade" }),
   },
   (table) => [primaryKey({ columns: [table.questionId, table.levelId] })],
 );
@@ -24,9 +24,9 @@ export const questionsToLevelsRelations = relations(
       fields: [questionsToLevels.questionId],
       references: [questions.id],
     }),
-    level: one(levels, {
+    level: one(seniorityLevels, {
       fields: [questionsToLevels.levelId],
-      references: [levels.id],
+      references: [seniorityLevels.id],
     }),
   }),
 );
