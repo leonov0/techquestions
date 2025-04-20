@@ -96,12 +96,8 @@
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -209,12 +205,8 @@
           "name": "question_reviews_question_id_questions_id_fk",
           "tableFrom": "question_reviews",
           "tableTo": "questions",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["question_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -222,12 +214,8 @@
           "name": "question_reviews_user_id_users_id_fk",
           "tableFrom": "question_reviews",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -281,12 +269,8 @@
           "name": "question_votes_question_id_questions_id_fk",
           "tableFrom": "question_votes",
           "tableTo": "questions",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["question_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -294,12 +278,8 @@
           "name": "question_votes_user_id_users_id_fk",
           "tableFrom": "question_votes",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -307,10 +287,7 @@
       "compositePrimaryKeys": {
         "question_votes_question_id_user_id_pk": {
           "name": "question_votes_question_id_user_id_pk",
-          "columns": [
-            "question_id",
-            "user_id"
-          ]
+          "columns": ["question_id", "user_id"]
         }
       },
       "uniqueConstraints": {},
@@ -398,12 +375,8 @@
           "name": "questions_user_id_users_id_fk",
           "tableFrom": "questions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -437,12 +410,8 @@
           "name": "questions_to_companies_question_id_questions_id_fk",
           "tableFrom": "questions_to_companies",
           "tableTo": "questions",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["question_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -450,12 +419,8 @@
           "name": "questions_to_companies_company_id_companies_id_fk",
           "tableFrom": "questions_to_companies",
           "tableTo": "companies",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["company_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -463,10 +428,7 @@
       "compositePrimaryKeys": {
         "questions_to_companies_question_id_company_id_pk": {
           "name": "questions_to_companies_question_id_company_id_pk",
-          "columns": [
-            "question_id",
-            "company_id"
-          ]
+          "columns": ["question_id", "company_id"]
         }
       },
       "uniqueConstraints": {},
@@ -497,12 +459,8 @@
           "name": "questions_to_levels_question_id_questions_id_fk",
           "tableFrom": "questions_to_levels",
           "tableTo": "questions",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["question_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -510,12 +468,8 @@
           "name": "questions_to_levels_level_id_seniority_levels_id_fk",
           "tableFrom": "questions_to_levels",
           "tableTo": "seniority_levels",
-          "columnsFrom": [
-            "level_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["level_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -523,10 +477,7 @@
       "compositePrimaryKeys": {
         "questions_to_levels_question_id_level_id_pk": {
           "name": "questions_to_levels_question_id_level_id_pk",
-          "columns": [
-            "question_id",
-            "level_id"
-          ]
+          "columns": ["question_id", "level_id"]
         }
       },
       "uniqueConstraints": {},
@@ -557,12 +508,8 @@
           "name": "questions_to_technologies_question_id_questions_id_fk",
           "tableFrom": "questions_to_technologies",
           "tableTo": "questions",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["question_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -570,12 +517,8 @@
           "name": "questions_to_technologies_technology_id_technologies_id_fk",
           "tableFrom": "questions_to_technologies",
           "tableTo": "technologies",
-          "columnsFrom": [
-            "technology_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["technology_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -583,10 +526,7 @@
       "compositePrimaryKeys": {
         "questions_to_technologies_question_id_technology_id_pk": {
           "name": "questions_to_technologies_question_id_technology_id_pk",
-          "columns": [
-            "question_id",
-            "technology_id"
-          ]
+          "columns": ["question_id", "technology_id"]
         }
       },
       "uniqueConstraints": {},
@@ -696,12 +636,8 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -711,9 +647,7 @@
         "sessions_token_unique": {
           "name": "sessions_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -853,16 +787,12 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         },
         "users_username_unique": {
           "name": "users_username_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "username"
-          ]
+          "columns": ["username"]
         }
       },
       "policies": {},
