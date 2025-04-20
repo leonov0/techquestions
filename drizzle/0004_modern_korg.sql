@@ -1,1 +1,0 @@
-ALTER TABLE "question_vote" ADD CONSTRAINT "question_vote_questionId_userId_pk" PRIMARY KEY("questionId","userId");
