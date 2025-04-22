@@ -1,6 +1,14 @@
 "use cache";
 
-import { and, countDistinct, desc, eq, inArray, SQL, sql } from "drizzle-orm";
+import {
+  and,
+  countDistinct,
+  desc,
+  eq,
+  inArray,
+  type SQL,
+  sql,
+} from "drizzle-orm";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { database, schema } from "@/database";
@@ -12,7 +20,7 @@ export async function getQuestions({
   status,
   technologies,
   companies,
-  levels,
+  seniorityLevels,
   page = 1,
   countPerPage = 10,
   isAnonymous,
@@ -23,14 +31,20 @@ export async function getQuestions({
   status?: Question["status"];
   technologies?: string[];
   companies?: string[];
-  levels?: string[];
+  seniorityLevels?: string[];
   page?: number;
   countPerPage?: number;
   isAnonymous?: boolean;
   userId?: string;
   order?: "new" | "top" | "relevance";
 }) {
-  cacheTag("questions", "rating", "technologies", "companies", "levels");
+  cacheTag(
+    "questions",
+    "rating",
+    "technologies",
+    "companies",
+    "seniority-levels",
+  );
 
   const filters: SQL[] = [];
 
@@ -58,8 +72,8 @@ export async function getQuestions({
     filters.push(inArray(schema.questionsToCompanies.companyId, companies));
   }
 
-  if (levels) {
-    filters.push(inArray(schema.questionsToLevels.levelId, levels));
+  if (seniorityLevels) {
+    filters.push(inArray(schema.questionsToLevels.levelId, seniorityLevels));
   }
 
   if (isAnonymous) {
@@ -120,9 +134,9 @@ export async function getQuestions({
         json_agg(
           DISTINCT jsonb_build_object('id', ${schema.companies.id},'name', ${schema.companies.name})
         ) FILTER (WHERE ${schema.companies.id} IS NOT NULL), '[]'::json)`,
-      levels: sql<[{ id: string; name: string }]>`COALESCE(
-        json_agg(DISTINCT jsonb_build_object('id', ${schema.levels.id},'name', ${schema.levels.name})
-        ) FILTER (WHERE ${schema.levels.id} IS NOT NULL), '[]'::json)`,
+      seniorityLevels: sql<[{ id: string; name: string }]>`COALESCE(
+        json_agg(DISTINCT jsonb_build_object('id', ${schema.seniorityLevels.id},'name', ${schema.seniorityLevels.name})
+        ) FILTER (WHERE ${schema.seniorityLevels.id} IS NOT NULL), '[]'::json)`,
       author: sql<{
         id: string;
         username: string;
@@ -157,8 +171,8 @@ export async function getQuestions({
       eq(schema.questions.id, schema.questionsToLevels.questionId),
     )
     .leftJoin(
-      schema.levels,
-      eq(schema.questionsToLevels.levelId, schema.levels.id),
+      schema.seniorityLevels,
+      eq(schema.questionsToLevels.levelId, schema.seniorityLevels.id),
     )
     .where(inArray(schema.questions.id, questionIds))
     .groupBy(schema.questions.id, schema.users.id)

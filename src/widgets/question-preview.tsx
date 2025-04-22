@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Question } from "@/features/questions";
-import { Rating, RatingLoader } from "@/features/rating";
+import { Rating, RatingSkeleton } from "@/features/rating";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { CategoryList } from "./category-list";
@@ -33,7 +33,7 @@ export async function QuestionPreview({
       </div>
 
       <div className="mt-4 flex gap-4">
-        <Suspense fallback={<RatingLoader rating={question.rating} />}>
+        <Suspense fallback={<RatingSkeleton rating={question.rating} />}>
           <Rating questionId={question.id} />
         </Suspense>
 

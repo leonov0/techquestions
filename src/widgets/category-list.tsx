@@ -1,21 +1,21 @@
 import { Badge } from "@/components/ui/badge";
-import type { Company, Level, Technology } from "@/features/questions";
+import type { Company, SeniorityLevel, Technology } from "@/features/questions";
 import { cn } from "@/lib/utils";
 
 export function CategoryList({
   id,
   technologies,
   companies,
-  levels,
+  seniorityLevels,
   className,
 }: {
   id: string;
   technologies: Technology[];
   companies: Company[];
-  levels: Level[];
+  seniorityLevels: SeniorityLevel[];
   className?: string;
 }) {
-  if (technologies.length + companies.length + levels.length === 0) {
+  if (technologies.length + companies.length + seniorityLevels.length === 0) {
     return null;
   }
 
@@ -33,9 +33,9 @@ export function CategoryList({
         </li>
       ))}
 
-      {levels.map((level) => (
-        <li key={`level-${id}-${level.id}`}>
-          <Badge variant="outline">{level.name}</Badge>
+      {seniorityLevels.map((seniorityLevel) => (
+        <li key={`seniority-level-${id}-${seniorityLevel.id}`}>
+          <Badge variant="outline">{seniorityLevel.name}</Badge>
         </li>
       ))}
     </ul>

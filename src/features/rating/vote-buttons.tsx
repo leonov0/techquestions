@@ -1,108 +1,121 @@
 "use client";
 
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useOptimistic, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useOptimistic,
+  useState,
+  useTransition,
+} from "react";
 import { toast } from "sonner";
 
-import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
 
+import { getCurrentVote } from "./actions/get-current-vote";
 import { vote } from "./actions/vote";
+import { VoteButton } from "./vote-button";
 
 export function VoteButtons({
   questionId,
   rating,
-  currentVote,
-  isAuthorized,
 }: {
   questionId: string;
   rating: number;
-  currentVote: number;
-  isAuthorized: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const redirectToSignIn = useCallback(() => {
+    const query = searchParams.toString();
+
+    const redirectUrl = `/auth/sign-in?redirectTo=${encodeURIComponent(
+      `${pathname}${query ? "?" + query : ""}`,
+    )}`;
+
+    router.push(redirectUrl);
+  }, [router, pathname, searchParams]);
+
   const [optimisticRating, updateOptimisticRating] = useOptimistic(
-    { rating, currentVote },
-    (state, newCurrentVote: number) => ({
-      rating: state.rating - state.currentVote + newCurrentVote,
-      currentVote: newCurrentVote,
-    }),
+    rating,
+    (_, optimisticValue: number) => optimisticValue,
   );
 
+  const session = authClient.useSession();
+
+  const [currentVote, setCurrentVote] = useState(0);
   const [, startTransition] = useTransition();
 
-  function setVote(value: number) {
-    startTransition(async () => {
-      updateOptimisticRating(value);
+  useEffect(() => {
+    if (!session) {
+      setCurrentVote(0);
+      return;
+    }
 
-      const response = await vote(questionId, value);
+    startTransition(async () => {
+      const response = await getCurrentVote(questionId);
 
       if (!response.success) {
         toast.error(response.error);
+        return;
+      }
+
+      setCurrentVote(response.data);
+    });
+  }, [questionId, session]);
+
+  function handleVote(voteValue: number) {
+    if (session.data === null) {
+      redirectToSignIn();
+      return;
+    }
+
+    const previousValue = currentVote;
+    const newValue = previousValue === voteValue ? 0 : voteValue;
+
+    setCurrentVote(newValue);
+
+    startTransition(async () => {
+      updateOptimisticRating(optimisticRating - previousValue + newValue);
+
+      const response = await vote(questionId, voteValue);
+
+      if (!response.success) {
+        toast.error(response.error);
+        setCurrentVote(previousValue);
+        return;
       }
     });
   }
 
-  const redirectToSignIn = useCallback(() => {
-    router.push(
-      `/signin?callbackUrl=${encodeURIComponent(pathname + `?${searchParams}`)}`,
-    );
-  }, [router, pathname, searchParams]);
-
-  function handleUpvote() {
-    if (!isAuthorized) {
-      redirectToSignIn();
-      return;
-    }
-
-    setVote(optimisticRating.currentVote > 0 ? 0 : 1);
-  }
-
-  function handleDownvote() {
-    if (!isAuthorized) {
-      redirectToSignIn();
-      return;
-    }
-
-    setVote(optimisticRating.currentVote < 0 ? 0 : -1);
-  }
-
   return (
     <div className="bg-secondary text-secondary-foreground flex items-center gap-2 rounded-full">
-      <button
-        onClick={handleUpvote}
-        className={cn(
-          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden",
-          optimisticRating.currentVote > 0 && "text-green-500",
-        )}
-      >
-        <ChevronUpIcon className="pointer-events-none size-4 shrink-0" />
-      </button>
+      <VoteButton
+        onClick={() => handleVote(1)}
+        variant="upvote"
+        isActive={currentVote > 0}
+        disabled={session.isPending}
+      />
 
       <span
         className={
-          optimisticRating.rating > 0
+          optimisticRating > 0
             ? "text-green-500"
-            : optimisticRating.rating < 0
+            : optimisticRating < 0
               ? "text-red-500"
               : undefined
         }
       >
-        {optimisticRating.rating}
+        {optimisticRating}
       </span>
 
-      <button
-        onClick={handleDownvote}
-        className={cn(
-          "hover:bg-foreground/10 focus-visible:ring-ring inline-flex size-10 items-center justify-center rounded-full transition-colors focus-visible:ring-1 focus-visible:outline-hidden",
-          optimisticRating.currentVote < 0 && "text-red-500",
-        )}
-      >
-        <ChevronDownIcon className="pointer-events-none size-4 shrink-0" />
-      </button>
+      <VoteButton
+        onClick={() => handleVote(-1)}
+        variant="downvote"
+        isActive={currentVote < 0}
+        disabled={session.isPending}
+      />
     </div>
   );
 }

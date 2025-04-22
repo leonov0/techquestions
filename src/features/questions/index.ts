@@ -1,5 +1,2 @@
-export {
-  QuestionFilters,
-  QuestionFiltersLoader,
-} from "./components/question-filters";
+export { getQuestions } from "./lib/get-questions";
 export * from "./types";

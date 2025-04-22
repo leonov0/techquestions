@@ -1,7 +1,9 @@
 "use server";
 
-import { auth } from "@/features/auth";
+import { headers } from "next/headers";
+
 import type { ActionResponse } from "@/lib/action-response";
+import { auth } from "@/lib/auth";
 
 import * as lib from "../lib/vote";
 
@@ -9,14 +11,16 @@ export async function vote(
   questionId: string,
   vote: number,
 ): Promise<ActionResponse<null>> {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user.id) {
+  if (!session) {
     return { success: false, error: "You need to be signed in to vote." };
   }
 
   try {
-    lib.vote(questionId, session.user.id, vote);
+    await lib.vote(questionId, session.user.id, vote);
 
     return { success: true, data: null };
   } catch {
