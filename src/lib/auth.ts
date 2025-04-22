@@ -7,6 +7,7 @@ import { database, schema } from "@/database";
 import { reactMagicLinkEmail } from "@/lib/emails/magic-link-email";
 import { reactResetPasswordEmail } from "@/lib/emails/reset-password-email";
 import { reactVerificationEmail } from "@/lib/emails/verification-email";
+import { ac } from "@/lib/permissions";
 import { sendEmail } from "@/lib/resend";
 
 const from =
@@ -41,7 +42,12 @@ export const auth = betterAuth({
   socialProviders: { google, github },
   advanced: { database: { generateId: false } },
   databaseHooks: { user: { create: { before } } },
-  plugins: [username(), admin(), magicLink({ sendMagicLink }), multiSession()],
+  plugins: [
+    username(),
+    admin({ ac }),
+    magicLink({ sendMagicLink }),
+    multiSession(),
+  ],
   user: {
     additionalFields: {
       username: {
@@ -59,37 +65,47 @@ export const auth = betterAuth({
   },
 });
 
-async function before(user: User) {
-  const usernameBase = user.email
-    .split("@")[0]
-    .replace(/[^a-zA-Z0-9_.]/g, "")
-    .slice(0, 30)
-    .toLowerCase();
+async function before(
+  user: User & { username?: string; displayUsername?: string },
+) {
+  const data = user;
 
-  const usersWithSameBase = await database
-    .select({ username: schema.users.username })
-    .from(schema.users)
-    .where(ilike(schema.users.username, `${usernameBase}%`));
+  if (!user.username) {
+    const usernameBase = user.email
+      .split("@")[0]
+      .replace(/[^a-zA-Z0-9_.]/g, "")
+      .slice(0, 30)
+      .toLowerCase();
 
-  const existingUsernames = new Set(usersWithSameBase.map((u) => u.username));
+    const usersWithSameBase = await database
+      .select({ username: schema.users.username })
+      .from(schema.users)
+      .where(ilike(schema.users.username, `${usernameBase}%`));
 
-  let displayUsername = usernameBase;
-  let counter = 1;
+    const existingUsernames = new Set(usersWithSameBase.map((u) => u.username));
 
-  while (existingUsernames.has(displayUsername)) {
-    const suffix = String(counter);
-    const baseLength = 30 - suffix.length;
-    displayUsername = usernameBase.slice(0, baseLength) + suffix;
-    counter++;
+    let displayUsername = usernameBase;
+    let counter = 1;
+
+    while (existingUsernames.has(displayUsername)) {
+      const suffix = String(counter);
+      const baseLength = 30 - suffix.length;
+      displayUsername = usernameBase.slice(0, baseLength) + suffix;
+      counter++;
+    }
+
+    data.displayUsername = displayUsername;
+    data.username = displayUsername.toLowerCase();
   }
 
-  return {
-    data: {
-      ...user,
-      displayUsername,
-      username: displayUsername.toLowerCase(),
-    },
-  };
+  if (!user.name) {
+    data.name = user.email
+      .split("@")[0]
+      .replace(/[^a-zA-Z]/g, "")
+      .slice(0, 30);
+  }
+
+  return { data };
 }
 
 async function sendMagicLink({ email, url }: { email: string; url: string }) {
