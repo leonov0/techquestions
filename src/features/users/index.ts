@@ -4,7 +4,6 @@ export { EditProfileForm } from "./components/edit-profile-form";
 export { ManageUserSection } from "./components/manage-user-section";
 export { Profile, ProfileLoader } from "./components/profile";
 export { SignInForm } from "./components/signin-form";
-export { SignOutForm } from "./components/signout-form";
 export {
   UsersTableView,
   UsersTableViewSkeleton,

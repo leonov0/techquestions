@@ -13,7 +13,11 @@ export function AuthView({ pathname }: { pathname: string }) {
 
   return (
     <main className="container">
-      <AuthCard pathname={pathname} className="mx-auto" />
+      <AuthCard
+        pathname={pathname}
+        socialLayout="horizontal"
+        className="mx-auto"
+      />
     </main>
   );
 }

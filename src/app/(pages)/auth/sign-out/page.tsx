@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SignOutForm } from "@/features/users";
+import { SignOutForm } from "@/features/sign-out";
 
 export default function SignOut() {
   return (
