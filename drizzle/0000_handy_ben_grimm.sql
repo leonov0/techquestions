@@ -57,10 +57,10 @@ CREATE TABLE "questions_to_companies" (
 	CONSTRAINT "questions_to_companies_question_id_company_id_pk" PRIMARY KEY("question_id","company_id")
 );
 --> statement-breakpoint
-CREATE TABLE "questions_to_levels" (
+CREATE TABLE "questions_to_seniority_levels" (
 	"question_id" uuid NOT NULL,
-	"level_id" uuid NOT NULL,
-	CONSTRAINT "questions_to_levels_question_id_level_id_pk" PRIMARY KEY("question_id","level_id")
+	"seniority_level_id" uuid NOT NULL,
+	CONSTRAINT "questions_to_seniority_levels_question_id_seniority_level_id_pk" PRIMARY KEY("question_id","seniority_level_id")
 );
 --> statement-breakpoint
 CREATE TABLE "questions_to_technologies" (
@@ -130,8 +130,8 @@ ALTER TABLE "question_votes" ADD CONSTRAINT "question_votes_user_id_users_id_fk"
 ALTER TABLE "questions" ADD CONSTRAINT "questions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "questions_to_companies" ADD CONSTRAINT "questions_to_companies_question_id_questions_id_fk" FOREIGN KEY ("question_id") REFERENCES "public"."questions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "questions_to_companies" ADD CONSTRAINT "questions_to_companies_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "questions_to_levels" ADD CONSTRAINT "questions_to_levels_question_id_questions_id_fk" FOREIGN KEY ("question_id") REFERENCES "public"."questions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "questions_to_levels" ADD CONSTRAINT "questions_to_levels_level_id_seniority_levels_id_fk" FOREIGN KEY ("level_id") REFERENCES "public"."seniority_levels"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "questions_to_seniority_levels" ADD CONSTRAINT "questions_to_seniority_levels_question_id_questions_id_fk" FOREIGN KEY ("question_id") REFERENCES "public"."questions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "questions_to_seniority_levels" ADD CONSTRAINT "questions_to_seniority_levels_seniority_level_id_seniority_levels_id_fk" FOREIGN KEY ("seniority_level_id") REFERENCES "public"."seniority_levels"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "questions_to_technologies" ADD CONSTRAINT "questions_to_technologies_question_id_questions_id_fk" FOREIGN KEY ("question_id") REFERENCES "public"."questions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "questions_to_technologies" ADD CONSTRAINT "questions_to_technologies_technology_id_technologies_id_fk" FOREIGN KEY ("technology_id") REFERENCES "public"."technologies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

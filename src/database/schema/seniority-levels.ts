@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { questionsToLevels } from "./questions-to-levels";
+import { questionsToSeniorityLevels } from "./questions-to-seniority-levels";
 
 export const seniorityLevels = pgTable("seniority_levels", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -13,7 +13,7 @@ export const seniorityLevels = pgTable("seniority_levels", {
 export const seniorityLevelsRelations = relations(
   seniorityLevels,
   ({ many }) => ({
-    questionsToLevels: many(questionsToLevels),
+    questionsToSeniorityLevels: many(questionsToSeniorityLevels),
   }),
 );
 

@@ -12,7 +12,7 @@ import {
 import { questionReviews } from "./question-reviews";
 import { questionVotes } from "./question-votes";
 import { questionsToCompanies } from "./questions-to-companies";
-import { questionsToLevels } from "./questions-to-levels";
+import { questionsToSeniorityLevels } from "./questions-to-seniority-levels";
 import { questionsToTechnologies } from "./questions-to-technologies";
 import { users } from "./users";
 
@@ -54,7 +54,7 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
   questionReviews: many(questionReviews),
   questionVotes: many(questionVotes),
   questionsToCompanies: many(questionsToCompanies),
-  questionsToLevels: many(questionsToLevels),
+  questionsToSeniorityLevels: many(questionsToSeniorityLevels),
   questionsToTechnologies: many(questionsToTechnologies),
 }));
 

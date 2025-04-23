@@ -4,7 +4,7 @@ export * from "./question-reviews";
 export * from "./question-votes";
 export * from "./questions";
 export * from "./questions-to-companies";
-export * from "./questions-to-levels";
+export * from "./questions-to-seniority-levels";
 export * from "./questions-to-technologies";
 export * from "./seniority-levels";
 export * from "./sessions";
