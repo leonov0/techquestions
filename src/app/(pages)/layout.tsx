@@ -9,7 +9,7 @@ export default function PagesLayout({
   return (
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto] gap-16">
       <Header />
-      <div>{children}</div>
+      {children}
       <Footer />
     </div>
   );
