@@ -1,13 +1,18 @@
 import { betterAuth, type User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, magicLink, multiSession, username } from "better-auth/plugins";
+import {
+  admin as adminPlugin,
+  magicLink,
+  multiSession,
+  username,
+} from "better-auth/plugins";
 import { ilike } from "drizzle-orm";
 
 import { database, schema } from "@/database";
 import { reactMagicLinkEmail } from "@/lib/emails/magic-link-email";
 import { reactResetPasswordEmail } from "@/lib/emails/reset-password-email";
 import { reactVerificationEmail } from "@/lib/emails/verification-email";
-import { ac } from "@/lib/permissions";
+import { ac, admin } from "@/lib/permissions";
 import { sendEmail } from "@/lib/resend";
 
 const from =
@@ -44,7 +49,7 @@ export const auth = betterAuth({
   databaseHooks: { user: { create: { before } } },
   plugins: [
     username(),
-    admin({ ac }),
+    adminPlugin({ ac, roles: { admin } }),
     magicLink({ sendMagicLink }),
     multiSession(),
   ],
