@@ -31,7 +31,7 @@ export function SignOutForm() {
     <form action={signOut}>
       <Button variant="destructive" disabled={isPending} className="w-full">
         <LogOut />
-        Sign out
+        Sign Out
       </Button>
     </form>
   );
