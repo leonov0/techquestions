@@ -73,7 +73,12 @@ export async function getQuestions({
   }
 
   if (seniorityLevels) {
-    filters.push(inArray(schema.questionsToLevels.levelId, seniorityLevels));
+    filters.push(
+      inArray(
+        schema.questionsToSeniorityLevels.seniorityLevelId,
+        seniorityLevels,
+      ),
+    );
   }
 
   if (isAnonymous) {
@@ -110,8 +115,8 @@ export async function getQuestions({
       eq(schema.questions.id, schema.questionsToCompanies.questionId),
     )
     .leftJoin(
-      schema.questionsToLevels,
-      eq(schema.questions.id, schema.questionsToLevels.questionId),
+      schema.questionsToSeniorityLevels,
+      eq(schema.questions.id, schema.questionsToSeniorityLevels.questionId),
     )
     .where(and(...filters));
 
@@ -167,12 +172,15 @@ export async function getQuestions({
       eq(schema.questionsToCompanies.companyId, schema.companies.id),
     )
     .leftJoin(
-      schema.questionsToLevels,
-      eq(schema.questions.id, schema.questionsToLevels.questionId),
+      schema.questionsToSeniorityLevels,
+      eq(schema.questions.id, schema.questionsToSeniorityLevels.questionId),
     )
     .leftJoin(
       schema.seniorityLevels,
-      eq(schema.questionsToLevels.levelId, schema.seniorityLevels.id),
+      eq(
+        schema.questionsToSeniorityLevels.seniorityLevelId,
+        schema.seniorityLevels.id,
+      ),
     )
     .where(inArray(schema.questions.id, questionIds))
     .groupBy(schema.questions.id, schema.users.id)

@@ -1,7 +1,9 @@
 "use server";
 
-import { auth } from "@/features/auth";
+import { headers } from "next/headers";
+
 import type { ActionResponse } from "@/lib/action-response";
+import { auth } from "@/lib/auth";
 
 import * as lib from "./lib";
 import { submitQuestionSchema } from "./schemas";
@@ -10,9 +12,11 @@ import type { SubmitQuestionPayload } from "./types";
 export async function submitQuestion(
   payload: SubmitQuestionPayload,
 ): Promise<ActionResponse<null>> {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user.id) {
+  if (!session) {
     return {
       success: false,
       error: "You must be logged in to submit a question.",
@@ -25,7 +29,8 @@ export async function submitQuestion(
     return { success: false, error: "Invalid payload." };
   }
 
-  const { technologies, companies, levels, ...value } = parsedPayload.data;
+  const { technologies, companies, seniorityLevels, ...value } =
+    parsedPayload.data;
 
   try {
     await lib.createQuestion({
@@ -35,7 +40,7 @@ export async function submitQuestion(
       },
       technologies,
       companies,
-      levels,
+      seniorityLevels,
     });
   } catch {
     return {

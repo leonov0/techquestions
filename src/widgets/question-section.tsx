@@ -7,8 +7,8 @@ import rehypeRaw from "rehype-raw";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getQuestion } from "@/features/questions/actions";
-import { Rating, RatingLoader } from "@/features/rating";
+import { getQuestion } from "@/features/questions";
+import { Rating, RatingSkeleton } from "@/features/rating";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { CategoryList } from "./category-list";
@@ -22,58 +22,64 @@ export async function QuestionSection({
 }) {
   const { id } = await params;
 
-  const { data: question } = await getQuestion(id);
+  const response = await getQuestion(id);
 
-  if (!question) {
+  if (!response.success) {
     return notFound();
   }
 
   return (
     <section className={className}>
-      <h1 className="text-3xl font-bold">{question.title}</h1>
+      <h1 className="text-3xl font-bold">{response.data.title}</h1>
 
       <div className="mt-2 flex flex-col gap-4 sm:flex-row">
         <p>
           <span className="text-muted-foreground">Asked </span>
 
-          <time dateTime={question.createdAt.toString()}>
-            {question.createdAt.toLocaleString()}
+          <time dateTime={response.data.createdAt.toString()}>
+            {response.data.createdAt.toLocaleString()}
           </time>
         </p>
 
         <p>
           <span className="text-muted-foreground">Modified </span>
 
-          <time dateTime={question.updatedAt.toString()}>
-            {question.updatedAt.toLocaleString()}
+          <time dateTime={response.data.updatedAt.toString()}>
+            {response.data.updatedAt.toLocaleString()}
           </time>
         </p>
       </div>
 
-      <CategoryList {...question} className="mt-4" />
+      <CategoryList
+        id={response.data.id}
+        technologies={response.data.technologies}
+        companies={response.data.companies}
+        seniorityLevels={response.data.seniorityLevels}
+        className="mt-4"
+      />
 
       <div className="mt-4 flex grow gap-4">
-        <Suspense fallback={<RatingLoader rating={question.rating} />}>
-          <Rating questionId={question.id} />
+        <Suspense fallback={<RatingSkeleton rating={response.data.rating} />}>
+          <Rating questionId={response.data.id} />
         </Suspense>
 
-        {question.author ? (
+        {response.data.author ? (
           <Link
-            href={`/users/${question.author.username}`}
+            href={`/users/${response.data.author.username}`}
             className="group flex gap-2"
           >
             <Avatar className="size-10">
-              {question.author.image && (
-                <AvatarImage src={question.author.image} />
+              {response.data.author.image && (
+                <AvatarImage src={response.data.author.image} />
               )}
 
               <AvatarFallback>
-                {getCapitalizedFirstLetter(question.author.username)}
+                {getCapitalizedFirstLetter(response.data.author.username)}
               </AvatarFallback>
             </Avatar>
 
             <p className="group-hover:text-primary text-sm transition-colors">
-              @{question.author.username}
+              @{response.data.author.username}
             </p>
           </Link>
         ) : (
@@ -91,7 +97,7 @@ export async function QuestionSection({
 
       <div className="prose dark:prose-invert prose-slate !max-w-full">
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-          {question.body}
+          {response.data.body}
         </ReactMarkdown>
       </div>
     </section>

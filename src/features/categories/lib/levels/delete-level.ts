@@ -5,8 +5,8 @@ import { database, schema } from "@/database";
 
 export async function deleteLevel(id: string) {
   await database
-    .delete(schema.questionsToLevels)
-    .where(eq(schema.questionsToLevels.levelId, id));
+    .delete(schema.questionsToSeniorityLevels)
+    .where(eq(schema.questionsToSeniorityLevels.levelId, id));
 
   await database.delete(schema.levels).where(eq(schema.levels.id, id));
 

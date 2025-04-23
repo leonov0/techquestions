@@ -62,12 +62,12 @@ export async function getQuestions({
       eq(schema.questionsToCompanies.companyId, schema.companies.id),
     )
     .leftJoin(
-      schema.questionsToLevels,
-      eq(schema.questions.id, schema.questionsToLevels.questionId),
+      schema.questionsToSeniorityLevels,
+      eq(schema.questions.id, schema.questionsToSeniorityLevels.questionId),
     )
     .leftJoin(
       schema.levels,
-      eq(schema.questionsToLevels.levelId, schema.levels.id),
+      eq(schema.questionsToSeniorityLevels.levelId, schema.levels.id),
     )
     .where(and(...filters))
     .orderBy(orderBy)

@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { QuestionPagination } from "@/features/questions/components/pagination";
+import { QuestionPagination } from "@/components/pagination";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 import { QuestionPreview } from "@/widgets/question-preview";
 

@@ -8,5 +8,5 @@ export const submitQuestionSchema = z.object({
   isAnonymous: z.boolean(),
   technologies: z.array(z.string().uuid()),
   companies: z.array(z.string().uuid()),
-  levels: z.array(z.string().uuid()),
+  seniorityLevels: z.array(z.string().uuid()),
 });

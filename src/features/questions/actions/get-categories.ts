@@ -1,19 +1,19 @@
 "use server";
 
-import type { Company, Level, Technology } from "@/database";
 import type { ActionResponse } from "@/lib/action-response";
 
 import * as lib from "../lib";
+import { Company, SeniorityLevel, Technology } from "../types";
 
 export async function getCategories(): Promise<
   ActionResponse<{
     technologies: Technology[];
     companies: Company[];
-    levels: Level[];
+    seniorityLevels: SeniorityLevel[];
   }>
 > {
   try {
-    const [technologies, companies, levels] = await Promise.all([
+    const [technologies, companies, seniorityLevels] = await Promise.all([
       lib.getTechnologies(),
       lib.getCompanies(),
       lib.getLevels(),
@@ -24,7 +24,7 @@ export async function getCategories(): Promise<
       data: {
         technologies,
         companies,
-        levels,
+        seniorityLevels,
       },
     };
   } catch {

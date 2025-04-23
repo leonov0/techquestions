@@ -6,12 +6,12 @@ export async function createQuestion({
   value,
   technologies,
   companies,
-  levels,
+  seniorityLevels,
 }: {
   value: NewQuestion;
   technologies: string[];
   companies: string[];
-  levels: string[];
+  seniorityLevels: string[];
 }) {
   revalidateTag("pending-questions");
 
@@ -44,12 +44,12 @@ export async function createQuestion({
     );
   }
 
-  if (levels.length) {
+  if (seniorityLevels.length) {
     promises.push(
-      database.insert(schema.questionsToLevels).values(
-        levels.map((levelId) => ({
+      database.insert(schema.questionsToSeniorityLevels).values(
+        seniorityLevels.map((seniorityLevelId) => ({
           questionId,
-          levelId,
+          seniorityLevelId,
         })),
       ),
     );

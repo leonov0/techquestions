@@ -15,10 +15,6 @@ export function CategoryList({
   seniorityLevels: SeniorityLevel[];
   className?: string;
 }) {
-  if (technologies.length + companies.length + seniorityLevels.length === 0) {
-    return null;
-  }
-
   return (
     <ul className={cn("flex flex-wrap gap-2", className)}>
       {technologies.map((technology) => (

@@ -7,17 +7,32 @@ import { database, schema } from "@/database";
 export async function getCompanies() {
   cacheTag("companies");
 
-  return database.select().from(schema.companies);
+  return database
+    .select({
+      id: schema.companies.id,
+      name: schema.companies.name,
+    })
+    .from(schema.companies);
 }
 
 export async function getLevels() {
-  cacheTag("levels");
+  cacheTag("seniority-levels");
 
-  return database.select().from(schema.levels);
+  return database
+    .select({
+      id: schema.seniorityLevels.id,
+      name: schema.seniorityLevels.name,
+    })
+    .from(schema.seniorityLevels);
 }
 
 export async function getTechnologies() {
   cacheTag("technologies");
 
-  return database.select().from(schema.technologies);
+  return database
+    .select({
+      id: schema.technologies.id,
+      name: schema.technologies.name,
+    })
+    .from(schema.technologies);
 }

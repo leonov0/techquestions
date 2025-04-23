@@ -14,31 +14,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Company, Level, Technology } from "@/database";
+import type { Company, SeniorityLevel, Technology } from "@/features/questions";
 
 export function QuestionFilterForm({
-  technologies,
-  companies,
-  levels,
+  technologies = [],
+  companies = [],
+  seniorityLevels = [],
 }: {
-  technologies: Technology[];
-  companies: Company[];
-  levels: Level[];
+  technologies?: Technology[];
+  companies?: Company[];
+  seniorityLevels?: SeniorityLevel[];
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("query"));
+
   const [selectedTechnologies, setSelectedTechnologies] = useState(
     searchParams.getAll("technologyId"),
   );
+
   const [selectedCompanies, setSelectedCompanies] = useState(
     searchParams.getAll("companyId"),
   );
-  const [selectedLevels, setSelectedLevels] = useState(
-    searchParams.getAll("levelId"),
+
+  const [selectedSeniorityLevels, setSelectedSeniorityLevels] = useState(
+    searchParams.getAll("seniorityLevelId"),
   );
+
   const [selectedOrderBy, setSelectedOrderBy] = useState(
     searchParams.get("order") || "relevance",
   );
@@ -60,15 +64,15 @@ export function QuestionFilterForm({
       params.append("companyId", companyId);
     });
 
-    selectedLevels.forEach((levelId) => {
-      params.append("levelId", levelId);
+    selectedSeniorityLevels.forEach((seniorityLevelId) => {
+      params.append("seniorityLevelId", seniorityLevelId);
     });
 
     if (selectedOrderBy) {
       params.set("order", selectedOrderBy);
     }
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}${params ? `?${params.toString()}` : ""}`);
   }
 
   return (
@@ -102,10 +106,10 @@ export function QuestionFilterForm({
       />
 
       <MultipleSelect
-        name="levels"
-        items={levels}
-        onChange={setSelectedLevels}
-        value={selectedLevels}
+        name="seniority levels"
+        items={seniorityLevels}
+        onChange={setSelectedSeniorityLevels}
+        value={selectedSeniorityLevels}
         className="w-full"
       />
 

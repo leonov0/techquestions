@@ -22,20 +22,20 @@ import { Input } from "@/components/ui/input";
 import { MultipleSelect } from "@/components/ui/multiple-select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import type { Company, Level, Technology } from "@/features/questions/types";
+import type { Company, SeniorityLevel, Technology } from "@/features/questions";
 
-import { submitQuestion } from "./actions";
 import { submitQuestionSchema } from "./schemas";
+import { submitQuestion } from "./submit-action";
 import type { SubmitQuestionPayload } from "./types";
 
 export function SubmitQuestionForm({
-  technologies,
-  companies,
-  levels,
+  technologies = [],
+  companies = [],
+  seniorityLevels = [],
 }: {
-  technologies: Technology[];
-  companies: Company[];
-  levels: Level[];
+  technologies?: Technology[];
+  companies?: Company[];
+  seniorityLevels?: SeniorityLevel[];
 }) {
   const form = useForm<SubmitQuestionPayload>({
     resolver: zodResolver(submitQuestionSchema),
@@ -45,7 +45,7 @@ export function SubmitQuestionForm({
       isAnonymous: false,
       technologies: [],
       companies: [],
-      levels: [],
+      seniorityLevels: [],
     },
   });
 
@@ -74,7 +74,7 @@ export function SubmitQuestionForm({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">
-            Submit a new question
+            Submit a New Question
           </h1>
 
           <p className="text-muted-foreground mt-2 text-lg sm:text-xl">
@@ -196,13 +196,17 @@ export function SubmitQuestionForm({
 
           <FormField
             control={form.control}
-            name="levels"
+            name="seniorityLevels"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Levels</FormLabel>
+                <FormLabel>Seniority Levels</FormLabel>
 
                 <FormControl>
-                  <MultipleSelect items={levels} {...field} />
+                  <MultipleSelect
+                    items={seniorityLevels}
+                    {...field}
+                    name="seniority levels"
+                  />
                 </FormControl>
 
                 <FormDescription>

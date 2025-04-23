@@ -26,7 +26,7 @@ export async function FeaturedQuestionList() {
       {response.data.map((question) => (
         <li key={question.id}>
           <QuestionPreview
-            question={question}
+            {...question}
             className="motion-preset-focus bg-card text-card-foreground h-full rounded-xl border p-6 shadow-sm"
           />
         </li>

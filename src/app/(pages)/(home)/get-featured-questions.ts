@@ -1,6 +1,7 @@
 "use server";
 
-import { getQuestions, type Question } from "@/features/questions";
+import type { Question } from "@/features/questions";
+import { getQuestions } from "@/features/questions/lib/get-questions";
 import type { ActionResponse } from "@/lib/action-response";
 
 export async function getFeaturedQuestions(): Promise<
