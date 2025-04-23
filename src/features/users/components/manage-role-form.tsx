@@ -23,8 +23,8 @@ import {
 } from "@/components/ui/select";
 
 import { updateProfile } from "../actions/update-profile";
-import { updateUserSchema } from "../schemas";
-import { UpdateUserPayload } from "../types";
+import { updateUserSchema } from "../../../app/(pages)/users/[id]/schemas";
+import { UpdateUserPayload } from "../../../app/(pages)/users/[id]/types";
 
 export function ManageRoleForm({ role }: { role: "user" | "admin" }) {
   const form = useForm<UpdateUserPayload>({

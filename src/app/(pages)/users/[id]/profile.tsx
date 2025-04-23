@@ -2,6 +2,7 @@ import { AlertCircle, ArrowBigUpDash, Flame, Search, User } from "lucide-react";
 import Form from "next/form";
 import { notFound, redirect } from "next/navigation";
 
+import { QuestionPagination } from "@/components/pagination";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,14 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { QuestionPagination } from "@/components/pagination";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 import { QuestionPreview } from "@/widgets/question-preview";
 
-import { getQuestionsByUserId } from "../actions/get-questions-by-user-id";
-import { getUserByUsername } from "../actions/get-user-by-username";
-import { getUserQuestionsSchema } from "../schemas";
+import { getQuestionsByUserId } from "./get-questions-by-user-id";
+import { getUserByUsername } from "./get-user-by-username";
+import { getUserQuestionsSchema } from "./schemas";
 
 export async function Profile({
   params,
@@ -65,7 +64,7 @@ export async function Profile({
     <div className={className}>
       <section className="flex items-center gap-4">
         <Avatar className="size-16">
-          <AvatarImage src={response.data.image ?? undefined}></AvatarImage>
+          <AvatarImage src={response.data.image ?? undefined} />
           <AvatarFallback>
             {response.data.username &&
               getCapitalizedFirstLetter(response.data.username)}
@@ -120,7 +119,7 @@ export async function Profile({
                     className="border-t pt-4 first:border-none first:pt-0"
                   >
                     <QuestionPreview
-                      question={question}
+                      {...question}
                       className="motion-preset-focus"
                     />
                   </li>
@@ -132,7 +131,7 @@ export async function Profile({
               />
             </>
           ) : (
-            <Alert variant="destructive">
+            <Alert>
               <AlertCircle />
               <AlertTitle>
                 No questions found for{" "}
@@ -151,40 +150,5 @@ export async function Profile({
         )}
       </section>
     </div>
-  );
-}
-
-export function ProfileLoader() {
-  return (
-    <>
-      <section className="flex items-center gap-4">
-        <div>
-          <Skeleton className="size-16 rounded-full" />
-        </div>
-
-        <div>
-          <Skeleton className="h-7 w-64" />
-          <Skeleton className="mt-1 h-6.5 w-56" />
-        </div>
-      </section>
-
-      <section className="mt-16 space-y-8">
-        <Skeleton className="h-9 w-53" />
-
-        <ul>
-          <li className="border-t pt-4 first:border-none first:pt-0">
-            <Skeleton className="h-40" />
-          </li>
-          <li className="border-t pt-4 first:border-none first:pt-0">
-            <Skeleton className="h-40" />
-          </li>
-          <li className="border-t pt-4 first:border-none first:pt-0">
-            <Skeleton className="h-40" />
-          </li>
-        </ul>
-
-        <Skeleton className="mx-auto h-9 max-w-[19rem]" />
-      </section>
-    </>
   );
 }

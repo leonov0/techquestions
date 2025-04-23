@@ -62,17 +62,17 @@ export async function getQuestions({
     );
   }
 
-  if (technologies) {
+  if (technologies !== undefined) {
     filters.push(
       inArray(schema.questionsToTechnologies.technologyId, technologies),
     );
   }
 
-  if (companies) {
+  if (companies !== undefined) {
     filters.push(inArray(schema.questionsToCompanies.companyId, companies));
   }
 
-  if (seniorityLevels) {
+  if (seniorityLevels !== undefined) {
     filters.push(
       inArray(
         schema.questionsToSeniorityLevels.seniorityLevelId,
@@ -81,7 +81,7 @@ export async function getQuestions({
     );
   }
 
-  if (isAnonymous) {
+  if (isAnonymous !== undefined) {
     filters.push(eq(schema.questions.isAnonymous, isAnonymous));
   }
 

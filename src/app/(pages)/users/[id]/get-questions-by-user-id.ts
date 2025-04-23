@@ -4,8 +4,8 @@ import type { Question } from "@/features/questions";
 import { getQuestions } from "@/features/questions/lib/get-questions";
 import type { ActionResponse } from "@/lib/action-response";
 
-import { getUserQuestionsSchema } from "../schemas";
-import type { GetUserQuestionsPayload } from "../types";
+import { getUserQuestionsSchema } from "./schemas";
+import type { GetUserQuestionsPayload } from "./types";
 
 export async function getQuestionsByUserId(
   userId: string,

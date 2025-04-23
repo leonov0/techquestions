@@ -3,7 +3,7 @@
 import type { User } from "@/database";
 import type { ActionResponse } from "@/lib/action-response";
 
-import * as lib from "../lib/get-user-by-username";
+import * as lib from "./lib";
 
 export async function getUserByUsername(
   username: string,
