@@ -24,7 +24,7 @@ export const questionsToLevelsRelations = relations(
       fields: [questionsToLevels.questionId],
       references: [questions.id],
     }),
-    level: one(seniorityLevels, {
+    seniorityLevel: one(seniorityLevels, {
       fields: [questionsToLevels.levelId],
       references: [seniorityLevels.id],
     }),

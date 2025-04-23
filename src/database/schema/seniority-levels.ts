@@ -10,9 +10,12 @@ export const seniorityLevels = pgTable("seniority_levels", {
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
-export const levelsRelations = relations(seniorityLevels, ({ many }) => ({
-  questionsToLevels: many(questionsToLevels),
-}));
+export const seniorityLevelsRelations = relations(
+  seniorityLevels,
+  ({ many }) => ({
+    questionsToLevels: many(questionsToLevels),
+  }),
+);
 
 export type SeniorityLevel = typeof seniorityLevels.$inferSelect;
 export type NewSeniorityLevel = typeof seniorityLevels.$inferInsert;
