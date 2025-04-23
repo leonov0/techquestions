@@ -79,7 +79,7 @@ export function VoteButtons({
     startTransition(async () => {
       updateOptimisticRating(optimisticRating - previousValue + newValue);
 
-      const response = await vote(questionId, voteValue);
+      const response = await vote(questionId, newValue);
 
       if (!response.success) {
         toast.error(response.error);
@@ -95,7 +95,7 @@ export function VoteButtons({
         onClick={() => handleVote(1)}
         variant="upvote"
         isActive={currentVote > 0}
-        disabled={session.isPending}
+        disabled={!!session.isPending}
       />
 
       <span
@@ -114,7 +114,7 @@ export function VoteButtons({
         onClick={() => handleVote(-1)}
         variant="downvote"
         isActive={currentVote < 0}
-        disabled={session.isPending}
+        disabled={!!session.isPending}
       />
     </div>
   );
