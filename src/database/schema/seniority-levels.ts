@@ -14,5 +14,5 @@ export const levelsRelations = relations(seniorityLevels, ({ many }) => ({
   questionsToLevels: many(questionsToLevels),
 }));
 
-export type Level = typeof seniorityLevels.$inferSelect;
-export type NewLevel = typeof seniorityLevels.$inferInsert;
+export type SeniorityLevel = typeof seniorityLevels.$inferSelect;
+export type NewSeniorityLevel = typeof seniorityLevels.$inferInsert;
