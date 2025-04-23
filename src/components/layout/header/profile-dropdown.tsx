@@ -95,7 +95,7 @@ export function ProfileDropdown({
         <DropdownMenuItem asChild>
           <Link href="/auth/sign-out">
             <LogOut />
-            Sign out
+            Sign Out
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
