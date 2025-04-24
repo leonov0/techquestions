@@ -2,6 +2,7 @@
 
 import { ChevronDown, LogOut, Moon, Settings, Sun } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,19 +16,36 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
-export function ProfileDropdown({
-  username,
-  name,
-  image,
-}: {
+type Props = {
   username: string;
   name: string;
   image?: string | null;
-}) {
+};
+
+export function ProfileDropdown(fallbackProps: Props) {
+  const session = authClient.useSession();
+
+  const [user, setUser] = useState<Props>(fallbackProps);
+
+  useEffect(() => {
+    if (session.data) {
+      if (!session.data.user.username) {
+        throw new Error("Username is required.");
+      }
+
+      setUser({
+        username: session.data.user.username,
+        name: session.data.user.name,
+        image: session.data.user.image,
+      });
+    }
+  }, [session]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -37,13 +55,13 @@ export function ProfileDropdown({
         )}
       >
         <Avatar className="size-5 rounded-sm">
-          <AvatarImage src={image ?? undefined} />
+          <AvatarImage src={user.image ?? undefined} />
           <AvatarFallback className="rounded-sm">
-            {getCapitalizedFirstLetter(username)}
+            {getCapitalizedFirstLetter(user.username)}
           </AvatarFallback>
         </Avatar>
 
-        <span className="line-clamp-1">{username}</span>
+        <span className="line-clamp-1">{user.username}</span>
 
         <ChevronDown
           className="relative transition duration-300 group-data-[state=open]:rotate-180"
@@ -53,18 +71,21 @@ export function ProfileDropdown({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/users/${username}`} className="flex items-center gap-4">
+          <Link
+            href={`/users/${user.username}`}
+            className="flex items-center gap-4"
+          >
             <Avatar className="size-8 rounded-sm">
-              <AvatarImage src={image ?? undefined} />
+              <AvatarImage src={user.image ?? undefined} />
 
               <AvatarFallback className="rounded-sm">
-                {getCapitalizedFirstLetter(username)}
+                {getCapitalizedFirstLetter(user.username)}
               </AvatarFallback>
             </Avatar>
 
             <div className="max-w-32 overflow-hidden pr-4 text-nowrap text-clip">
-              <p className="text-sm font-medium">{name}</p>
-              <p className="text-xs">@{username}</p>
+              <p className="text-sm font-medium">{user.name}</p>
+              <p className="text-xs">@{user.username}</p>
             </div>
           </Link>
         </DropdownMenuItem>
