@@ -19,6 +19,6 @@ export type Question = {
   rating: number;
   technologies: Category[];
   companies: Category[];
-  levels: Category[];
+  seniorityLevels: Category[];
   author: User | null;
 };

@@ -34,9 +34,9 @@ export async function getQuestions({
         json_agg(
           DISTINCT jsonb_build_object('id', ${schema.companies.id},'name', ${schema.companies.name})
         ) FILTER (WHERE ${schema.companies.id} IS NOT NULL), '[]'::json)`,
-      levels: sql<[{ id: string; name: string }]>`COALESCE(
-        json_agg(DISTINCT jsonb_build_object('id', ${schema.levels.id},'name', ${schema.levels.name})
-        ) FILTER (WHERE ${schema.levels.id} IS NOT NULL), '[]'::json)`,
+      seniorityLevels: sql<[{ id: string; name: string }]>`COALESCE(
+        json_agg(DISTINCT jsonb_build_object('id', ${schema.seniorityLevels.id},'name', ${schema.seniorityLevels.name})
+        ) FILTER (WHERE ${schema.seniorityLevels.id} IS NOT NULL), '[]'::json)`,
       author: schema.users,
     })
     .from(schema.questions)
@@ -66,8 +66,11 @@ export async function getQuestions({
       eq(schema.questions.id, schema.questionsToSeniorityLevels.questionId),
     )
     .leftJoin(
-      schema.levels,
-      eq(schema.questionsToSeniorityLevels.levelId, schema.levels.id),
+      schema.seniorityLevels,
+      eq(
+        schema.questionsToSeniorityLevels.seniorityLevelId,
+        schema.seniorityLevels.id,
+      ),
     )
     .where(and(...filters))
     .orderBy(orderBy)
