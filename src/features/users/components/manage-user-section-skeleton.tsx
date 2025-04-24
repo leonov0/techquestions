@@ -1,3 +1,5 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 export async function ManageUserSectionSkeleton() {
-  return <>123</>;
+  return <Skeleton className="h-66" />;
 }
