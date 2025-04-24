@@ -9,19 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 import { getUser } from "../actions/get-user";
-import { ManageRoleForm } from "./manage-role-form";
+import { ManageRolesForm } from "./manage-roles-form";
 
 export async function ManageUserSection({
   params,
-  className,
 }: {
   params: Promise<{ id: string }>;
-  className?: string;
 }) {
   const { id } = await params;
+
   const response = await getUser(id);
 
   if (!response.success) {
@@ -34,30 +32,25 @@ export async function ManageUserSection({
     );
   }
 
-  if (!response.data) {
-    notFound();
+  if (response.data === null) {
+    return notFound();
   }
-
   return (
-    <section className={cn("space-y-8", className)}>
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Moderating {response.data.username}
-        </h1>
-        <code className="text-muted-foreground">{response.data.id}</code>
-      </div>
-
+    <section>
       <Card>
         <CardHeader>
-          <CardTitle>Role Management</CardTitle>
+          <CardTitle>Manage User&apos;s Roles</CardTitle>
           <CardDescription>
-            Manage the roles of this user. You can change the roles of this user
-            to give them different permissions in the system.
+            Manage the roles of the user. You can assign or remove roles as
+            needed. User immediately receives or loses permissions based on the
+            roles assigned.
           </CardDescription>
         </CardHeader>
-
         <CardContent>
-          <ManageRoleForm role={response.data.role ?? "user"} />
+          <ManageRolesForm
+            userId={response.data.id}
+            roles={response.data.role ?? ""}
+          />
         </CardContent>
       </Card>
     </section>

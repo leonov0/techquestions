@@ -12,7 +12,7 @@ import { database, schema } from "@/database";
 import { reactMagicLinkEmail } from "@/lib/emails/magic-link-email";
 import { reactResetPasswordEmail } from "@/lib/emails/reset-password-email";
 import { reactVerificationEmail } from "@/lib/emails/verification-email";
-import { ac, admin } from "@/lib/permissions";
+import { ac, admin, user } from "@/lib/permissions";
 import { sendEmail } from "@/lib/resend";
 
 const from =
@@ -49,7 +49,7 @@ export const auth = betterAuth({
   databaseHooks: { user: { create: { before } } },
   plugins: [
     username(),
-    adminPlugin({ ac, roles: { admin } }),
+    adminPlugin({ ac, roles: { admin, user } }),
     magicLink({ sendMagicLink }),
     multiSession(),
   ],

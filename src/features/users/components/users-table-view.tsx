@@ -1,13 +1,26 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { auth } from "@/lib/auth";
+import { AlertCircle } from "lucide-react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { getUsers } from "../actions/get-users";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
 export async function UsersTableView() {
-  const { users } = await auth.api.listUsers({ query: {} });
+  const response = await getUsers();
 
-  return <DataTable columns={columns} data={users} />;
+  if (!response.success) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="size-4" />
+        <AlertTitle>An error occurred while fetching levels.</AlertTitle>
+        <AlertDescription>{response.error}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  return <DataTable columns={columns} data={response.data} />;
 }
 
 export function UsersTableViewSkeleton() {

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { ManageUserSection } from "@/features/users";
+import { ManageUserSection, ManageUserSectionSkeleton } from "@/features/users";
 
 export default function ManageUser({
   params,
@@ -9,7 +9,7 @@ export default function ManageUser({
 }) {
   return (
     <main className="mx-auto w-full max-w-xl">
-      <Suspense>
+      <Suspense fallback={<ManageUserSectionSkeleton />}>
         <ManageUserSection params={params} />
       </Suspense>
     </main>

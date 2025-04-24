@@ -1,15 +1,15 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { UserWithRole } from "better-auth/plugins";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { User } from "@/database";
 
-export const columns: ColumnDef<UserWithRole>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
     header: "ID",
