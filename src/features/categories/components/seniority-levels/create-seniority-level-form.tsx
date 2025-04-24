@@ -19,37 +19,33 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { updateLevel } from "../../actions/levels/update-level";
-import { updateCategorySchema } from "../../schemas";
-import type { UpdateCategoryPayload } from "../../types";
+import { createSeniorityLevel } from "../../actions/seniority-levels/create-seniority-level";
+import { createCategorySchema } from "../../schemas";
+import type { CreateCategoryPayload } from "../../types";
 
-export function UpdateLevelForm({
-  id,
-  defaultValues,
-}: {
-  id: string;
-  defaultValues: UpdateCategoryPayload;
-}) {
-  const form = useForm<UpdateCategoryPayload>({
-    resolver: zodResolver(updateCategorySchema),
-    defaultValues,
+export function CreateSeniorityLevelForm() {
+  const form = useForm<CreateCategoryPayload>({
+    resolver: zodResolver(createCategorySchema),
+    defaultValues: {
+      name: "",
+    },
   });
 
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
 
-  function onSubmit(payload: UpdateCategoryPayload) {
+  function onSubmit(payload: CreateCategoryPayload) {
     startTransition(async () => {
-      const response = await updateLevel(id, payload);
+      const response = await createSeniorityLevel(payload);
 
       if (!response.success) {
         toast.error(response.error);
         return;
       }
 
-      toast.success("Level updated successfully.");
-      router.push("/admin/levels");
+      toast.success("Seniority level created successfully.");
+      router.push("/admin/seniority-levels");
     });
   }
 
@@ -67,7 +63,9 @@ export function UpdateLevelForm({
                 <Input placeholder="name" {...field} />
               </FormControl>
 
-              <FormDescription>This is level display name.</FormDescription>
+              <FormDescription>
+                This is seniority level display name.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -75,7 +73,7 @@ export function UpdateLevelForm({
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="animate-spin" />}
-          Save
+          Create
         </Button>
       </form>
     </Form>

@@ -5,14 +5,17 @@ import { database, schema } from "@/database";
 
 import type { UpdateCategoryPayload } from "../../types";
 
-export async function updateLevel(id: string, payload: UpdateCategoryPayload) {
+export async function updateSeniorityLevel(
+  id: string,
+  payload: UpdateCategoryPayload,
+) {
   await database
-    .update(schema.levels)
+    .update(schema.seniorityLevels)
     .set({
       ...payload,
       updatedAt: new Date(),
     })
-    .where(eq(schema.levels.id, id));
+    .where(eq(schema.seniorityLevels.id, id));
 
-  revalidateTag("levels");
+  revalidateTag("seniority-levels");
 }

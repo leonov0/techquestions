@@ -5,9 +5,11 @@ import { headers } from "next/headers";
 import type { ActionResponse } from "@/lib/action-response";
 import { auth } from "@/lib/auth";
 
-import * as lib from "../../lib/companies/delete-company";
+import * as lib from "../../lib/seniority-levels/delete-seniority-level";
 
-export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
+export async function deleteSeniorityLevel(
+  id: string,
+): Promise<ActionResponse<null>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -36,12 +38,12 @@ export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
   }
 
   try {
-    await lib.deleteCompany(id);
+    await lib.deleteSeniorityLevel(id);
     return { success: true, data: null };
   } catch {
     return {
       success: false,
-      error: "Failed to delete company. Please try again later.",
+      error: "Failed to delete level. Please try again later.",
     };
   }
 }

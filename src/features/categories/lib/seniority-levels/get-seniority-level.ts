@@ -5,13 +5,13 @@ import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
-export async function getLevel(id: string) {
-  cacheTag("levels");
+export async function getSeniorityLevel(id: string) {
+  cacheTag("seniority-levels");
 
   const rows = await database
     .select()
-    .from(schema.levels)
-    .where(eq(schema.levels.id, id))
+    .from(schema.seniorityLevels)
+    .where(eq(schema.seniorityLevels.id, id))
     .limit(1);
 
   if (rows.length === 0) {

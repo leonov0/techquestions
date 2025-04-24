@@ -1,6 +1,6 @@
 import { ModerateLevelSection } from "@/features/categories";
 
-export default async function Level({
+export default async function SeniorityLevel({
   params,
 }: {
   params: Promise<{

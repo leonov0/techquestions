@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-import { getLevel } from "../../actions/levels/get-level";
-import { DeleteLevelForm } from "./delete-level-form";
-import { UpdateLevelForm } from "./update-level-form";
+import { getSeniorityLevel } from "../../actions/seniority-levels/get-seniority-level";
+import { DeleteSeniorityLevelForm } from "./delete-seniority-level-form";
+import { UpdateSeniorityLevelForm } from "./update-seniority-level-form";
 
 export async function ModerateLevelSection({
   params,
@@ -33,7 +33,7 @@ export async function ModerateLevelSection({
   className?: string;
 }) {
   const { id } = await params;
-  const response = await getLevel(id);
+  const response = await getSeniorityLevel(id);
 
   if (!response.success) {
     return (
@@ -60,7 +60,7 @@ export async function ModerateLevelSection({
 
       <Card>
         <CardHeader>
-          <CardTitle>Edit Level</CardTitle>
+          <CardTitle>Edit Seniority Level</CardTitle>
           <CardDescription>
             Enter the new details for the level. Make sure to double-check the
             information before submitting.
@@ -68,13 +68,13 @@ export async function ModerateLevelSection({
         </CardHeader>
 
         <CardContent>
-          <UpdateLevelForm id={id} defaultValues={response.data} />
+          <UpdateSeniorityLevelForm id={id} defaultValues={response.data} />
         </CardContent>
       </Card>
 
       <Card className="border-destructive">
         <CardHeader>
-          <CardTitle>Delete Level</CardTitle>
+          <CardTitle>Delete Seniority Level</CardTitle>
           <CardDescription>
             This action is irreversible. Are you sure you want to delete?
           </CardDescription>
@@ -98,7 +98,7 @@ export async function ModerateLevelSection({
                 </DialogDescription>
               </DialogHeader>
 
-              <DeleteLevelForm id={id} name={response.data.name} />
+              <DeleteSeniorityLevelForm id={id} name={response.data.name} />
             </DialogContent>
           </Dialog>
         </CardFooter>

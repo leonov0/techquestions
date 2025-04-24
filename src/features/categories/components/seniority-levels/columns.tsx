@@ -40,7 +40,7 @@ export const columns: ColumnDef<Company>[] = [
       return (
         <Link
           className={buttonVariants({ variant: "outline", size: "icon" })}
-          href={`/admin/levels/${row.original.id}`}
+          href={`/admin/seniority-levels/${row.original.id}`}
         >
           <Pencil />
         </Link>

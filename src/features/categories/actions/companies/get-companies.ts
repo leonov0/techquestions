@@ -1,16 +1,39 @@
 "use server";
 
+import { headers } from "next/headers";
+
 import type { Company } from "@/database";
-import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
+import { auth } from "@/lib/auth";
 
 import * as lib from "../../lib/companies/get-companies";
 
 export async function getCompanies(): Promise<ActionResponse<Company[]>> {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (session?.user.role !== "admin") {
-    return { success: false, error: "Forbidden." };
+  if (session === null) {
+    return {
+      success: false,
+      error: "Unauthorized.",
+    };
+  }
+
+  const { success } = await auth.api.userHasPermission({
+    body: {
+      userId: session.user.id,
+      permissions: {
+        questions: ["list"],
+      },
+    },
+  });
+
+  if (!success) {
+    return {
+      success: false,
+      error: "Forbidden.",
+    };
   }
 
   try {

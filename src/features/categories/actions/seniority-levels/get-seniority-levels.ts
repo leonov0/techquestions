@@ -2,12 +2,15 @@
 
 import { headers } from "next/headers";
 
+import type { SeniorityLevel } from "@/database";
 import type { ActionResponse } from "@/lib/action-response";
 import { auth } from "@/lib/auth";
 
-import * as lib from "../../lib/companies/delete-company";
+import * as lib from "../../lib/seniority-levels/get-seniority-levels";
 
-export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
+export async function getSeniorityLevels(): Promise<
+  ActionResponse<SeniorityLevel[]>
+> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -23,7 +26,7 @@ export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
     body: {
       userId: session.user.id,
       permissions: {
-        questions: ["delete"],
+        questions: ["list"],
       },
     },
   });
@@ -36,12 +39,12 @@ export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
   }
 
   try {
-    await lib.deleteCompany(id);
-    return { success: true, data: null };
+    const data = await lib.getSeniorityLevels();
+    return { success: true, data };
   } catch {
     return {
       success: false,
-      error: "Failed to delete company. Please try again later.",
+      error: "Failed to get levels. Please try again later.",
     };
   }
 }

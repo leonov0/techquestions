@@ -139,9 +139,9 @@ export async function AdminSidebar() {
                       <SidebarMenuSub>
                         <SidebarMenuSubItem>
                           <SidebarMenuButton asChild>
-                            <Link href="/admin/levels">
+                            <Link href="/admin/seniority-levels">
                               <Brain />
-                              Levels
+                              Seniority Levels
                             </Link>
                           </SidebarMenuButton>
                         </SidebarMenuSubItem>

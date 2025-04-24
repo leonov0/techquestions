@@ -18,10 +18,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { deleteLevel } from "../../actions/levels/delete-level";
+import { deleteSeniorityLevel } from "../../actions/seniority-levels/delete-seniority-level";
 import type { DeleteCategoryPayload } from "../../types";
 
-export function DeleteLevelForm({ id, name }: { id: string; name: string }) {
+export function DeleteSeniorityLevelForm({
+  id,
+  name,
+}: {
+  id: string;
+  name: string;
+}) {
   const form = useForm<DeleteCategoryPayload>({
     defaultValues: {
       name: "",
@@ -34,15 +40,15 @@ export function DeleteLevelForm({ id, name }: { id: string; name: string }) {
 
   function onSubmit() {
     startTransition(async () => {
-      const response = await deleteLevel(id);
+      const response = await deleteSeniorityLevel(id);
 
       if (!response.success) {
         toast.error(response.error);
         return;
       }
 
-      toast.success("Level deleted successfully.");
-      router.push("/admin/levels");
+      toast.success("Seniority level deleted successfully.");
+      router.push("/admin/seniority-levels");
     });
   }
 
@@ -56,8 +62,8 @@ export function DeleteLevelForm({ id, name }: { id: string; name: string }) {
             <FormItem>
               <FormLabel>
                 <p>
-                  Enter the name of the level <strong>{name}</strong> to confirm
-                  deletion:
+                  Enter the name of the seniority level <strong>{name}</strong>{" "}
+                  to confirm deletion:
                 </p>
               </FormLabel>
 

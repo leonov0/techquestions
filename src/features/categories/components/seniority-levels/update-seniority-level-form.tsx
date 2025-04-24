@@ -19,33 +19,37 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { createLevel } from "../../actions/levels/create-level";
-import { createCategorySchema } from "../../schemas";
-import type { CreateCategoryPayload } from "../../types";
+import { updateSeniorityLevel } from "../../actions/seniority-levels/update-seniority-level";
+import { updateCategorySchema } from "../../schemas";
+import type { UpdateCategoryPayload } from "../../types";
 
-export function CreateLevelForm() {
-  const form = useForm<CreateCategoryPayload>({
-    resolver: zodResolver(createCategorySchema),
-    defaultValues: {
-      name: "",
-    },
+export function UpdateSeniorityLevelForm({
+  id,
+  defaultValues,
+}: {
+  id: string;
+  defaultValues: UpdateCategoryPayload;
+}) {
+  const form = useForm<UpdateCategoryPayload>({
+    resolver: zodResolver(updateCategorySchema),
+    defaultValues,
   });
 
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
 
-  function onSubmit(payload: CreateCategoryPayload) {
+  function onSubmit(payload: UpdateCategoryPayload) {
     startTransition(async () => {
-      const response = await createLevel(payload);
+      const response = await updateSeniorityLevel(id, payload);
 
       if (!response.success) {
         toast.error(response.error);
         return;
       }
 
-      toast.success("Level created successfully.");
-      router.push("/admin/levels");
+      toast.success("Seniority level updated successfully.");
+      router.push("/admin/seniority-levels");
     });
   }
 
@@ -71,7 +75,7 @@ export function CreateLevelForm() {
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="animate-spin" />}
-          Create
+          Save
         </Button>
       </form>
     </Form>

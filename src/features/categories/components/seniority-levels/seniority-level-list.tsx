@@ -2,12 +2,12 @@ import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-import { getLevels } from "../../actions/levels/get-levels";
+import { getSeniorityLevels } from "../../actions/seniority-levels/get-seniority-levels";
 import { DataTable } from "../data-table";
 import { columns } from "./columns";
 
-export async function LevelList() {
-  const response = await getLevels();
+export async function SeniorityLevelList() {
+  const response = await getSeniorityLevels();
 
   if (!response.success) {
     return (

@@ -7,13 +7,13 @@ import {
 } from "@/components/ui/card";
 import { CreateLevelForm } from "@/features/categories";
 
-export default function CreateLevel() {
+export default function CreateSeniorityLevel() {
   return (
     <Card className="mx-auto w-full max-w-xl">
       <CardHeader>
-        <CardTitle>Create Level</CardTitle>
+        <CardTitle>Create Seniority Level</CardTitle>
         <CardDescription>
-          Fill in the form below to create a new level.
+          Fill in the form below to create a new seniority level.
         </CardDescription>
       </CardHeader>
 

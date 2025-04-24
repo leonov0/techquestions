@@ -5,9 +5,14 @@ import { headers } from "next/headers";
 import type { ActionResponse } from "@/lib/action-response";
 import { auth } from "@/lib/auth";
 
-import * as lib from "../../lib/companies/delete-company";
+import * as lib from "../../lib/seniority-levels/update-seniority-level";
+import { updateCategorySchema } from "../../schemas";
+import type { UpdateCategoryPayload } from "../../types";
 
-export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
+export async function updateSeniorityLevel(
+  id: string,
+  payload: UpdateCategoryPayload,
+): Promise<ActionResponse<null>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -23,7 +28,7 @@ export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
     body: {
       userId: session.user.id,
       permissions: {
-        questions: ["delete"],
+        questions: ["update"],
       },
     },
   });
@@ -35,13 +40,20 @@ export async function deleteCompany(id: string): Promise<ActionResponse<null>> {
     };
   }
 
+  const parsedPayload = await updateCategorySchema.safeParseAsync(payload);
+
+  if (!parsedPayload.success) {
+    return { success: false, error: "Invalid payload." };
+  }
+
   try {
-    await lib.deleteCompany(id);
+    await lib.updateSeniorityLevel(id, parsedPayload.data);
+
     return { success: true, data: null };
   } catch {
     return {
       success: false,
-      error: "Failed to delete company. Please try again later.",
+      error: "Failed to update level. Please try again later.",
     };
   }
 }
