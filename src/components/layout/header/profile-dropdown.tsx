@@ -1,8 +1,8 @@
 "use client";
 
-import { ChevronDown, LogOut, Moon, Settings, Sun } from "lucide-react";
+import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
@@ -30,6 +30,9 @@ type Props = {
 export function ProfileDropdown(fallbackProps: Props) {
   const session = authClient.useSession();
 
+  const [hasPermission, setHasPermission] = useState(false);
+  const [, startTransition] = useTransition();
+
   const [user, setUser] = useState<Props>(fallbackProps);
 
   useEffect(() => {
@@ -42,6 +45,16 @@ export function ProfileDropdown(fallbackProps: Props) {
         username: session.data.user.username,
         name: session.data.user.name,
         image: session.data.user.image,
+      });
+
+      startTransition(async () => {
+        const permission = await authClient.admin.hasPermission({
+          permissions: {
+            questions: ["list"],
+          },
+        });
+
+        setHasPermission(permission.data?.success ?? false);
       });
     }
   }, [session]);
@@ -91,6 +104,15 @@ export function ProfileDropdown(fallbackProps: Props) {
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
+
+        {hasPermission && (
+          <DropdownMenuItem asChild>
+            <Link href="/admin">
+              <Wrench />
+              Admin Panel
+            </Link>
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuItem asChild>
           <Link href="/auth/settings">
