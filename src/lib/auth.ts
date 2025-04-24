@@ -54,6 +54,9 @@ export const auth = betterAuth({
     multiSession(),
   ],
   user: {
+    deleteUser: {
+      enabled: true,
+    },
     additionalFields: {
       username: {
         type: "string",
