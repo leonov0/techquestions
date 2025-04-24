@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
-import { Profile, ProfileLoader } from "@/features/users";
+import { Profile } from "./profile";
+import { ProfileSkeleton } from "./profile-skeleton";
 
 export default function User({
   params,
@@ -10,8 +11,8 @@ export default function User({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   return (
-    <main className="container max-w-screen-sm py-16">
-      <Suspense fallback={<ProfileLoader />}>
+    <main className="container max-w-xl">
+      <Suspense fallback={<ProfileSkeleton />}>
         <Profile
           params={params}
           searchParams={searchParams}

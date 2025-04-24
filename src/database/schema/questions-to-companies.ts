@@ -7,12 +7,12 @@ import { questions } from "./questions";
 export const questionsToCompanies = pgTable(
   "questions_to_companies",
   {
-    questionId: uuid("questionId")
+    questionId: uuid("question_id")
       .notNull()
-      .references(() => questions.id),
-    companyId: uuid("companyId")
+      .references(() => questions.id, { onDelete: "cascade" }),
+    companyId: uuid("company_id")
       .notNull()
-      .references(() => companies.id),
+      .references(() => companies.id, { onDelete: "cascade" }),
   },
   (table) => [primaryKey({ columns: [table.questionId, table.companyId] })],
 );

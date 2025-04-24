@@ -1,4 +1,4 @@
-import { GitPullRequest } from "lucide-react";
+import { AlertCircle, GitPullRequest } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,8 @@ export async function ReviewQuestionSection() {
 
   if (!response.success) {
     return (
-      <Alert>
+      <Alert variant="destructive">
+        <AlertCircle />
         <AlertTitle>An error occurred while fetching the questions.</AlertTitle>
         <AlertDescription>{response.error}</AlertDescription>
       </Alert>
@@ -35,10 +36,7 @@ export async function ReviewQuestionSection() {
           key={question.id}
           className="border-t pt-4 first:border-none first:pt-0"
         >
-          <QuestionPreview
-            question={question}
-            className="motion-preset-focus"
-          />
+          <QuestionPreview {...question} className="motion-preset-focus" />
 
           <Dialog>
             <DialogTrigger asChild>

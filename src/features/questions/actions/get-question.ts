@@ -1,26 +1,48 @@
 "use server";
 
-import { auth } from "@/features/auth";
+import { headers } from "next/headers";
+
+import { ActionResponse } from "@/lib/action-response";
+import { auth } from "@/lib/auth";
 
 import * as lib from "../lib";
+import { Question } from "../types";
 
-export async function getQuestion(id: string) {
-  const session = await auth();
+export async function getQuestion(
+  id: string,
+): Promise<ActionResponse<Question>> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   try {
     const data = await lib.getQuestion(id);
 
-    if (
-      session?.user.role !== "admin" &&
-      (data == null || data.status !== "approved")
-    ) {
-      return { data: null, error: "Question not found." };
+    if (data == null) {
+      return { success: false, error: "Question not found." };
     }
 
-    return { data, error: null };
+    if (data.status !== "approved") {
+      if (session && session.user.id !== data.author?.id) {
+        const { success } = await auth.api.userHasPermission({
+          body: {
+            userId: session.user.id,
+            permissions: { questions: ["list"] },
+          },
+        });
+
+        if (success) {
+          return { success: true, data };
+        }
+      }
+
+      return { success: false, error: "Question not found." };
+    }
+
+    return { success: true, data };
   } catch {
     return {
-      data: null,
+      success: false,
       error: "Failed to get question. Please try again later.",
     };
   }

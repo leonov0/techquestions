@@ -1,8 +1,9 @@
 import { inArray, type SQL } from "drizzle-orm";
+import { headers } from "next/headers";
 
 import { schema } from "@/database";
-import { auth } from "@/features/auth";
 import type { ActionResponse } from "@/lib/action-response";
+import { auth } from "@/lib/auth";
 
 import * as lib from "../lib/get-questions";
 import { getQuestionSchema } from "../schemas";
@@ -11,9 +12,27 @@ import type { GetQuestionPayload, Question } from "../types";
 export async function getQuestions(
   payload: GetQuestionPayload,
 ): Promise<ActionResponse<Question[]>> {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (session?.user.role !== "admin") {
+  if (session === null) {
+    return {
+      success: false,
+      error: "Unauthorized.",
+    };
+  }
+
+  const { success } = await auth.api.userHasPermission({
+    body: {
+      userId: session?.user.id,
+      permissions: {
+        questions: ["list"],
+      },
+    },
+  });
+
+  if (!success) {
     return {
       success: false,
       error: "Forbidden.",

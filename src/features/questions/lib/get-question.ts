@@ -10,13 +10,11 @@ import type { Question } from "../types";
 export async function getQuestion(id: string): Promise<Question | null> {
   cacheTag("questions");
 
-  const [question] = await database
-    .select()
-    .from(schema.questions)
-    .where(eq(schema.questions.id, id))
-    .limit(1);
+  const question = await database.query.questions.findFirst({
+    where: eq(schema.questions.id, id),
+  });
 
-  if (!question) {
+  if (question === undefined) {
     return null;
   }
 
@@ -28,21 +26,15 @@ export async function getQuestion(id: string): Promise<Question | null> {
     isAnonymous: question.isAnonymous,
     createdAt: question.createdAt,
     updatedAt: question.updatedAt,
-    author: await getAuthor(question.userId, question.isAnonymous),
+    author: question.userId ? await getAuthor(question.userId) : null,
     rating: await getRating(id),
     technologies: await getTechnologies(id),
     companies: await getCompanies(id),
-    levels: await getLevels(id),
+    seniorityLevels: await getSeniorityLevels(id),
   } as Question;
 }
 
-async function getAuthor(id: string | null, isAnonymous: boolean) {
-  cacheTag("users");
-
-  if (isAnonymous || id === null) {
-    return null;
-  }
-
+async function getAuthor(id: string) {
   const users = await database
     .select()
     .from(schema.users)
@@ -92,20 +84,23 @@ async function getCompanies(id: string) {
   return companies;
 }
 
-async function getLevels(id: string) {
-  cacheTag("levels");
+async function getSeniorityLevels(id: string) {
+  cacheTag("seniority-levels");
 
   const levels = await database
     .select({
-      id: schema.levels.id,
-      name: schema.levels.name,
+      id: schema.seniorityLevels.id,
+      name: schema.seniorityLevels.name,
     })
-    .from(schema.questionsToLevels)
+    .from(schema.questionsToSeniorityLevels)
     .innerJoin(
-      schema.levels,
-      eq(schema.levels.id, schema.questionsToLevels.levelId),
+      schema.seniorityLevels,
+      eq(
+        schema.seniorityLevels.id,
+        schema.questionsToSeniorityLevels.seniorityLevelId,
+      ),
     )
-    .where(eq(schema.questionsToLevels.levelId, id));
+    .where(eq(schema.questionsToSeniorityLevels.seniorityLevelId, id));
 
   return levels;
 }
@@ -113,7 +108,7 @@ async function getLevels(id: string) {
 async function getRating(id: string) {
   cacheTag("rating");
 
-  const [{ rating }] = await database
+  const rows = await database
     .select({
       rating: sql<number>`COALESCE(SUM(${schema.questionVotes.vote}), 0)`,
     })
@@ -121,5 +116,5 @@ async function getRating(id: string) {
     .where(eq(schema.questionVotes.questionId, id))
     .limit(1);
 
-  return rating;
+  return rows.length > 0 ? rows[0].rating : 0;
 }

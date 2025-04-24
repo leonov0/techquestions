@@ -7,12 +7,12 @@ import { technologies } from "./technologies";
 export const questionsToTechnologies = pgTable(
   "questions_to_technologies",
   {
-    questionId: uuid("questionId")
+    questionId: uuid("question_id")
       .notNull()
-      .references(() => questions.id),
-    technologyId: uuid("technologyId")
+      .references(() => questions.id, { onDelete: "cascade" }),
+    technologyId: uuid("technology_id")
       .notNull()
-      .references(() => technologies.id),
+      .references(() => technologies.id, { onDelete: "cascade" }),
   },
   (table) => [primaryKey({ columns: [table.questionId, table.technologyId] })],
 );

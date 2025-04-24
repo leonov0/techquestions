@@ -1,10 +1,12 @@
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
-import { buttonVariants } from "@/components/ui/button";
-import { QuestionFilters, QuestionFiltersLoader } from "@/features/questions";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { QuestionList, QuestionListLoader } from "@/widgets/question-list";
+
+import { QuestionFilters } from "./question-filters";
+import { QuestionFiltersSkeleton } from "./question-filters-skeleton";
 
 export default async function Questions({
   searchParams,
@@ -12,16 +14,16 @@ export default async function Questions({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   return (
-    <main className="container grid gap-8 py-16 lg:grid-cols-[18rem_1fr] xl:grid-cols-[18rem_1fr_18rem]">
+    <main className="container grid gap-8 lg:grid-cols-[18rem_1fr] xl:grid-cols-[18rem_1fr_18rem]">
       <aside className="space-y-6">
-        <Link
-          href="/questions/new"
-          className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
-        >
-          Submit new question
-        </Link>
+        <Button variant="secondary" className="w-full" asChild>
+          <Link href="/questions/new">
+            <Plus />
+            Submit New Question
+          </Link>
+        </Button>
 
-        <Suspense fallback={<QuestionFiltersLoader />}>
+        <Suspense fallback={<QuestionFiltersSkeleton />}>
           <QuestionFilters />
         </Suspense>
       </aside>

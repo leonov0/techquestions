@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
+import { headers } from "next/headers";
 
-import { auth } from "@/features/auth";
 import { ActionResponse } from "@/lib/action-response";
+import { auth } from "@/lib/auth";
 
 import * as lib from "../lib/review-question";
 import { reviewQuestionSchema } from "../schemas";
@@ -13,9 +14,27 @@ export async function reviewQuestion(
   id: string,
   payload: ReviewQuestionPayload,
 ): Promise<ActionResponse<null>> {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (session?.user.role !== "admin" || !session.user.id) {
+  if (session === null) {
+    return {
+      success: false,
+      error: "Unauthorized.",
+    };
+  }
+
+  const { success } = await auth.api.userHasPermission({
+    body: {
+      userId: session?.user.id,
+      permissions: {
+        questions: ["create"],
+      },
+    },
+  });
+
+  if (!success) {
     return {
       success: false,
       error: "Forbidden.",

@@ -1,24 +1,20 @@
 import { Badge } from "@/components/ui/badge";
-import type { Company, Level, Technology } from "@/features/questions";
+import type { Company, SeniorityLevel, Technology } from "@/features/questions";
 import { cn } from "@/lib/utils";
 
 export function CategoryList({
   id,
   technologies,
   companies,
-  levels,
+  seniorityLevels,
   className,
 }: {
   id: string;
   technologies: Technology[];
   companies: Company[];
-  levels: Level[];
+  seniorityLevels: SeniorityLevel[];
   className?: string;
 }) {
-  if (technologies.length + companies.length + levels.length === 0) {
-    return null;
-  }
-
   return (
     <ul className={cn("flex flex-wrap gap-2", className)}>
       {technologies.map((technology) => (
@@ -33,9 +29,9 @@ export function CategoryList({
         </li>
       ))}
 
-      {levels.map((level) => (
-        <li key={`level-${id}-${level.id}`}>
-          <Badge variant="outline">{level.name}</Badge>
+      {seniorityLevels.map((seniorityLevel) => (
+        <li key={`seniority-level-${id}-${seniorityLevel.id}`}>
+          <Badge variant="outline">{seniorityLevel.name}</Badge>
         </li>
       ))}
     </ul>

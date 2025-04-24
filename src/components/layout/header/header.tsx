@@ -1,16 +1,19 @@
 import { LogIn } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 import React from "react";
 
 import { TechQuestions } from "@/components/icons/techquestions";
 import { buttonVariants } from "@/components/ui/button";
-import { auth } from "@/features/auth";
+import { auth } from "@/lib/auth";
 
 import { ProfileDropdown } from "./profile-dropdown";
 import { ThemeToggle } from "./theme-toggle";
 
 export async function Header() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <header className="bg-background/60 sticky top-0 z-50 py-2 backdrop-blur-sm">
@@ -32,14 +35,14 @@ export async function Header() {
           </Link>
         </nav>
 
-        {session?.user.id ? (
-          <ProfileDropdown placeholder={session.user} />
+        {session ? (
+          <ProfileDropdown {...session.user} />
         ) : (
           <div className="flex gap-4">
             <ThemeToggle />
 
             <Link
-              href="/signin"
+              href="/auth/sign-in"
               className={buttonVariants({ variant: "secondary" })}
             >
               <LogIn />

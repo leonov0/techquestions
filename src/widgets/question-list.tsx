@@ -1,10 +1,10 @@
 import { AlertCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
+import { QuestionPagination } from "@/components/pagination";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getQuestions } from "@/features/questions/actions";
-import { QuestionPagination } from "@/features/questions/components/pagination";
+import { getQuestions } from "@/features/questions";
 import { getQuestionSchema } from "@/features/questions/schemas";
 import { parseToStringArray } from "@/lib/utils";
 
@@ -20,7 +20,7 @@ export async function QuestionList({
   const parsedParams = await getQuestionSchema.safeParseAsync({
     technologies: parseToStringArray(params.technologyId),
     companies: parseToStringArray(params.companyId),
-    levels: parseToStringArray(params.levelId),
+    seniorityLevels: parseToStringArray(params.seniorityLevelId),
     ...params,
   });
 
@@ -35,10 +35,8 @@ export async function QuestionList({
   if (!response.success) {
     return (
       <Alert variant="destructive" className="h-fit">
-        <AlertCircle className="size-4" />
-
+        <AlertCircle />
         <AlertTitle>An error occurred while fetching the questions.</AlertTitle>
-
         <AlertDescription>{response.error}</AlertDescription>
       </Alert>
     );
@@ -47,10 +45,8 @@ export async function QuestionList({
   if (response.data.questions.length === 0) {
     return (
       <Alert className="h-fit">
-        <AlertCircle className="size-4" />
-
+        <AlertCircle />
         <AlertTitle>No questions found.</AlertTitle>
-
         <AlertDescription>
           Try changing the filters or submitting a new question.
         </AlertDescription>
@@ -67,10 +63,7 @@ export async function QuestionList({
               key={question.id}
               className="border-t pt-4 first:border-none first:pt-0"
             >
-              <QuestionPreview
-                question={question}
-                className="motion-preset-focus"
-              />
+              <QuestionPreview {...question} className="motion-preset-focus" />
             </li>
           ))}
         </ul>

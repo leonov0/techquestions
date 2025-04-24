@@ -1,1 +1,0 @@
-ALTER TABLE "account" ALTER COLUMN "id_token" SET DATA TYPE varchar(2048);

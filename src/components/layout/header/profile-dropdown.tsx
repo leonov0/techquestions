@@ -2,9 +2,7 @@
 
 import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
 import Link from "next/link";
-import type { Session } from "next-auth";
-import { useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
@@ -18,22 +16,46 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
-export function ProfileDropdown({
-  placeholder,
-}: {
-  placeholder: Session["user"];
-}) {
-  const [user, setUser] = useState(placeholder);
+type Props = {
+  username: string;
+  name: string;
+  image?: string | null;
+};
 
-  const session = useSession();
+export function ProfileDropdown(fallbackProps: Props) {
+  const session = authClient.useSession();
+
+  const [hasPermission, setHasPermission] = useState(false);
+  const [, startTransition] = useTransition();
+
+  const [user, setUser] = useState<Props>(fallbackProps);
 
   useEffect(() => {
-    if (session.status === "authenticated") {
-      setUser(session.data.user);
+    if (session.data) {
+      if (!session.data.user.username) {
+        throw new Error("Username is required.");
+      }
+
+      setUser({
+        username: session.data.user.username,
+        name: session.data.user.name,
+        image: session.data.user.image,
+      });
+
+      startTransition(async () => {
+        const permission = await authClient.admin.hasPermission({
+          permissions: {
+            questions: ["list"],
+          },
+        });
+
+        setHasPermission(permission.data?.success ?? false);
+      });
     }
   }, [session]);
 
@@ -42,14 +64,13 @@ export function ProfileDropdown({
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({ variant: "secondary" }),
-          "group max-w-40 space-x-2 pl-2",
+          "group space-x-2 pl-2",
         )}
       >
         <Avatar className="size-5 rounded-sm">
           <AvatarImage src={user.image ?? undefined} />
-
           <AvatarFallback className="rounded-sm">
-            {user.username && getCapitalizedFirstLetter(user.username)}
+            {getCapitalizedFirstLetter(user.username)}
           </AvatarFallback>
         </Avatar>
 
@@ -71,7 +92,7 @@ export function ProfileDropdown({
               <AvatarImage src={user.image ?? undefined} />
 
               <AvatarFallback className="rounded-sm">
-                {user.username && getCapitalizedFirstLetter(user.username)}
+                {getCapitalizedFirstLetter(user.username)}
               </AvatarFallback>
             </Avatar>
 
@@ -84,17 +105,17 @@ export function ProfileDropdown({
 
         <DropdownMenuSeparator />
 
-        {user.role === "admin" && (
+        {hasPermission && (
           <DropdownMenuItem asChild>
             <Link href="/admin">
               <Wrench />
-              Admin panel
+              Admin Panel
             </Link>
           </DropdownMenuItem>
         )}
 
         <DropdownMenuItem asChild>
-          <Link href="/settings">
+          <Link href="/auth/settings">
             <Settings />
             Settings
           </Link>
@@ -115,9 +136,9 @@ export function ProfileDropdown({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href="/signout">
+          <Link href="/auth/sign-out">
             <LogOut />
-            Sign out
+            Sign Out
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

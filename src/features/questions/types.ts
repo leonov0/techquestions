@@ -10,7 +10,7 @@ export type Technology = { id: string; name: string };
 
 export type Company = { id: string; name: string };
 
-export type Level = { id: string; name: string };
+export type SeniorityLevel = { id: string; name: string };
 
 type Author = {
   id: string;
@@ -28,7 +28,7 @@ type BaseQuestion = {
   rating: number;
   technologies: Technology[];
   companies: Company[];
-  levels: Level[];
+  seniorityLevels: SeniorityLevel[];
 };
 
 type AnonymousQuestion = BaseQuestion & {

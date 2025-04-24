@@ -1,18 +1,26 @@
 import {
   Brain,
   Building2,
+  ChartBar,
   ChartColumnStacked,
   ChevronRight,
   ChevronsUpDown,
   CodeXml,
   Database,
   Library,
+  Users,
 } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,20 +41,16 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { auth } from "@/features/auth";
 import { getPendingQuestionCount } from "@/features/review-questions";
+import { auth } from "@/lib/auth";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-
 export async function AdminSidebar() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session) {
+  if (session === null) {
     return null;
   }
 
@@ -81,7 +85,7 @@ export async function AdminSidebar() {
                 <SidebarMenuButton asChild>
                   <Link href="/admin/pending-questions">
                     <Library />
-                    <span>Pending Questions</span>
+                    Pending Questions
                     {getPendingQuestionCountResponse.success &&
                       getPendingQuestionCountResponse.data > 0 && (
                         <Badge>{getPendingQuestionCountResponse.data}</Badge>
@@ -94,7 +98,7 @@ export async function AdminSidebar() {
                 <SidebarMenuButton asChild>
                   <Link href="/admin/questions">
                     <Database />
-                    <span>Questions</span>
+                    Questions
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -136,9 +140,9 @@ export async function AdminSidebar() {
                       <SidebarMenuSub>
                         <SidebarMenuSubItem>
                           <SidebarMenuButton asChild>
-                            <Link href="/admin/levels">
+                            <Link href="/admin/seniority-levels">
                               <Brain />
-                              Levels
+                              Seniority Levels
                             </Link>
                           </SidebarMenuButton>
                         </SidebarMenuSubItem>
@@ -146,6 +150,24 @@ export async function AdminSidebar() {
                     </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href="/admin/users">
+                      <Users />
+                      Users
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href="/admin/statistics">
+                      <ChartBar />
+                      Statistics
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarMenu>
           </SidebarGroupContent>

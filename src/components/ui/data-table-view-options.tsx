@@ -15,15 +15,17 @@ import {
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
+  className?: string;
 }
 
 export function DataTableViewOptions<TData>({
   table,
+  className,
 }: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className={className}>
           <Settings2 />
           View
         </Button>

@@ -43,7 +43,14 @@ const companies = [
   "Stripe",
 ];
 
-const levels = ["Junior", "Mid-Level", "Senior", "Lead", "Manager", "Director"];
+const seniorityLevels = [
+  "Junior",
+  "Mid-Level",
+  "Senior",
+  "Lead",
+  "Manager",
+  "Director",
+];
 
 async function main() {
   await reset(database, schema);
@@ -54,11 +61,11 @@ async function main() {
     questionVotes: schema.questionVotes,
     questionsToCompanies: schema.questionsToCompanies,
     questionsToTechnologies: schema.questionsToTechnologies,
-    questionsToLevels: schema.questionsToLevels,
+    questionsToSeniorityLevels: schema.questionsToSeniorityLevels,
     companies: schema.companies,
     technologies: schema.technologies,
     questionReviews: schema.questionReviews,
-    levels: schema.levels,
+    seniorityLevels: schema.seniorityLevels,
   }).refine((f) => ({
     companies: {
       columns: {
@@ -78,10 +85,10 @@ async function main() {
       },
       count: 13,
     },
-    levels: {
+    seniorityLevels: {
       columns: {
         name: f.valuesFromArray({
-          values: levels,
+          values: seniorityLevels,
           isUnique: true,
         }),
       },
@@ -106,8 +113,15 @@ async function main() {
       with: {
         questionsToCompanies: 1,
         questionsToTechnologies: 1,
-        questionsToLevels: 1,
+        questionsToSeniorityLevels: 1,
         questionVotes: 1,
+      },
+    },
+    users: {
+      columns: {
+        role: f.valuesFromArray({
+          values: ["admin", "user"],
+        }),
       },
     },
   }));
