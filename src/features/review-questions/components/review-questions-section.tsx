@@ -35,10 +35,7 @@ export async function ReviewQuestionSection() {
           key={question.id}
           className="border-t pt-4 first:border-none first:pt-0"
         >
-          <QuestionPreview
-            question={question}
-            className="motion-preset-focus"
-          />
+          <QuestionPreview {...question} className="motion-preset-focus" />
 
           <Dialog>
             <DialogTrigger asChild>

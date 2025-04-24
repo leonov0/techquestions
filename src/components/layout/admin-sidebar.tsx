@@ -9,11 +9,17 @@ import {
   Library,
   Users,
 } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,20 +40,16 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { auth } from "@/features/auth";
 import { getPendingQuestionCount } from "@/features/review-questions";
+import { auth } from "@/lib/auth";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-
 export async function AdminSidebar() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session) {
+  if (session === null) {
     return null;
   }
 
