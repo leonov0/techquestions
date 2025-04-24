@@ -1,6 +1,7 @@
 import {
   Brain,
   Building2,
+  ChartBar,
   ChartColumnStacked,
   ChevronRight,
   ChevronsUpDown,
@@ -155,6 +156,15 @@ export async function AdminSidebar() {
                     <Link href="/admin/users">
                       <Users />
                       Users
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href="/admin/statistics">
+                      <ChartBar />
+                      Statistics
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

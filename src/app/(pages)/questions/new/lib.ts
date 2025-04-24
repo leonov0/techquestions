@@ -13,7 +13,7 @@ export async function createQuestion({
   companies: string[];
   seniorityLevels: string[];
 }) {
-  revalidateTag("pending-questions");
+  revalidateTag("questions");
 
   const [{ questionId }] = await database
     .insert(schema.questions)
