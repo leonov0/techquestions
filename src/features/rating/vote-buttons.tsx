@@ -66,6 +66,10 @@ export function VoteButtons({
   }, [questionId, session]);
 
   function handleVote(voteValue: number) {
+    if (session.isPending) {
+      return;
+    }
+
     if (session.data === null) {
       redirectToSignIn();
       return;
@@ -95,7 +99,6 @@ export function VoteButtons({
         onClick={() => handleVote(1)}
         variant="upvote"
         isActive={currentVote > 0}
-        disabled={!!session.isPending}
       />
 
       <span
@@ -114,7 +117,6 @@ export function VoteButtons({
         onClick={() => handleVote(-1)}
         variant="downvote"
         isActive={currentVote < 0}
-        disabled={!!session.isPending}
       />
     </div>
   );
