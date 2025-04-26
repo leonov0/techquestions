@@ -1,4 +1,6 @@
 export * from "./accounts";
+export * from "./comment-votes";
+export * from "./comments";
 export * from "./companies";
 export * from "./question-reviews";
 export * from "./question-votes";

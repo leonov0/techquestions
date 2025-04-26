@@ -9,6 +9,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { comments } from "./comments";
 import { questionReviews } from "./question-reviews";
 import { questionVotes } from "./question-votes";
 import { questionsToCompanies } from "./questions-to-companies";
@@ -56,6 +57,7 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
   questionsToCompanies: many(questionsToCompanies),
   questionsToSeniorityLevels: many(questionsToSeniorityLevels),
   questionsToTechnologies: many(questionsToTechnologies),
+  comments: many(comments),
 }));
 
 export type Question = typeof questions.$inferSelect;
