@@ -1,11 +1,18 @@
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import {
+  CommentForm,
+  CommentList,
+  getCommentsByQuestionId,
+} from "@/features/comments";
 import { getQuestion } from "@/features/questions";
 import { Rating, RatingSkeleton } from "@/features/rating";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
@@ -21,7 +28,10 @@ export async function QuestionSection({
 }) {
   const { id } = await params;
 
-  const response = await getQuestion(id);
+  const [response, getCommentsResponse] = await Promise.all([
+    getQuestion(id),
+    getCommentsByQuestionId(id),
+  ]);
 
   if (!response.success) {
     return notFound();
@@ -102,6 +112,22 @@ export async function QuestionSection({
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>
           {response.data.body}
         </ReactMarkdown>
+      </div>
+
+      <div className="mt-16 space-y-8">
+        <h3 className="text-2xl font-semibold tracking-tight">Comments</h3>
+
+        <CommentForm questionId={id} />
+
+        {getCommentsResponse.success ? (
+          <CommentList comments={getCommentsResponse.data} />
+        ) : (
+          <Alert variant="destructive">
+            <AlertCircle />
+            <AlertTitle>Failed to get comments</AlertTitle>
+            <AlertDescription>{getCommentsResponse.error}</AlertDescription>
+          </Alert>
+        )}
       </div>
     </section>
   );
