@@ -22,8 +22,7 @@ export async function getCurrentVote(
     const data = await lib.getCurrentVote(questionId, session.user.id);
 
     return { success: true, data };
-  } catch (e) {
-    console.error(e);
+  } catch {
     return { success: false, error: "Failed to get current vote." };
   }
 }
