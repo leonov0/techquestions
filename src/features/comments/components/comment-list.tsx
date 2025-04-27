@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 import type { Comment } from "../types";
+import { VoteButtons } from "./vote-buttons";
 
 export function CommentList({ comments }: { comments: Comment[] }) {
   if (comments.length === 0) {
@@ -46,6 +47,8 @@ export function CommentList({ comments }: { comments: Comment[] }) {
                 </time>
               </div>
             </Link>
+
+            <VoteButtons commentId={comment.id} rating={comment.rating} />
           </div>
         </li>
       ))}

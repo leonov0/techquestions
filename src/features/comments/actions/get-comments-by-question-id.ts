@@ -11,8 +11,7 @@ export async function getCommentsByQuestionId(
   try {
     const data = await lib.getCommentsByQuestionId(questionId);
     return { success: true, data };
-  } catch (e) {
-    console.error("Error fetching comments:", e);
+  } catch {
     return {
       success: false,
       error: "Failed to fetch comments. Please try again later.",

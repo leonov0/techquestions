@@ -9,7 +9,7 @@ export default async function Question({
   params: Promise<{ id: string }>;
 }) {
   return (
-    <main className="container py-16">
+    <main className="container">
       <Suspense fallback={<QuestionSectionSkeleton />}>
         <QuestionSection params={params} className="motion-preset-focus" />
       </Suspense>

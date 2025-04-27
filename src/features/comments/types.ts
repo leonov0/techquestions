@@ -9,6 +9,7 @@ export type Comment = {
   message: string;
   createdAt: Date;
   updatedAt: Date;
+  rating: number;
   author: {
     id: string;
     username: string;
