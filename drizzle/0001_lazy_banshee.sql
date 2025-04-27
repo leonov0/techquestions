@@ -1,10 +1,10 @@
 CREATE TABLE "comment_votes" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"comment_id" uuid NOT NULL,
 	"user_id" uuid NOT NULL,
 	"vote" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "comment_votes_comment_id_user_id_pk" PRIMARY KEY("comment_id","user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "comments" (

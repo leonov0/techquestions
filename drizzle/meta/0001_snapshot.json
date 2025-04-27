@@ -1,5 +1,5 @@
 {
-  "id": "3db3a621-ace9-4c76-af51-71e9897623f5",
+  "id": "46bc3935-2694-4206-a100-5aa8a6e24c15",
   "prevId": "6e6f01c3-0c89-4238-9102-59540562fe6a",
   "version": "7",
   "dialect": "postgresql",
@@ -112,13 +112,6 @@
       "name": "comment_votes",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
         "comment_id": {
           "name": "comment_id",
           "type": "uuid",
@@ -173,7 +166,12 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "comment_votes_comment_id_user_id_pk": {
+          "name": "comment_votes_comment_id_user_id_pk",
+          "columns": ["comment_id", "user_id"]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
