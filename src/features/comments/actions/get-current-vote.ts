@@ -8,7 +8,7 @@ import { auth } from "@/lib/auth";
 import * as lib from "../lib/get-current-vote";
 
 export async function getCurrentVote(
-  questionId: string,
+  commentId: string,
 ): Promise<ActionResponse<number>> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -19,7 +19,7 @@ export async function getCurrentVote(
   }
 
   try {
-    const data = await lib.getCurrentVote(questionId, session.user.id);
+    const data = await lib.getCurrentVote(commentId, session.user.id);
 
     return { success: true, data };
   } catch {

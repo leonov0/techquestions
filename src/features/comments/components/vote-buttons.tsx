@@ -10,17 +10,17 @@ import {
 } from "react";
 import { toast } from "sonner";
 
+import { VoteButton } from "@/features/rating/vote-button";
 import { authClient } from "@/lib/auth-client";
 
-import { getCurrentVote } from "./actions/get-current-vote";
-import { vote } from "./actions/vote";
-import { VoteButton } from "./vote-button";
+import { getCurrentVote } from "../actions/get-current-vote";
+import { vote } from "../actions/vote";
 
 export function VoteButtons({
-  questionId,
+  commentId,
   rating,
 }: {
-  questionId: string;
+  commentId: string;
   rating: number;
 }) {
   const router = useRouter();
@@ -54,7 +54,7 @@ export function VoteButtons({
     }
 
     startTransition(async () => {
-      const response = await getCurrentVote(questionId);
+      const response = await getCurrentVote(commentId);
 
       if (!response.success) {
         toast.error(response.error);
@@ -63,7 +63,7 @@ export function VoteButtons({
 
       setCurrentVote(response.data);
     });
-  }, [questionId, session]);
+  }, [commentId, session]);
 
   function handleVote(voteValue: number) {
     if (session.isPending) {
@@ -83,7 +83,7 @@ export function VoteButtons({
     startTransition(async () => {
       updateOptimisticRating(optimisticRating - previousValue + newValue);
 
-      const response = await vote(questionId, newValue);
+      const response = await vote(commentId, newValue);
 
       if (!response.success) {
         toast.error(response.error);
