@@ -1,4 +1,5 @@
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowBigUpDash, Flame, Search } from "lucide-react";
+import Form from "next/form";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -7,6 +8,14 @@ import rehypeRaw from "rehype-raw";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import {
   CommentForm,
@@ -15,22 +24,29 @@ import {
 } from "@/features/comments";
 import { getQuestion } from "@/features/questions";
 import { Rating, RatingSkeleton } from "@/features/rating";
-import { getCapitalizedFirstLetter } from "@/lib/utils";
+import { getCapitalizedFirstLetter, parseToString } from "@/lib/utils";
 
 import { CategoryList } from "./category-list";
 
 export async function QuestionSection({
   params,
+  searchParams,
   className,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
   className?: string;
 }) {
   const { id } = await params;
 
+  const awaitedSearchParams = await searchParams;
+  const order = parseToString(awaitedSearchParams.order, "new") as
+    | "new"
+    | "top";
+
   const [response, getCommentsResponse] = await Promise.all([
     getQuestion(id),
-    getCommentsByQuestionId(id),
+    getCommentsByQuestionId(id, order),
   ]);
 
   if (!response.success) {
@@ -118,6 +134,28 @@ export async function QuestionSection({
         <h3 className="text-2xl font-semibold tracking-tight">Comments</h3>
 
         <CommentForm questionId={id} />
+
+        <Form action={`/questions/${id}`} className="flex gap-2">
+          <Select name="order" defaultValue={order}>
+            <SelectTrigger className="w-42">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="new">
+                <Flame />
+                New
+              </SelectItem>
+              <SelectItem value="top">
+                <ArrowBigUpDash />
+                Top
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button variant="secondary" size="icon">
+            <Search />
+          </Button>
+        </Form>
 
         {getCommentsResponse.success ? (
           <CommentList comments={getCommentsResponse.data} />

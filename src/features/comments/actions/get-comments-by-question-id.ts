@@ -7,9 +7,10 @@ import type { Comment } from "../types";
 
 export async function getCommentsByQuestionId(
   questionId: string,
+  order?: "new" | "top",
 ): Promise<ActionResponse<Comment[]>> {
   try {
-    const data = await lib.getCommentsByQuestionId(questionId);
+    const data = await lib.getCommentsByQuestionId(questionId, order);
     return { success: true, data };
   } catch {
     return {
