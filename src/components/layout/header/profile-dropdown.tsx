@@ -1,6 +1,14 @@
 "use client";
 
-import { ChevronDown, LogOut, Moon, Settings, Sun, Wrench } from "lucide-react";
+import {
+  ChevronDown,
+  FileDown,
+  LogOut,
+  Moon,
+  Settings,
+  Sun,
+  Wrench,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 
@@ -118,6 +126,13 @@ export function ProfileDropdown(fallbackProps: Props) {
           <Link href="/auth/settings">
             <Settings />
             Settings
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/export-data">
+            <FileDown />
+            Export Data
           </Link>
         </DropdownMenuItem>
 
