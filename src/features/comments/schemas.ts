@@ -6,5 +6,5 @@ export const commentSchema = z.object({
     .string()
     .trim()
     .nonempty("Message is required.")
-    .max(512, "Message must be at most 512 characters long."),
+    .max(1024, "Message must be at most 1024 characters long."),
 });
