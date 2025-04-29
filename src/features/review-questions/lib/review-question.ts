@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { database, schema } from "@/database";
 
-import { ReviewQuestionPayload } from "../types";
+import type { ReviewQuestionPayload } from "../types";
 
 export async function reviewQuestion(
   questionId: string,
@@ -18,7 +18,7 @@ export async function reviewQuestion(
 
     database
       .update(schema.questions)
-      .set({ status: payload.status })
+      .set({ status: payload.status, updatedAt: new Date() })
       .where(eq(schema.questions.id, questionId)),
   ]);
 }
