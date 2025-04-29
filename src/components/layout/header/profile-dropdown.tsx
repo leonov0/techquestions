@@ -3,6 +3,7 @@
 import {
   ChevronDown,
   FileDown,
+  GitPullRequest,
   LogOut,
   Moon,
   Settings,
@@ -126,6 +127,13 @@ export function ProfileDropdown(fallbackProps: Props) {
           <Link href="/auth/settings">
             <Settings />
             Settings
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/reviews">
+            <GitPullRequest />
+            Reviews
           </Link>
         </DropdownMenuItem>
 
