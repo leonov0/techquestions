@@ -10,4 +10,5 @@ export const updateQuestionSchema = z.object({
   technologies: z.array(z.string().uuid()),
   companies: z.array(z.string().uuid()),
   seniorityLevels: z.array(z.string().uuid()),
+  status: z.enum(["pending"]).optional(),
 });
