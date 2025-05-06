@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Loader2 } from "lucide-react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -47,6 +48,10 @@ export function UpdateQuestionForm({
 
   function onSubmit(payload: UpdateQuestionPayload) {
     startTransition(async () => {
+      if (resubmit) {
+        payload.status = "pending";
+      }
+
       const response = await updateQuestion(payload);
 
       if (!response.success) {
@@ -56,6 +61,8 @@ export function UpdateQuestionForm({
       }
     });
   }
+
+  const [resubmit, setResubmit] = useState<CheckedState>(false);
 
   return (
     <Form {...form}>
@@ -92,7 +99,6 @@ export function UpdateQuestionForm({
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="body"
@@ -118,7 +124,6 @@ export function UpdateQuestionForm({
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="isAnonymous"
@@ -141,7 +146,6 @@ export function UpdateQuestionForm({
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="technologies"
@@ -161,7 +165,6 @@ export function UpdateQuestionForm({
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="companies"
@@ -181,7 +184,6 @@ export function UpdateQuestionForm({
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="seniorityLevels"
@@ -205,6 +207,22 @@ export function UpdateQuestionForm({
               </FormItem>
             )}
           />
+
+          <div className="flex items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm">
+            <Checkbox
+              id="resubmit"
+              checked={resubmit}
+              onCheckedChange={(state) => setResubmit(state)}
+            />
+            <div className="space-y-1 leading-none">
+              <FormLabel>Resubmit questions</FormLabel>
+
+              <FormDescription>
+                This question will be resubmitted for review. It will not be
+                visible to other users until it is approved again.
+              </FormDescription>
+            </div>
+          </div>
 
           <Button type="submit" disabled={isPending}>
             {isPending && <Loader2 className="animate-spin" />}
