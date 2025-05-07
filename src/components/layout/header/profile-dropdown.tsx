@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Award,
   ChevronDown,
   FileDown,
   GitPullRequest,
@@ -127,6 +128,13 @@ export function ProfileDropdown(fallbackProps: Props) {
           <Link href="/auth/settings">
             <Settings />
             Settings
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/achievements">
+            <Award />
+            Achievements
           </Link>
         </DropdownMenuItem>
 
