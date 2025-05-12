@@ -1,7 +1,11 @@
-import { Progress } from "@/components/ui/progress";
+import { Suspense } from "react";
+
 import { Separator } from "@/components/ui/separator";
 
-export default function Achievements() {
+import { AchievementList } from "./achievement-list";
+import { AchievementListLoader } from "./achievement-list-loader";
+
+export default async function Achievements() {
   return (
     <main className="container max-w-xl">
       <h1 className="text-3xl font-semibold tracking-tight">Achievements</h1>
@@ -15,17 +19,9 @@ export default function Achievements() {
       <Separator className="my-8" />
 
       <section className="mt-8">
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <li className="rounded-md border px-4 py-8 shadow">
-            <h3 className="text-center font-medium">First Question</h3>
-            <p className="text-muted-foreground mt-2 text-center text-sm">
-              Submit your first question, which will be approved by the
-              moderator.
-            </p>
-            <Progress value={0} className="mt-4" />
-            <p className="text-muted-foreground text-right text-sm">0/1</p>
-          </li>
-        </ul>
+        <Suspense fallback={<AchievementListLoader />}>
+          <AchievementList />
+        </Suspense>
       </section>
     </main>
   );
