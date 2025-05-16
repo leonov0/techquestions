@@ -19,7 +19,10 @@ export const questionVotes = pgTable(
     userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
     vote: integer("vote").notNull(),
     createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-    updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { mode: "date" })
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
   },
   (table) => [primaryKey({ columns: [table.questionId, table.userId] })],
 );

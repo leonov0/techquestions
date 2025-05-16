@@ -51,10 +51,10 @@ export async function AdminSidebar() {
   });
 
   if (session === null) {
-    return null;
+    throw new Error("Session is null");
   }
 
-  const { image, username, name } = session.user;
+  const { image, username, name, displayUsername } = session.user;
 
   const getPendingQuestionCountResponse = await getPendingQuestionCount();
 
@@ -63,9 +63,7 @@ export async function AdminSidebar() {
       <SidebarHeader>
         <SidebarMenuButton size="lg" asChild>
           <Link href="/admin">
-            <div className="size-8">
-              <TechQuestions />
-            </div>
+            <TechQuestions className="size-8" />
 
             <div>
               <p className="text-sm font-medium">TechQuestions</p>
@@ -181,7 +179,7 @@ export async function AdminSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <Avatar className="rounded-sm">
-                    <AvatarImage src={image ?? undefined} />
+                    {image && <AvatarImage src={image} />}
 
                     <AvatarFallback className="rounded-sm">
                       {username && getCapitalizedFirstLetter(username)}
@@ -190,7 +188,7 @@ export async function AdminSidebar() {
 
                   <div className="flex-1 overflow-hidden font-medium text-nowrap text-clip">
                     <p className="text-sm font-medium">{name}</p>
-                    <p className="text-xs">@{username}</p>
+                    <p className="text-xs">@{displayUsername}</p>
                   </div>
 
                   <ChevronsUpDown />

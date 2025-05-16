@@ -15,7 +15,10 @@ export const comments = pgTable("comments", {
     .references(() => users.id, { onDelete: "cascade" }),
   message: text("message").notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const commentsRelations = relations(comments, ({ one, many }) => ({

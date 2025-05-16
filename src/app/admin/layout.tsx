@@ -11,9 +11,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider className="max-w-screen">
+    <SidebarProvider>
       <AdminSidebar />
-      <SidebarInset className="space-y-4 overflow-auto p-4">
+      <SidebarInset className="space-y-4 p-4">
         <SidebarTrigger />
         {children}
       </SidebarInset>

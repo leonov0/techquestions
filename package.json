@@ -16,7 +16,7 @@
     "db:seed": "node -r esbuild-register ./src/database/seeder.ts"
   },
   "dependencies": {
-    "@daveyplate/better-auth-ui": "^1.5.5",
+    "@daveyplate/better-auth-ui": "^1.6.4",
     "@hookform/resolvers": "^5.0.1",
     "@neondatabase/serverless": "^1.0.0",
     "@radix-ui/react-accordion": "^1.2.8",

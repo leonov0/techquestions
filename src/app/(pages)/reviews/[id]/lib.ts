@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 
 import { database, schema } from "@/database";
@@ -16,7 +16,6 @@ export async function updateQuestion(payload: UpdateQuestionPayload) {
         body: payload.body,
         isAnonymous: payload.isAnonymous,
         status: payload.status,
-        updatedAt: new Date(),
       })
       .where(eq(schema.questions.id, payload.id));
 
@@ -118,4 +117,28 @@ export async function getDefaultValues(id: string) {
     companies: row.companies.filter(Boolean),
     seniorityLevels: row.seniorityLevels.filter(Boolean),
   };
+}
+
+export async function getReviews(questionId: string, userId: string) {
+  const rows = await database
+    .select({
+      id: schema.questionReviews.id,
+      status: schema.questionReviews.status,
+      message: schema.questionReviews.message,
+      createdAt: schema.questionReviews.createdAt,
+    })
+    .from(schema.questionReviews)
+    .leftJoin(
+      schema.questions,
+      eq(schema.questionReviews.questionId, schema.questions.id),
+    )
+    .where(
+      and(
+        eq(schema.questionReviews.questionId, questionId),
+        eq(schema.questions.userId, userId),
+      ),
+    )
+    .orderBy(desc(schema.questionReviews.createdAt));
+
+  return rows;
 }
