@@ -3,4 +3,5 @@ export const PROTECTED_ROUTES = [
   "/export-data",
   "/reviews",
   "/achievements",
+  "/admin",
 ] as const;

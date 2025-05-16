@@ -65,7 +65,10 @@ export async function QuestionSection({
         <p>
           <span className="text-muted-foreground">Asked </span>
 
-          <time dateTime={response.data.createdAt.toString()}>
+          <time
+            dateTime={response.data.createdAt.toString()}
+            suppressHydrationWarning
+          >
             {response.data.createdAt.toLocaleString()}
           </time>
         </p>
@@ -73,7 +76,10 @@ export async function QuestionSection({
         <p>
           <span className="text-muted-foreground">Modified </span>
 
-          <time dateTime={response.data.updatedAt.toString()}>
+          <time
+            dateTime={response.data.updatedAt.toString()}
+            suppressHydrationWarning
+          >
             {response.data.updatedAt.toLocaleString()}
           </time>
         </p>

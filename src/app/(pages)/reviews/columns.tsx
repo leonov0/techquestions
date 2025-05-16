@@ -54,7 +54,11 @@ export const columns: ColumnDef<Question>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.original.updatedAt.toLocaleString()}</div>,
+    cell: ({ row }) => (
+      <div suppressHydrationWarning>
+        {row.original.updatedAt.toLocaleString()}
+      </div>
+    ),
   },
   {
     accessorKey: "createdAt",
@@ -69,7 +73,11 @@ export const columns: ColumnDef<Question>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.original.createdAt.toLocaleString()}</div>,
+    cell: ({ row }) => (
+      <div suppressHydrationWarning>
+        {row.original.createdAt.toLocaleString()}
+      </div>
+    ),
   },
   {
     accessorKey: "actions",

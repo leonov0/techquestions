@@ -24,14 +24,22 @@ export const columns: ColumnDef<Company>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Updated At" />
     ),
-    cell: ({ row }) => <div>{row.original.updatedAt.toLocaleString()}</div>,
+    cell: ({ row }) => (
+      <div suppressHydrationWarning>
+        {row.original.updatedAt.toLocaleString()}
+      </div>
+    ),
   },
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />
     ),
-    cell: ({ row }) => <div>{row.original.createdAt.toLocaleString()}</div>,
+    cell: ({ row }) => (
+      <div suppressHydrationWarning>
+        {row.original.createdAt.toLocaleString()}
+      </div>
+    ),
   },
   {
     accessorKey: "actions",
