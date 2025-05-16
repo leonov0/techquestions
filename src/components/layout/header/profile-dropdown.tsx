@@ -12,10 +12,10 @@ import {
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,69 +27,50 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
+import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
-type Props = {
-  username: string;
+type UserProfile = {
   name: string;
+  username?: string | null;
+  displayUsername?: string | null;
   image?: string | null;
+  role?: string | null;
 };
 
-export function ProfileDropdown(fallbackProps: Props) {
+export function ProfileDropdown(initialUserProfile: UserProfile) {
   const session = authClient.useSession();
 
-  const [hasPermission, setHasPermission] = useState(false);
-  const [, startTransition] = useTransition();
-
-  const [user, setUser] = useState<Props>(fallbackProps);
+  const [user, setUser] = useState<UserProfile>(initialUserProfile);
 
   useEffect(() => {
     if (session.data) {
-      if (!session.data.user.username) {
-        throw new Error("Username is required.");
-      }
-
-      setUser({
-        username: session.data.user.username,
-        name: session.data.user.name,
-        image: session.data.user.image,
-      });
-
-      startTransition(async () => {
-        const permission = await authClient.admin.hasPermission({
-          permissions: {
-            questions: ["list"],
-          },
-        });
-
-        setHasPermission(permission.data?.success ?? false);
-      });
+      setUser(session.data.user);
     }
   }, [session]);
 
+  if (!user.displayUsername || !user.username) {
+    throw new Error("Display username or username is missing");
+  }
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        className={cn(
-          buttonVariants({ variant: "secondary" }),
-          "group space-x-2 pl-2",
-        )}
-      >
-        <Avatar className="size-5 rounded-sm">
-          <AvatarImage src={user.image ?? undefined} />
-          <AvatarFallback className="rounded-sm">
-            {getCapitalizedFirstLetter(user.username)}
-          </AvatarFallback>
-        </Avatar>
+      <DropdownMenuTrigger asChild>
+        <Button className="group space-x-2 pl-2" variant="secondary">
+          <Avatar className="size-5 rounded-sm">
+            {user.image && <AvatarImage src={user.image} />}
+            <AvatarFallback className="rounded-sm">
+              {getCapitalizedFirstLetter(user.displayUsername)}
+            </AvatarFallback>
+          </Avatar>
 
-        <span className="line-clamp-1">{user.username}</span>
+          <p className="max-w-16 truncate overflow-hidden whitespace-nowrap sm:max-w-none">
+            {user.displayUsername}
+          </p>
 
-        <ChevronDown
-          className="relative transition duration-300 group-data-[state=open]:rotate-180"
-          aria-hidden="true"
-        />
+          <ChevronDown className="transition duration-300 group-data-[state=open]:rotate-180" />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
@@ -99,23 +80,21 @@ export function ProfileDropdown(fallbackProps: Props) {
             className="flex items-center gap-4"
           >
             <Avatar className="size-8 rounded-sm">
-              <AvatarImage src={user.image ?? undefined} />
-
+              {user.image && <AvatarImage src={user.image} />}
               <AvatarFallback className="rounded-sm">
-                {getCapitalizedFirstLetter(user.username)}
+                {getCapitalizedFirstLetter(user.displayUsername)}
               </AvatarFallback>
             </Avatar>
 
-            <div className="max-w-32 overflow-hidden pr-4 text-nowrap text-clip">
+            <div>
               <p className="text-sm font-medium">{user.name}</p>
-              <p className="text-xs">@{user.username}</p>
+              <p className="text-xs">@{user.displayUsername}</p>
             </div>
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
-
-        {hasPermission && (
+        {user.role && user.role.includes("admin") && (
           <DropdownMenuItem asChild>
             <Link href="/admin">
               <Wrench />
