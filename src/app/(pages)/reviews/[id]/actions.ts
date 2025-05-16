@@ -79,3 +79,35 @@ export async function getDefaultValues(
     };
   }
 }
+
+export async function getReviews(questionId: string): Promise<
+  ActionResponse<{
+    reviews: {
+      id: string;
+      status: "pending" | "approved" | "rejected" | null;
+      message: string | null;
+      createdAt: Date;
+    }[];
+  }>
+> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    return {
+      success: false,
+      error: "Unauthorized.",
+    };
+  }
+
+  try {
+    const reviews = await lib.getReviews(questionId, session.user.id);
+    return { success: true, data: { reviews } };
+  } catch {
+    return {
+      success: false,
+      error: "Failed to fetch the reviews. Please try again later.",
+    };
+  }
+}
