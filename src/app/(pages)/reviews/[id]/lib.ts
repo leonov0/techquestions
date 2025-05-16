@@ -16,7 +16,6 @@ export async function updateQuestion(payload: UpdateQuestionPayload) {
         body: payload.body,
         isAnonymous: payload.isAnonymous,
         status: payload.status,
-        updatedAt: new Date(),
       })
       .where(eq(schema.questions.id, payload.id));
 

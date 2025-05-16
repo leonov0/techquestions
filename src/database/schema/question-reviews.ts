@@ -16,7 +16,10 @@ export const questionReviews = pgTable("question_reviews", {
   }).default("pending"),
   message: text("message"),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const questionReviewsRelations = relations(
