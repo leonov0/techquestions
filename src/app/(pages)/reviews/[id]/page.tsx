@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { EditQuestionSection } from "./edit-question-section";
+import { QuestionSection } from "./question-section";
 
 export default async function EditQuestion({
   params,
@@ -12,7 +12,7 @@ export default async function EditQuestion({
   return (
     <main className="container max-w-xl">
       <Suspense fallback={<Skeleton className="h-96" />}>
-        <EditQuestionSection params={params} />
+        <QuestionSection params={params} />
       </Suspense>
     </main>
   );

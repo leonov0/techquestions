@@ -15,7 +15,7 @@ import { getCategories } from "@/features/questions";
 import { getDefaultValues, getReviews } from "./actions";
 import { UpdateQuestionForm } from "./update-question-form";
 
-export async function EditQuestionSection({
+export async function QuestionSection({
   params,
 }: {
   params: Promise<{ id: string }>;
