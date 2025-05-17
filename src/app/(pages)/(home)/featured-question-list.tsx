@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { QuestionPreview } from "@/widgets/question-preview";
 
-import { getFeaturedQuestions } from "./get-featured-questions";
+import { getFeaturedQuestions } from "./actions";
 
 export async function FeaturedQuestionList() {
   const response = await getFeaturedQuestions();
