@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function FeaturedQuestionListSkeleton() {
+export function FeaturedQuestionListLoader() {
   return (
     <ul className="grid gap-4 lg:grid-cols-3">
       <li>

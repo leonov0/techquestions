@@ -6,7 +6,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 
 import { FeaturedQuestionList } from "./featured-question-list";
-import { FeaturedQuestionListSkeleton } from "./featured-question-list-skeleton";
+import { FeaturedQuestionListLoader } from "./featured-question-list-loader";
+import { PopularCategoriesList } from "./popular-categories-list";
 
 export default async function Home() {
   const isAuthenticated = await auth.api.getSession({
@@ -14,7 +15,7 @@ export default async function Home() {
   });
 
   return (
-    <main className="container">
+    <main className="container space-y-16">
       <section className="mx-auto max-w-xl">
         <h1 className="motion-translate-y-in-50 motion-opacity-in-[0%] text-3xl font-semibold tracking-tight">
           Master Every Tech Interview
@@ -42,10 +43,22 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mt-16">
-        <Suspense fallback={<FeaturedQuestionListSkeleton />}>
+      <section className="space-y-8">
+        <h2 className="text-3xl font-semibold tracking-tight">
+          🔥 Hot Questions
+        </h2>
+
+        <Suspense fallback={<FeaturedQuestionListLoader />}>
           <FeaturedQuestionList />
         </Suspense>
+      </section>
+
+      <section className="space-y-8">
+        <h2 className="text-3xl font-semibold tracking-tight">
+          ⭐ Popular Categories
+        </h2>
+
+        <PopularCategoriesList />
       </section>
     </main>
   );

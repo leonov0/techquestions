@@ -61,7 +61,7 @@ async function getTechnologies(id: string) {
       schema.technologies,
       eq(schema.technologies.id, schema.questionsToTechnologies.technologyId),
     )
-    .where(eq(schema.questionsToTechnologies.technologyId, id));
+    .where(eq(schema.questionsToTechnologies.questionId, id));
 
   return technologies;
 }
@@ -79,7 +79,7 @@ async function getCompanies(id: string) {
       schema.companies,
       eq(schema.companies.id, schema.questionsToCompanies.companyId),
     )
-    .where(eq(schema.questionsToCompanies.companyId, id));
+    .where(eq(schema.questionsToCompanies.questionId, id));
 
   return companies;
 }
@@ -100,7 +100,7 @@ async function getSeniorityLevels(id: string) {
         schema.questionsToSeniorityLevels.seniorityLevelId,
       ),
     )
-    .where(eq(schema.questionsToSeniorityLevels.seniorityLevelId, id));
+    .where(eq(schema.questionsToSeniorityLevels.questionId, id));
 
   return levels;
 }
