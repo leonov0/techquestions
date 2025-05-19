@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
@@ -29,8 +29,8 @@ export function SignOutForm() {
 
   return (
     <form action={signOut}>
-      <Button variant="destructive" disabled={isPending} className="w-full">
-        <LogOut />
+      <Button disabled={isPending}>
+        {isPending ? <Loader2 className="animate-spin" /> : <LogOut />}
         Sign Out
       </Button>
     </form>
