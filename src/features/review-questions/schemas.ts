@@ -6,5 +6,5 @@ export const getQuestionsSchema = z.object({
 
 export const reviewQuestionSchema = z.object({
   status: z.enum(["approved", "rejected"]),
-  message: z.string().optional(),
+  message: z.string().trim().optional(),
 });
