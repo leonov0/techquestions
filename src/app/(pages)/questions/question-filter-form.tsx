@@ -52,7 +52,7 @@ export function QuestionFilterForm({
 
     const params = new URLSearchParams();
 
-    if (query) {
+    if (query && query.trim()) {
       params.set("query", query);
     }
 
