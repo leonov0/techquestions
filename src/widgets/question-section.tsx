@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -131,7 +132,7 @@ export async function QuestionSection({
       <Separator className="my-8" />
 
       <div className="prose dark:prose-invert prose-slate !max-w-full">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
           {response.data.body}
         </ReactMarkdown>
       </div>

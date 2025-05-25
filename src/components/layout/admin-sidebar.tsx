@@ -10,7 +10,6 @@ import {
   Library,
   Users,
 } from "lucide-react";
-import { headers } from "next/headers";
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
@@ -42,20 +41,19 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { getPendingQuestionCount } from "@/features/review-questions";
-import { auth } from "@/lib/auth";
 import { getCapitalizedFirstLetter } from "@/lib/utils";
 
-export async function AdminSidebar() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session === null) {
-    throw new Error("Session is null");
-  }
-
-  const { image, username, name, displayUsername } = session.user;
-
+export async function AdminSidebar({
+  image,
+  username,
+  name,
+  displayUsername,
+}: {
+  image?: string | null;
+  username?: string | null;
+  name?: string | null;
+  displayUsername?: string | null;
+}) {
   const getPendingQuestionCountResponse = await getPendingQuestionCount();
 
   return (

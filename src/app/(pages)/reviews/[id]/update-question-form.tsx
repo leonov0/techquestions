@@ -59,6 +59,8 @@ export function UpdateQuestionForm({
 
         return;
       }
+
+      toast.success("Question updated successfully!");
     });
   }
 

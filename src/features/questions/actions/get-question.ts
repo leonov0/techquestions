@@ -23,7 +23,14 @@ export async function getQuestion(
     }
 
     if (data.status !== "approved") {
-      if (session && session.user.id !== data.author?.id) {
+      if (session) {
+        if (session.user.id === data.author?.id) {
+          return {
+            success: true,
+            data,
+          };
+        }
+
         const { success } = await auth.api.userHasPermission({
           body: {
             userId: session.user.id,
