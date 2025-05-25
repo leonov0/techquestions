@@ -24,12 +24,7 @@ export default async function AdminLayout({
 
   return (
     <SidebarProvider>
-      <AdminSidebar
-        image={session.user.image}
-        username={session.user.username}
-        name={session.user.name}
-        displayUsername={session.user.displayUsername}
-      />
+      <AdminSidebar user={session.user} />
       <SidebarInset className="space-y-4 p-4">
         <SidebarTrigger />
         {children}

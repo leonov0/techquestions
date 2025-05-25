@@ -1,5 +1,6 @@
 import "highlight.js/styles/github-dark.css";
 
+import { UserAvatar } from "@daveyplate/better-auth-ui";
 import { AlertCircle, ArrowBigUpDash, Flame, Search } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
@@ -11,7 +12,6 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -28,7 +28,7 @@ import {
 } from "@/features/comments";
 import { getQuestion } from "@/features/questions";
 import { Rating, RatingSkeleton } from "@/features/rating";
-import { getCapitalizedFirstLetter, parseToString } from "@/lib/utils";
+import { parseToString } from "@/lib/utils";
 
 import { CategoryList } from "./category-list";
 
@@ -107,15 +107,7 @@ export async function QuestionSection({
             href={`/users/${response.data.author.username}`}
             className="group flex gap-2"
           >
-            <Avatar className="size-10">
-              {response.data.author.image && (
-                <AvatarImage src={response.data.author.image} />
-              )}
-
-              <AvatarFallback>
-                {getCapitalizedFirstLetter(response.data.author.username)}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar className="size-10" user={response.data.author} />
 
             <p className="group-hover:text-primary text-sm transition-colors">
               @{response.data.author.username}
@@ -123,9 +115,7 @@ export async function QuestionSection({
           </Link>
         ) : (
           <div className="flex gap-2">
-            <Avatar className="size-10">
-              <AvatarFallback>A</AvatarFallback>
-            </Avatar>
+            <UserAvatar className="size-10" />
 
             <p className="text-sm">Anonymous</p>
           </div>

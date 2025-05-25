@@ -13,7 +13,7 @@ import { unstable_cacheTag as cacheTag } from "next/cache";
 
 import { database, schema } from "@/database";
 
-import type { Question } from "../types";
+import type { Author, Question } from "../types";
 
 export async function getQuestions({
   query,
@@ -142,12 +142,8 @@ export async function getQuestions({
       seniorityLevels: sql<[{ id: string; name: string }]>`COALESCE(
         json_agg(DISTINCT jsonb_build_object('id', ${schema.seniorityLevels.id},'name', ${schema.seniorityLevels.name})
         ) FILTER (WHERE ${schema.seniorityLevels.id} IS NOT NULL), '[]'::json)`,
-      author: sql<{
-        id: string;
-        username: string;
-        image: string | null;
-      } | null>`CASE WHEN ${schema.questions.isAnonymous} OR ${schema.users.username} IS NULL THEN NULL ELSE
-        jsonb_build_object('id', ${schema.users.id}, 'username', ${schema.users.username}, 'image', ${schema.users.image}) END`,
+      author: sql<Author | null>`CASE WHEN ${schema.questions.isAnonymous} OR ${schema.users.username} IS NULL THEN NULL ELSE
+        jsonb_build_object('id', ${schema.users.id}, 'username', ${schema.users.username}, 'name', ${schema.users.name}, 'image', ${schema.users.image}) END`,
     })
     .from(schema.questions)
     .leftJoin(

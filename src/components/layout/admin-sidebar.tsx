@@ -1,3 +1,4 @@
+import { UserAvatar } from "@daveyplate/better-auth-ui";
 import {
   Brain,
   Building2,
@@ -13,7 +14,6 @@ import {
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
@@ -41,18 +41,15 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { getPendingQuestionCount } from "@/features/review-questions";
-import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 export async function AdminSidebar({
-  image,
-  username,
-  name,
-  displayUsername,
+  user,
 }: {
-  image?: string | null;
-  username?: string | null;
-  name?: string | null;
-  displayUsername?: string | null;
+  user: {
+    name: string;
+    displayUsername?: string | null;
+    image?: string | null;
+  };
 }) {
   const getPendingQuestionCountResponse = await getPendingQuestionCount();
 
@@ -176,17 +173,11 @@ export async function AdminSidebar({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
-                  <Avatar className="rounded-sm">
-                    {image && <AvatarImage src={image} />}
-
-                    <AvatarFallback className="rounded-sm">
-                      {username && getCapitalizedFirstLetter(username)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar user={user} className="rounded-sm" />
 
                   <div className="flex-1 overflow-hidden font-medium text-nowrap text-clip">
-                    <p className="text-sm font-medium">{name}</p>
-                    <p className="text-xs">@{displayUsername}</p>
+                    <p className="text-sm font-medium">{user.name}</p>
+                    <p className="text-xs">@{user.displayUsername}</p>
                   </div>
 
                   <ChevronsUpDown />

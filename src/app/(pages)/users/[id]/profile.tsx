@@ -1,10 +1,10 @@
+import { UserAvatar } from "@daveyplate/better-auth-ui";
 import { AlertCircle, ArrowBigUpDash, Flame, Search, User } from "lucide-react";
 import Form from "next/form";
 import { notFound, redirect } from "next/navigation";
 
 import { QuestionPagination } from "@/components/pagination";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getCapitalizedFirstLetter } from "@/lib/utils";
 import { QuestionPreview } from "@/widgets/question-preview";
 
 import { getQuestionsByUserId } from "./get-questions-by-user-id";
@@ -63,13 +62,7 @@ export async function Profile({
   return (
     <div className={className}>
       <section className="flex items-center gap-4">
-        <Avatar className="size-16">
-          <AvatarImage src={response.data.image ?? undefined} />
-          <AvatarFallback>
-            {response.data.username &&
-              getCapitalizedFirstLetter(response.data.username)}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar className="size-16" user={response.data} />
 
         <div className="overflow-hidden">
           <p className="text-3xl leading-none font-medium tracking-tight">
