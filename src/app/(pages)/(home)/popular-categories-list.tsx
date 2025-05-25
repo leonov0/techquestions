@@ -50,11 +50,11 @@ export async function PopularCategoriesList() {
 function getCategoryClassName(name: string) {
   switch (name) {
     case "Google":
-      return "border-blue-500 hover:bg-blue-500/10";
+      return "border-blue-500 hover:bg-blue-500/10 bg-gradient-to-br from-blue-500/10 to-blue-500/20";
     case "Algorithms":
-      return "border-teal-500 hover:bg-teal-500/10";
+      return "border-teal-500 hover:bg-teal-500/10 bg-gradient-to-br from-teal-500/10 to-teal-500/20";
     case "Junior Developers":
-      return "border-green-500 hover:bg-green-500/10";
+      return "border-green-500 hover:bg-green-500/10 bg-gradient-to-br from-green-500/10 to-green-500/20";
     default:
       return "";
   }
