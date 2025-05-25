@@ -1,9 +1,12 @@
+import "highlight.js/styles/github-dark.css";
+
 import { AlertCircle, ArrowBigUpDash, Flame, Search } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
@@ -132,7 +135,10 @@ export async function QuestionSection({
       <Separator className="my-8" />
 
       <div className="prose dark:prose-invert prose-slate !max-w-full">
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw, rehypeHighlight]}
+        >
           {response.data.body}
         </ReactMarkdown>
       </div>

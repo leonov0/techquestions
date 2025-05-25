@@ -169,6 +169,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  .hljs {
+    @apply !bg-[var(--tw-prose-bg)];
+  }
 }
 
 @layer components {
