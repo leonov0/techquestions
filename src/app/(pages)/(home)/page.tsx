@@ -1,19 +1,14 @@
-import { headers } from "next/headers";
 import Link from "next/link";
 import { Suspense } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
-import { auth } from "@/lib/auth";
 
 import { FeaturedQuestionList } from "./featured-question-list";
 import { FeaturedQuestionListLoader } from "./featured-question-list-loader";
 import { PopularCategoriesList } from "./popular-categories-list";
+import { SignInActionLink } from "./sign-in-action-link";
 
-export default async function Home() {
-  const isAuthenticated = await auth.api.getSession({
-    headers: await headers(),
-  });
-
+export default function Home() {
   return (
     <main className="container space-y-16">
       <section className="mx-auto max-w-xl">
@@ -32,14 +27,11 @@ export default async function Home() {
             Explore questions
           </Link>
 
-          {!isAuthenticated && (
-            <Link
-              href="/auth/sign-in"
-              className={buttonVariants({ variant: "secondary", size: "lg" })}
-            >
-              Join the community
-            </Link>
-          )}
+          <SignInActionLink
+            className={buttonVariants({ variant: "secondary", size: "lg" })}
+          >
+            Join the community
+          </SignInActionLink>
         </div>
       </section>
 
@@ -58,7 +50,9 @@ export default async function Home() {
           ⭐ Popular Categories
         </h2>
 
-        <PopularCategoriesList />
+        <Suspense fallback={<FeaturedQuestionListLoader />}>
+          <PopularCategoriesList />
+        </Suspense>
       </section>
     </main>
   );
