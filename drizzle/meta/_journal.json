@@ -15,6 +15,13 @@
       "when": 1745769769188,
       "tag": "0001_lazy_banshee",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1748243425819,
+      "tag": "0002_kind_firebird",
+      "breakpoints": true
     }
   ]
 }
