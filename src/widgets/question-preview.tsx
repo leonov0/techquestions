@@ -1,10 +1,10 @@
+import { UserAvatar } from "@daveyplate/better-auth-ui";
 import Link from "next/link";
 import { Suspense } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Question } from "@/features/questions";
 import { Rating, RatingSkeleton } from "@/features/rating";
-import { cn, getCapitalizedFirstLetter } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 import { CategoryList } from "./category-list";
 
@@ -51,13 +51,7 @@ export async function QuestionPreview({
 
         {author ? (
           <Link href={`/users/${author.username}`} className="group flex gap-2">
-            <Avatar className="size-10">
-              {author.image && <AvatarImage src={author.image} />}
-
-              <AvatarFallback>
-                {getCapitalizedFirstLetter(author.username)}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar className="size-10" user={author} />
 
             <div className="text-sm">
               <p className="group-hover:text-primary transition-colors">
@@ -71,9 +65,7 @@ export async function QuestionPreview({
           </Link>
         ) : (
           <div className="flex gap-2">
-            <Avatar className="size-10">
-              <AvatarFallback>A</AvatarFallback>
-            </Avatar>
+            <UserAvatar className="size-10" />
 
             <div className="text-sm">
               <p>Anonymous</p>

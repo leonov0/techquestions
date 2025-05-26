@@ -1,3 +1,4 @@
+import { UserAvatar } from "@daveyplate/better-auth-ui";
 import {
   Brain,
   Building2,
@@ -10,11 +11,9 @@ import {
   Library,
   Users,
 } from "lucide-react";
-import { headers } from "next/headers";
 import Link from "next/link";
 
 import { TechQuestions } from "@/components/icons/techquestions";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
@@ -42,20 +41,16 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { getPendingQuestionCount } from "@/features/review-questions";
-import { auth } from "@/lib/auth";
-import { getCapitalizedFirstLetter } from "@/lib/utils";
 
-export async function AdminSidebar() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session === null) {
-    throw new Error("Session is null");
-  }
-
-  const { image, username, name, displayUsername } = session.user;
-
+export async function AdminSidebar({
+  user,
+}: {
+  user: {
+    name: string;
+    displayUsername?: string | null;
+    image?: string | null;
+  };
+}) {
   const getPendingQuestionCountResponse = await getPendingQuestionCount();
 
   return (
@@ -178,17 +173,11 @@ export async function AdminSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
-                  <Avatar className="rounded-sm">
-                    {image && <AvatarImage src={image} />}
-
-                    <AvatarFallback className="rounded-sm">
-                      {username && getCapitalizedFirstLetter(username)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar user={user} className="rounded-sm" />
 
                   <div className="flex-1 overflow-hidden font-medium text-nowrap text-clip">
-                    <p className="text-sm font-medium">{name}</p>
-                    <p className="text-xs">@{displayUsername}</p>
+                    <p className="text-sm font-medium">{user.name}</p>
+                    <p className="text-xs">@{user.displayUsername}</p>
                   </div>
 
                   <ChevronsUpDown />

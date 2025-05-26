@@ -1,5 +1,6 @@
 "use client";
 
+import { UserAvatar } from "@daveyplate/better-auth-ui";
 import {
   Award,
   ChevronDown,
@@ -14,7 +15,6 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-import { getCapitalizedFirstLetter } from "@/lib/utils";
 
 import { DropdownMenuThemesSubContent } from "./dropdown-menu-themes-sub-content";
 
@@ -58,12 +57,7 @@ export function ProfileDropdown(initialUserProfile: UserProfile) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="group space-x-2 pl-2" variant="secondary">
-          <Avatar className="size-5 rounded-sm">
-            {user.image && <AvatarImage src={user.image} />}
-            <AvatarFallback className="rounded-sm">
-              {getCapitalizedFirstLetter(user.displayUsername)}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} className="size-5 rounded-sm" />
 
           <p className="max-w-16 truncate overflow-hidden whitespace-nowrap sm:max-w-none">
             {user.displayUsername}
@@ -79,12 +73,7 @@ export function ProfileDropdown(initialUserProfile: UserProfile) {
             href={`/users/${user.username}`}
             className="flex items-center gap-4"
           >
-            <Avatar className="size-8 rounded-sm">
-              {user.image && <AvatarImage src={user.image} />}
-              <AvatarFallback className="rounded-sm">
-                {getCapitalizedFirstLetter(user.displayUsername)}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar user={user} className="size-8 rounded-sm" />
 
             <div>
               <p className="text-sm font-medium">{user.name}</p>

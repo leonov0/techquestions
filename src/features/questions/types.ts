@@ -12,8 +12,9 @@ export type Company = { id: string; name: string };
 
 export type SeniorityLevel = { id: string; name: string };
 
-type Author = {
+export type Author = {
   id: string;
+  name: string;
   username: string;
   image: string | null;
 };

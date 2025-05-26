@@ -70,17 +70,17 @@ export async function getPopularCategories(): Promise<
 
     const categories = [
       {
-        name: "Questions by Google",
+        name: "Google",
         href: `/questions?companyId=${google.id}`,
         description: "Explore questions asked by Google.",
       },
       {
-        name: "Questions by Algorithms",
+        name: "Algorithms",
         href: `/questions?technologyId=${algorithms.id}`,
         description: "Explore questions related to Algorithms.",
       },
       {
-        name: "Questions for Junior Developers",
+        name: "Junior Developers",
         href: `/questions?seniorityLevelId=${junior.id}`,
         description: "Explore questions for Junior Developers.",
       },
