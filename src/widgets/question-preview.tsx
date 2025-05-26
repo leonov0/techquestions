@@ -34,7 +34,7 @@ export async function QuestionPreview({
         </Link>
       </h3>
 
-      <p className="line-clamp-2 text-sm">{body}</p>
+      <p className="line-clamp-2 text-sm wrap-anywhere">{body}</p>
 
       <CategoryList
         id={id}
