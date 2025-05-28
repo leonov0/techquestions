@@ -19,7 +19,5 @@ export async function getCreatedQuestionsCount() {
     .where(eq(schema.questions.status, "approved"))
     .groupBy(sql`DATE_TRUNC('day', ${schema.questions.createdAt})`);
 
-  console.log("rows", rows);
-
   return rows;
 }

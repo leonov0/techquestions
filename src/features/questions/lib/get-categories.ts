@@ -12,7 +12,8 @@ export async function getCompanies() {
       id: schema.companies.id,
       name: schema.companies.name,
     })
-    .from(schema.companies);
+    .from(schema.companies)
+    .orderBy(schema.companies.name);
 }
 
 export async function getLevels() {
@@ -23,7 +24,8 @@ export async function getLevels() {
       id: schema.seniorityLevels.id,
       name: schema.seniorityLevels.name,
     })
-    .from(schema.seniorityLevels);
+    .from(schema.seniorityLevels)
+    .orderBy(schema.seniorityLevels.name);
 }
 
 export async function getTechnologies() {
@@ -34,5 +36,6 @@ export async function getTechnologies() {
       id: schema.technologies.id,
       name: schema.technologies.name,
     })
-    .from(schema.technologies);
+    .from(schema.technologies)
+    .orderBy(schema.technologies.name);
 }

@@ -25,6 +25,7 @@ export function AuthUIProvider({ children }: { children: React.ReactNode }) {
       deleteUser
       magicLink
       username
+      apiKeys
       avatar
     >
       {children}

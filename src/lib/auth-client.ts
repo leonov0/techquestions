@@ -1,5 +1,6 @@
 import {
   adminClient,
+  apiKeyClient,
   magicLinkClient,
   multiSessionClient,
   usernameClient,
@@ -14,5 +15,6 @@ export const authClient = createAuthClient({
     adminClient({ ac, user }),
     magicLinkClient(),
     multiSessionClient(),
+    apiKeyClient(),
   ],
 });
