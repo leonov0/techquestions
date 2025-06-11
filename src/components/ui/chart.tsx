@@ -233,10 +233,7 @@ function ChartTooltipContent({
                       </span>
                     </div>
                     {item.value && (
-                      <span
-                        className="text-foreground font-mono font-medium tabular-nums"
-                        suppressHydrationWarning
-                      >
+                      <span className="text-foreground font-mono font-medium tabular-nums">
                         {item.value.toLocaleString()}
                       </span>
                     )}
