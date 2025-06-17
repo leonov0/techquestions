@@ -1,6 +1,6 @@
 "use cache";
 
-import { count, eq, sql } from "drizzle-orm";
+import { asc, count, eq, sql } from "drizzle-orm";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 
 import { database, schema } from "@/database";
@@ -17,7 +17,8 @@ export async function getCreatedQuestionsCount() {
     })
     .from(schema.questions)
     .where(eq(schema.questions.status, "approved"))
-    .groupBy(sql`DATE_TRUNC('day', ${schema.questions.createdAt})`);
+    .groupBy(sql`DATE_TRUNC('day', ${schema.questions.createdAt})`)
+    .orderBy(asc(sql`DATE_TRUNC('day', ${schema.questions.createdAt})`));
 
   return rows;
 }
