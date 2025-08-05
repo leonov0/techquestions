@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:drop": "drizzle-kit drop"
   },
   "dependencies": {
     "@daveyplate/better-auth-ui": "^2.1.3",
