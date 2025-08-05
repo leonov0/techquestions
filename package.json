@@ -17,6 +17,7 @@
   "dependencies": {
     "@daveyplate/better-auth-ui": "^2.1.3",
     "@neondatabase/serverless": "^1.0.1",
+    "@radix-ui/react-slot": "^1.2.3",
     "better-auth": "^1.3.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -28,6 +29,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "resend": "^4.7.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
