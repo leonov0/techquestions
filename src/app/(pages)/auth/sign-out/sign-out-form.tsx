@@ -29,7 +29,7 @@ export function SignOutForm() {
 
   return (
     <form action={signOut}>
-      <Button disabled={isPending}>
+      <Button className="w-full" disabled={isPending}>
         {isPending ? <Loader2 className="animate-spin" /> : <LogOut />}
         Sign Out
       </Button>
