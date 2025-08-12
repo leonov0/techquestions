@@ -1,12 +1,14 @@
 import { betterAuth, type User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { magicLink } from "better-auth/plugins";
+import { magicLink, username } from "better-auth/plugins";
 
 import { reactMagicLinkEmail } from "@/components/emails/magic-link-email";
 import { reactResetPasswordEmail } from "@/components/emails/reset-password-email";
 import { reactVerificationEmail } from "@/components/emails/verification-email";
 import { database, schema } from "@/database";
 import { sendEmail } from "@/lib/send-email";
+
+import { createBaseFromEmail, getUsernamesStartingWith } from "./utils";
 
 const google = {
   clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -36,8 +38,27 @@ export const auth = betterAuth({
     sendResetPassword,
   },
   socialProviders: { google, github },
-  plugins: [magicLink({ sendMagicLink })],
+  plugins: [magicLink({ sendMagicLink }), username()],
   advanced: { database: { generateId: false } },
+  databaseHooks: { user: { create: { before } } },
+  user: {
+    additionalFields: {
+      username: {
+        type: "string",
+        required: true,
+        sortable: true,
+        unique: true,
+        returned: true,
+      },
+      displayUsername: {
+        type: "string",
+        required: true,
+        sortable: true,
+        unique: false,
+        returned: true,
+      },
+    },
+  },
 });
 
 async function sendMagicLink({ email, url }: { email: string; url: string }) {
@@ -79,4 +100,32 @@ async function sendResetPassword({ user, url }: { user: User; url: string }) {
       resetLink: url,
     }),
   });
+}
+
+async function before(user: {
+  email: string;
+  username?: string;
+  displayUsername?: string;
+}) {
+  if (user.username) return { data: user };
+
+  const base = createBaseFromEmail(user.email);
+  let username = base.toLowerCase();
+  let displayUsername = base;
+
+  const existingUsernames = await getUsernamesStartingWith(base.toLowerCase());
+
+  for (let i = 0; existingUsernames.has(username); i++) {
+    const suffix = String(i);
+    displayUsername = base.slice(0, 30 - suffix.length) + suffix;
+    username = displayUsername.toLowerCase();
+  }
+
+  return {
+    data: {
+      ...user,
+      username,
+      displayUsername,
+    },
+  };
 }

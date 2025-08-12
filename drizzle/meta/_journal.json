@@ -8,6 +8,13 @@
       "when": 1754817231101,
       "tag": "0000_tricky_garia",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1755007075737,
+      "tag": "0001_smiling_doctor_doom",
+      "breakpoints": true
     }
   ]
 }
