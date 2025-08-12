@@ -16,6 +16,13 @@ export function AuthUIProvider({ children }: { children: React.ReactNode }) {
       replace={router.replace}
       onSessionChange={router.refresh}
       Link={Link}
+      credentials={{ username: true }}
+      deleteUser
+      emailVerification
+      magicLink
+      multiSession
+      settings
+      social={{ providers: ["google", "github"] }}
     >
       {children}
     </Provider>
