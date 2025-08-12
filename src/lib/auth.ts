@@ -1,6 +1,6 @@
 import { betterAuth, type User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { magicLink, username } from "better-auth/plugins";
+import { magicLink, multiSession, username } from "better-auth/plugins";
 
 import { reactMagicLinkEmail } from "@/components/emails/magic-link-email";
 import { reactResetPasswordEmail } from "@/components/emails/reset-password-email";
@@ -38,7 +38,7 @@ export const auth = betterAuth({
     sendResetPassword,
   },
   socialProviders: { google, github },
-  plugins: [magicLink({ sendMagicLink }), username()],
+  plugins: [magicLink({ sendMagicLink }), username(), multiSession()],
   advanced: { database: { generateId: false } },
   databaseHooks: { user: { create: { before } } },
   user: {
